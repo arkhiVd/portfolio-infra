@@ -60,12 +60,12 @@ data "aws_iam_policy_document" "apply_deploy" {
     sid    = "SiteBucket"
     effect = "Allow"
     actions = [
-      "s3:CreateBucket", "s3:DeleteBucket", "s3:ListBucket",
-      "s3:GetBucket*", "s3:PutBucket*", "s3:DeleteBucketPolicy",
-      "s3:PutObject", "s3:GetObject", "s3:DeleteObject",
-      "s3:PutEncryptionConfiguration", "s3:GetEncryptionConfiguration",
-      "s3:PutBucketPublicAccessBlock", "s3:GetBucketPublicAccessBlock",
-      "s3:PutBucketOwnershipControls", "s3:GetBucketOwnershipControls"
+      # writes (scoped to this bucket by resources below)
+      "s3:CreateBucket", "s3:DeleteBucket", "s3:DeleteBucketPolicy",
+      "s3:PutBucket*", "s3:PutEncryptionConfiguration",
+      "s3:PutObject", "s3:DeleteObject",
+      # reads — broad Get*/List* so refresh can read every sub-config
+      "s3:Get*", "s3:List*"
     ]
     resources = [
       "arn:aws:s3:::aravindakrishnan-portfolio-site",
@@ -79,12 +79,10 @@ data "aws_iam_policy_document" "apply_deploy" {
     effect = "Allow"
     actions = [
       "cloudfront:CreateDistribution", "cloudfront:UpdateDistribution",
-      "cloudfront:DeleteDistribution", "cloudfront:GetDistribution",
-      "cloudfront:GetDistributionConfig", "cloudfront:ListDistributions",
-      "cloudfront:TagResource", "cloudfront:ListTagsForResource",
+      "cloudfront:DeleteDistribution", "cloudfront:TagResource", "cloudfront:UntagResource",
       "cloudfront:CreateOriginAccessControl", "cloudfront:UpdateOriginAccessControl",
-      "cloudfront:DeleteOriginAccessControl", "cloudfront:GetOriginAccessControl",
-      "cloudfront:CreateInvalidation"
+      "cloudfront:DeleteOriginAccessControl", "cloudfront:CreateInvalidation",
+      "cloudfront:Get*", "cloudfront:List*"
     ]
     resources = ["*"]
   }
@@ -94,8 +92,9 @@ data "aws_iam_policy_document" "apply_deploy" {
     sid    = "ACM"
     effect = "Allow"
     actions = [
-      "acm:RequestCertificate", "acm:DeleteCertificate", "acm:DescribeCertificate",
-      "acm:ListCertificates", "acm:ListTagsForCertificate", "acm:AddTagsToCertificate"
+      "acm:RequestCertificate", "acm:DeleteCertificate",
+      "acm:AddTagsToCertificate", "acm:RemoveTagsFromCertificate",
+      "acm:Describe*", "acm:List*", "acm:GetCertificate"
     ]
     resources = ["*"]
   }
@@ -105,13 +104,13 @@ data "aws_iam_policy_document" "apply_deploy" {
     sid    = "Lambda"
     effect = "Allow"
     actions = [
-      "lambda:CreateFunction", "lambda:DeleteFunction", "lambda:GetFunction",
+      "lambda:CreateFunction", "lambda:DeleteFunction",
       "lambda:UpdateFunctionCode", "lambda:UpdateFunctionConfiguration",
-      "lambda:GetFunctionConfiguration", "lambda:ListVersionsByFunction",
-      "lambda:TagResource", "lambda:ListTags",
+      "lambda:TagResource", "lambda:UntagResource",
       "lambda:CreateFunctionUrlConfig", "lambda:UpdateFunctionUrlConfig",
-      "lambda:DeleteFunctionUrlConfig", "lambda:GetFunctionUrlConfig",
-      "lambda:AddPermission", "lambda:RemovePermission", "lambda:GetPolicy"
+      "lambda:DeleteFunctionUrlConfig",
+      "lambda:AddPermission", "lambda:RemovePermission",
+      "lambda:Get*", "lambda:List*"
     ]
     resources = ["arn:aws:lambda:*:${data.aws_caller_identity.current.account_id}:function:PortfolioVisitorCounterFunction"]
   }
@@ -121,9 +120,9 @@ data "aws_iam_policy_document" "apply_deploy" {
     sid    = "DynamoDB"
     effect = "Allow"
     actions = [
-      "dynamodb:CreateTable", "dynamodb:DeleteTable", "dynamodb:DescribeTable",
-      "dynamodb:DescribeContinuousBackups", "dynamodb:DescribeTimeToLive",
-      "dynamodb:UpdateTable", "dynamodb:TagResource", "dynamodb:ListTagsOfResource"
+      "dynamodb:CreateTable", "dynamodb:DeleteTable", "dynamodb:UpdateTable",
+      "dynamodb:TagResource", "dynamodb:UntagResource",
+      "dynamodb:Describe*", "dynamodb:ListTagsOfResource"
     ]
     resources = ["arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/PortfolioVisitorCounter"]
   }
@@ -133,11 +132,12 @@ data "aws_iam_policy_document" "apply_deploy" {
     sid    = "LambdaExecRole"
     effect = "Allow"
     actions = [
-      "iam:CreateRole", "iam:DeleteRole", "iam:GetRole", "iam:PassRole",
-      "iam:CreatePolicy", "iam:DeletePolicy", "iam:GetPolicy", "iam:GetPolicyVersion",
-      "iam:ListPolicyVersions", "iam:CreatePolicyVersion", "iam:DeletePolicyVersion",
-      "iam:AttachRolePolicy", "iam:DetachRolePolicy", "iam:ListAttachedRolePolicies",
-      "iam:ListRolePolicies", "iam:TagRole", "iam:TagPolicy", "iam:ListInstanceProfilesForRole"
+      "iam:CreateRole", "iam:DeleteRole", "iam:PassRole",
+      "iam:CreatePolicy", "iam:DeletePolicy",
+      "iam:CreatePolicyVersion", "iam:DeletePolicyVersion",
+      "iam:AttachRolePolicy", "iam:DetachRolePolicy",
+      "iam:TagRole", "iam:TagPolicy", "iam:UntagRole", "iam:UntagPolicy",
+      "iam:Get*", "iam:List*"
     ]
     resources = [
       "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/portfolio-lambda-execution-role",
@@ -150,8 +150,9 @@ data "aws_iam_policy_document" "apply_deploy" {
     sid    = "Logs"
     effect = "Allow"
     actions = [
-      "logs:CreateLogGroup", "logs:DeleteLogGroup", "logs:DescribeLogGroups",
-      "logs:PutRetentionPolicy", "logs:TagResource", "logs:ListTagsForResource"
+      "logs:CreateLogGroup", "logs:DeleteLogGroup", "logs:PutRetentionPolicy",
+      "logs:TagResource", "logs:UntagResource",
+      "logs:Describe*", "logs:ListTagsForResource", "logs:ListTagsLogGroup"
     ]
     resources = ["arn:aws:logs:*:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/PortfolioVisitorCounterFunction*"]
   }
