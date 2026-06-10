@@ -1,0 +1,72 @@
+name: terraform-plan
+
+# Runs on every PR targeting main. Read-only: assumes the scoped PLAN role via
+# OIDC (no stored AWS keys), runs fmt/validate/security-scan/plan, and posts the
+# plan back to the PR. It CANNOT mutate infrastructure.
+on:
+  pull_request:
+    branches: [main]
+
+# OIDC needs id-token: write. Everything else least-privilege.
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: tf-plan-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    env:
+      TF_VAR_ip_hash_secret: ${{ secrets.IP_HASH_SECRET }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Configure AWS credentials (OIDC, plan role)
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        with:
+          role-to-assume: ${{ secrets.AWS_PLAN_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+        with:
+          terraform_version: "1.15.2"
+
+      - name: Terraform fmt
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init
+        run: terraform init -input=false
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: Checkov security scan
+        continue-on-error: true
+        run: |
+          pipx install checkov
+          checkov -d . --quiet --compact --framework terraform
+
+      - name: Terraform plan
+        id: plan
+        run: terraform plan -input=false -no-color -out=tfplan | tee plan.txt
+
+      - name: Comment plan on PR
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          {
+            echo '### Terraform Plan'
+            echo '```'
+            tail -c 60000 plan.txt
+            echo '```'
+          } > body.md
+          gh pr comment "${{ github.event.pull_request.number }}" --body-file body.md

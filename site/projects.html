@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Projects - AV</title>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- DevIcons -->
+    <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="text-white antialiased">
+
+    <!-- Navigation -->
+    <nav id="header" class="w-full z-50 transition-all duration-300">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="index.html" class="text-3xl transition-transform hover:scale-110">
+                <i class="fas fa-cloud bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 glow-icon"></i>
+            </a>
+            
+            <!-- Header Actions -->
+            <div class="flex items-center space-x-4 md:space-x-8">
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="hover:text-cyan-400 transition-colors">Home</a>
+                    <a href="projects.html" class="text-cyan-400 font-semibold border-b-2 border-cyan-400">Projects</a>
+                    <a href="about.html" class="hover:text-cyan-400 transition-colors">About</a>
+                </div>
+
+                <!-- Visitor Badge -->
+                <div class="visitor-badge glass px-3 py-1 rounded-full border border-white/10">
+                    <i class="fas fa-eye text-cyan-400"></i>
+                    <span class="hidden sm:inline">Views:</span>
+                    <span id="visitor-count" class="font-mono font-bold">...</span>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="menu-toggle" class="md:hidden text-2xl focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="nav-menu" class="hidden flex-col md:hidden glass absolute w-full left-0 top-full mt-2 p-4 space-y-4 text-center border-t border-white/10">
+            <a href="index.html" class="block hover:text-cyan-400 transition-colors">Home</a>
+            <a href="projects.html" class="block text-cyan-400 font-semibold">Projects</a>
+            <a href="about.html" class="block hover:text-cyan-400 transition-colors">About</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 pt-32 pb-12">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-4xl font-bold mb-12 text-center text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">PROJECTS</h2>
+
+            <div class="grid grid-cols-1 gap-8">
+                
+                <!-- Project 1 -->
+                <article class="glass p-8 hover:bg-white/5 transition-all duration-300 transform hover:-translate-y-1 border border-white/10">
+                    <h3 class="text-2xl font-bold mb-4 text-cyan-300">
+                        <a href="project-detail.html" class="hover:text-cyan-400 transition-colors">Cloud-Native Portfolio (This Website)</a>
+                    </h3>
+                    <div class="flex space-x-4 mb-6">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" title="AWS" alt="AWS" class="w-8 h-8" />
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/terraform/terraform-original.svg" title="Terraform" alt="Terraform" class="w-8 h-8" />
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/githubactions/githubactions-original.svg" title="GitHub Actions" alt="GitHub Actions" class="w-8 h-8" />
+                    </div>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Architected and deployed a serverless portfolio website on AWS to demonstrate full-stack cloud engineering skills. The frontend is hosted on S3 and delivered globally via a secure CloudFront CDN with a custom domain. Currently developing the backend API using Python (Lambda), API Gateway, and DynamoDB to power a real-time visitor counter. The entire infrastructure is being defined as code using Terraform and automated via a GitHub Actions CI/CD pipeline.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="project-detail.html" class="button text-sm">Learn More</a>
+                        <a href="https://github.com/arkhiVd/portfolio-frontend" target="_blank" class="flex items-center px-4 py-2 border border-gray-500 hover:border-white rounded-full text-sm transition-colors text-gray-300">
+                            <i class="fab fa-github mr-2"></i> Frontend
+                        </a>
+                        <a href="https://github.com/arkhiVd/portfolio-backend" target="_blank" class="flex items-center px-4 py-2 border border-gray-500 hover:border-white rounded-full text-sm transition-colors text-gray-300">
+                            <i class="fab fa-github mr-2"></i> Backend
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Project 2 -->
+                <article class="glass p-8 hover:bg-white/5 transition-all duration-300 transform hover:-translate-y-1 border border-white/10">
+                    <h3 class="text-2xl font-bold mb-4 text-cyan-300">Automated CI/CD Pipelines for AWS Container Services</h3>
+                    <div class="flex space-x-4 mb-6">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" title="AWS" alt="AWS" class="w-8 h-8" />
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-plain.svg" title="Docker" alt="Docker" class="w-8 h-8" />
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/terraform/terraform-original.svg" title="Terraform" alt="Terraform" class="w-8 h-8" />
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/githubactions/githubactions-original.svg" title="GitHub Actions" alt="GitHub Actions" class="w-8 h-8" />
+                    </div>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Designed and implemented two fully automated CI/CD pipelines to deploy a containerized Python web application onto distinct AWS architectures. The first pipeline deployed to a production-grade ECS Fargate environment behind an Application Load Balancer, with all networking and service infrastructure managed via Terraform. As a cost-effective alternative, engineered a second, fully serverless pipeline using AWS App Runner, automating deployments and SSL management. Both solutions utilized GitHub Actions for CI/CD and OIDC for secure, keyless authentication to AWS.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="https://github.com/arkhiVd/aws-ecs-containerized-webapp" target="_blank" class="flex items-center px-4 py-2 border border-gray-500 hover:border-white rounded-full text-sm transition-colors text-gray-300">
+                            <i class="fab fa-github mr-2"></i> ECS
+                        </a>
+                        <a href="https://github.com/arkhiVd/aws-apprunner-containerized-webapp" target="_blank" class="flex items-center px-4 py-2 border border-gray-500 hover:border-white rounded-full text-sm transition-colors text-gray-300">
+                            <i class="fab fa-github mr-2"></i> App Runner
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Project 3 -->
+                <article class="glass p-8 hover:bg-white/5 transition-all duration-300 transform hover:-translate-y-1 border border-white/10">
+                    <h3 class="text-2xl font-bold mb-4 text-cyan-300">Personal Homelab</h3>
+                    <div class="flex space-x-4 mb-6">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg" title="Linux" alt="Linux" class="w-8 h-8" />
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-plain.svg" title="Docker" alt="Docker" class="w-8 h-8" />
+                    </div>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Architected and deployed a private, end-to-end encrypted, real-time sync service on a headless Arch Linux server to provide a secure, self-hosted cloud solution for personal data. The service operates by running a containerized CouchDB database managed by Docker and Docker-Compose. The deployment involved securing the service at the network layer through ip-tables and Docker firewall.
+                    </p>
+                </article>
+
+                <!-- Project 4 -->
+                <article class="glass p-8 hover:bg-white/5 transition-all duration-300 transform hover:-translate-y-1 border border-white/10">
+                    <h3 class="text-2xl font-bold mb-4 text-cyan-300">Network Automation Scripts (In Progress)</h3>
+                    <p class="text-sm text-cyan-400 mb-4"><strong>Technologies:</strong> Python, Netmiko, GNS3, Git</p>
+                    <p class="text-gray-300 leading-relaxed">
+                        Developing Python scripts with Netmiko to automate the backup of network device configurations in a simulated GNS3 environment, with versioning in Git.
+                    </p>
+                </article>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="container mx-auto px-6 py-12">
+        <div class="glass p-8 border-t border-white/10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <!-- Get In Touch -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-cyan-400">Get In Touch</h3>
+                    <p class="text-gray-400">
+                        I am actively seeking new opportunities and would love to connect. Please feel free to reach out.
+                    </p>
+                </div>
+
+                <!-- Mail -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-cyan-400">Mail</h3>
+                    <a href="mailto:aravindakrishnanv@tutamail.com" class="text-gray-300 hover:text-white transition-colors">
+                        aravindakrishnanv@tutamail.com
+                    </a>
+                </div>
+
+                <!-- Connect -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-cyan-400">Connect</h3>
+                    <div class="flex justify-center space-x-6">
+                        <a href="https://www.linkedin.com/in/aravindakrishnan-v-2b0651218" target="_blank" class="text-3xl text-gray-400 hover:text-blue-500 transition-colors">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="https://github.com/arkhiVd" target="_blank" class="text-3xl text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center text-gray-600 text-xs">
+                Designed & Built by Aravindakrishnan V.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/visitorscript.js"></script>
+</body>
+</html>

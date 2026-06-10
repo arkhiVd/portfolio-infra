@@ -1,0 +1,213 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>About - AV</title>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- DevIcons -->
+    <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="text-white antialiased">
+
+    <!-- Navigation -->
+    <nav id="header" class="w-full z-50 transition-all duration-300">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="index.html" class="text-3xl transition-transform hover:scale-110">
+                <i class="fas fa-cloud bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 glow-icon"></i>
+            </a>
+            
+            <!-- Header Actions -->
+            <div class="flex items-center space-x-4 md:space-x-8">
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="hover:text-cyan-400 transition-colors">Home</a>
+                    <a href="projects.html" class="hover:text-cyan-400 transition-colors">Projects</a>
+                    <a href="about.html" class="text-cyan-400 font-semibold border-b-2 border-cyan-400">About</a>
+                </div>
+
+                <!-- Visitor Badge -->
+                <div class="visitor-badge glass px-3 py-1 rounded-full border border-white/10">
+                    <i class="fas fa-eye text-cyan-400"></i>
+                    <span class="hidden sm:inline">Views:</span>
+                    <span id="visitor-count" class="font-mono font-bold">...</span>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="menu-toggle" class="md:hidden text-2xl focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="nav-menu" class="hidden flex-col md:hidden glass absolute w-full left-0 top-full mt-2 p-4 space-y-4 text-center border-t border-white/10">
+            <a href="index.html" class="block hover:text-cyan-400 transition-colors">Home</a>
+            <a href="projects.html" class="block hover:text-cyan-400 transition-colors">Projects</a>
+            <a href="about.html" class="block text-cyan-400 font-semibold">About</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 pt-32 pb-12">
+        <div class="max-w-6xl mx-auto space-y-12">
+            
+            <!-- TOP SECTION: Work Experience -->
+            <section>
+                <h2 class="text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Work Experience</h2>
+                <article class="glass p-8 hover:bg-white/5 transition-all duration-300 border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.1)]">
+                    <div class="flex flex-col md:flex-row gap-6 items-start">
+                        <div class="p-4 bg-white/5 rounded-2xl border border-white/10">
+                            <i class="fas fa-cloud text-5xl text-cyan-400"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
+                                <h3 class="text-2xl font-bold text-white">Cloud Engineer</h3>
+                                <span class="px-3 py-1 bg-cyan-500/20 text-cyan-300 rounded-full text-sm font-mono border border-cyan-500/30">Oct 2025 - Present</span>
+                            </div>
+                            <h4 class="text-xl text-gray-300 mb-4">Centilytics | Intelligent Cloud Management</h4>
+                            <p class="text-gray-300 leading-relaxed text-lg">
+                                Full-time Cloud Engineer responsible for  cloud management and infrastructure optimization.
+                            </p>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <!-- MIDDLE SECTION: Technical Skills -->
+            <section>
+                <h2 class="text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Technical Skills</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- Technologies -->
+                    <div class="glass p-8 hover:bg-white/5 transition-all">
+                        <h4 class="text-xl font-semibold text-gray-200 mb-6 border-b border-white/10 pb-2">Technologies & Tools</h4>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="glass px-4 py-2 flex items-center gap-2 hover:bg-white/10 transition-colors"><i class="devicon-amazonwebservices-plain-wordmark text-orange-400"></i> AWS</span>
+                            <span class="glass px-4 py-2 flex items-center gap-2 hover:bg-white/10 transition-colors"><i class="devicon-terraform-plain text-purple-400"></i> Terraform</span>
+                            <span class="glass px-4 py-2 flex items-center gap-2 hover:bg-white/10 transition-colors"><i class="devicon-docker-plain text-blue-400"></i> Docker</span>
+                            <span class="glass px-4 py-2 flex items-center gap-2 hover:bg-white/10 transition-colors"><i class="devicon-git-plain text-red-500"></i> Git</span>
+                            <span class="glass px-4 py-2 flex items-center gap-2 hover:bg-white/10 transition-colors"><i class="devicon-github-original text-white"></i> GitHub Actions</span>
+                            <span class="glass px-4 py-2 flex items-center gap-2 hover:bg-white/10 transition-colors"><i class="devicon-linux-plain text-white"></i> Linux</span>
+                        </div>
+                    </div>
+
+                    <!-- Languages -->
+                    <div class="glass p-8 hover:bg-white/5 transition-all">
+                        <h4 class="text-xl font-semibold text-gray-200 mb-6 border-b border-white/10 pb-2">Languages & Scripting</h4>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="glass px-4 py-2 flex items-center gap-2 hover:bg-white/10 transition-colors"><i class="devicon-python-plain text-yellow-300"></i> Python</span>
+                            <span class="glass px-4 py-2 flex items-center gap-2 hover:bg-white/10 transition-colors"><i class="devicon-mysql-plain text-blue-400"></i> SQL</span>
+                            <span class="glass px-4 py-2 flex items-center gap-2 hover:bg-white/10 transition-colors"><i class="devicon-html5-plain text-orange-500"></i> HTML</span>
+                            <span class="glass px-4 py-2 flex items-center gap-2 hover:bg-white/10 transition-colors"><i class="devicon-css3-plain text-blue-500"></i> CSS</span>
+                            <span class="glass px-4 py-2 flex items-center gap-2 hover:bg-white/10 transition-colors"><i class="devicon-javascript-plain text-yellow-400"></i> JavaScript</span>
+                        </div>
+                    </div>
+
+                    <!-- Areas of Interest -->
+                    <div class="glass p-8 hover:bg-white/5 transition-all md:col-span-2">
+                        <h4 class="text-xl font-semibold text-gray-200 mb-6 border-b border-white/10 pb-2">Areas of Interest</h4>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="glass px-4 py-2 text-sm hover:bg-white/10 transition-colors">Cloud Engineering</span>
+                            <span class="glass px-4 py-2 text-sm hover:bg-white/10 transition-colors">Infrastructure as Code (IaC)</span>
+                            <span class="glass px-4 py-2 text-sm hover:bg-white/10 transition-colors">DevOps & Automation</span>
+                            <span class="glass px-4 py-2 text-sm hover:bg-white/10 transition-colors">AWS Architecture</span>
+                            <span class="glass px-4 py-2 text-sm hover:bg-white/10 transition-colors">CI/CD Pipeline</span>
+                            <span class="glass px-4 py-2 text-sm hover:bg-white/10 transition-colors">Networking</span>
+                            <span class="glass px-4 py-2 text-sm hover:bg-white/10 transition-colors">Machine Learning</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BOTTOM SECTION: Education & Certifications -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Education -->
+                <section>
+                    <h2 class="text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Education</h2>
+                    <article class="glass p-6 hover:bg-white/5 transition-all duration-300">
+                        <h4 class="text-lg font-bold text-cyan-300 mb-2">GOVT. MODEL ENGINEERING COLLEGE</h4>
+                        <p class="text-base font-semibold mb-1 text-gray-200">Bachelor of Technology in Electronics & Communication</p>
+                        <p class="text-sm text-gray-400">Graduated: June 2025</p>
+                    </article>
+                </section>
+
+                <!-- Certifications -->
+                <section>
+                    <h2 class="text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Certifications</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <!-- AWS -->
+                        <a href="https://www.credly.com/badges/f80f390f-8aaa-4828-9f45-fa34bd2fb81b/public_url" target="_blank" class="block h-full">
+                            <article class="glass p-6 h-full flex flex-col items-center text-center hover:bg-white/5 transition-all duration-300 hover:-translate-y-1">
+                                <img src="images/aws-saa.png" alt="AWS Certified Solutions Architect" class="h-20 mb-4 object-contain" />
+                                <h4 class="font-bold text-gray-100 text-sm">AWS Solutions Architect - Associate</h4>
+                            </article>
+                        </a>
+                        <!-- Cisco -->
+                        <a href="https://www.credly.com/badges/5aaa037e-bf4c-4eb4-8f24-64ccbf8e3b04/linked_in_profile" target="_blank" class="block h-full">
+                            <article class="glass p-6 h-full flex flex-col items-center text-center hover:bg-white/5 transition-all duration-300 hover:-translate-y-1">
+                                <img src="images/ccna_large.png" alt="Cisco Certified Network Associate" class="h-20 mb-4 object-contain" />
+                                <h4 class="font-bold text-gray-100 text-sm">Cisco Certified Network Associate</h4>
+                            </article>
+                        </a>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="container mx-auto px-6 py-12">
+        <div class="glass p-8 border-t border-white/10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <!-- Get In Touch -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-cyan-400">Get In Touch</h3>
+                    <p class="text-gray-400">
+                        I am actively seeking new opportunities and would love to connect. Please feel free to reach out.
+                    </p>
+                </div>
+
+                <!-- Mail -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-cyan-400">Mail</h3>
+                    <a href="mailto:aravindakrishnanv@tutamail.com" class="text-gray-300 hover:text-white transition-colors">
+                        aravindakrishnanv@tutamail.com
+                    </a>
+                </div>
+
+                <!-- Connect -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-cyan-400">Connect</h3>
+                    <div class="flex justify-center space-x-6">
+                        <a href="https://www.linkedin.com/in/aravindakrishnan-v-2b0651218" target="_blank" class="text-3xl text-gray-400 hover:text-blue-500 transition-colors">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="https://github.com/arkhiVd" target="_blank" class="text-3xl text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center text-gray-600 text-xs">
+                Designed & Built by Aravindakrishnan V.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/visitorscript.js"></script>
+</body>
+</html>
