@@ -64,6 +64,7 @@ data "aws_iam_policy_document" "apply_deploy" {
       "s3:CreateBucket", "s3:DeleteBucket", "s3:DeleteBucketPolicy",
       "s3:PutBucket*", "s3:PutEncryptionConfiguration",
       "s3:PutObject", "s3:DeleteObject",
+      "s3:PutObjectTagging", "s3:DeleteObjectTagging",
       # reads — broad Get*/List* so refresh can read every sub-config
       "s3:Get*", "s3:List*"
     ]
