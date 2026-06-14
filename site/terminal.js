@@ -10,7 +10,7 @@
   const PROJECTS = [
     { id: "portfolio",  name: "Cloud-Native Portfolio", status: "live",
       stack: "AWS · Terraform · Lambda · GitHub Actions",
-      blurb: "Serverless site in this repo: private S3 origin, CloudFront delivery, Lambda + DynamoDB visitor counter. Terraform-driven, CI/CD via GitHub Actions + OIDC." },
+      blurb: "Serverless site on S3 + CloudFront, custom domain, Python/Lambda visitor counter on DynamoDB. Fully IaC, CI/CD via GitHub Actions + OIDC." },
     { id: "cicd",       name: "CI/CD for AWS Containers", status: "live",
       stack: "ECS Fargate · App Runner · Docker · Terraform",
       blurb: "Two automated pipelines deploying a containerized app: one to ECS Fargate behind an ALB, one fully serverless on App Runner. Keyless OIDC auth." },
@@ -97,7 +97,7 @@ AWS SAA + CCNA certified.`;
     },
     open(arg) {
       const map = {
-        portfolio: "https://github.com/arkhiVd/portfolio-infra",
+        portfolio: "https://github.com/arkhiVd/portfolio-frontend",
         cicd: "https://github.com/arkhiVd/aws-ecs-containerized-webapp",
         homelab: "https://github.com/arkhiVd",
         netauto: "https://github.com/arkhiVd",
@@ -108,21 +108,19 @@ AWS SAA + CCNA certified.`;
     },
     neofetch() {
       out(`<div class="neofetch">
-        <div class="nf-art" aria-hidden="true"><div class="nf-monogram">AKV</div></div>
         <div class="nf-info">
-          <span class="title">aravind@cloud</span><hr>
-          <span class="k">role</span>     <span class="v">Cloud Engineer @ Centilytics</span><br>
-          <span class="k">os</span>       <span class="v">Arch Linux · macOS</span><br>
-          <span class="k">shell</span>    <span class="v">zsh + tmux</span><br>
-          <span class="k">cloud</span>    <span class="v">AWS (SAA certified)</span><br>
-          <span class="k">iac</span>      <span class="v">Terraform</span><br>
-          <span class="k">langs</span>    <span class="v">Python · Bash · SQL</span><br>
+          <span class="title">aravindakrishnan@cloud</span><hr>
+          <span class="k">role</span>     <span class="v">Cloud Engineer</span> <span class="muted">· ~1 yr experience</span><br>
+          <span class="k">focus</span>    <span class="v">AWS · Terraform · Docker · CI/CD</span><br>
+          <span class="k">certs</span>    <span class="cyan">AWS Solutions Architect – Associate</span><br>
+                   <span class="cyan">Cisco CCNA</span><br>
+          <span class="k">edu</span>      <span class="v">B.Tech ECE · Govt. Model Engineering College</span><br>
           <span class="k">location</span> <span class="v">India · UTC+5:30</span><br>
-          <span class="k">status</span>   <span class="v">open to opportunities</span>
+          <span class="k">status</span>   <span style="color:var(--amber)">serving notice · open to work</span>
           <div class="nf-swatch">
             <i style="background:#05080a"></i><i style="background:#1f7a48"></i>
-            <i style="background:#4ef08a"></i><i style="background:#8dffb6"></i>
-            <i style="background:#ffb02e"></i><i style="background:#ffce6e"></i>
+            <i style="background:#4ef08a"></i><i style="background:#22d3ee"></i>
+            <i style="background:#a78bfa"></i><i style="background:#ffb02e"></i>
             <i style="background:#b6c7be"></i><i style="background:#e9f6ee"></i>
           </div>
         </div></div>`);
@@ -140,7 +138,7 @@ AWS SAA + CCNA certified.`;
     echo(arg, raw) { out(esc(raw || "")); },
     sudo() { out(`<span style="color:var(--amber)">aravind is not in the sudoers file. This incident will be reported.</span> <span class="muted">;)</span>`); },
     clear() { body.querySelectorAll(".term-line, .term-out").forEach(n => n.remove()); },
-    banner() { intro(true); },
+    banner() { commands.neofetch(); },
   };
 
   function run(raw) {
@@ -156,11 +154,9 @@ AWS SAA + CCNA certified.`;
   }
   window.runTerminal = run; // for command chips
 
-  function intro(skipName) {
-    if (!skipName) {
-      out(`<span class="muted">Last login: ${new Date().toDateString()} on ttys001</span>`);
-    }
-    out(`Welcome. This is an interactive shell — type <span class="k">help</span> to explore,<br>or try <span class="k">neofetch</span>, <span class="k">projects</span>, <span class="k">whoami</span>.`);
+  function intro() {
+    out(`<span class="muted">Last login: ${new Date().toDateString()} on ttys001</span>`);
+    setTimeout(() => { run('neofetch'); }, 700);
   }
 
   function init() {
@@ -169,7 +165,7 @@ AWS SAA + CCNA certified.`;
     input = document.getElementById("term-input");
     if (!body || !input) return;
 
-    intro(false);
+    intro();
     scroll();
 
     input.addEventListener("keydown", (e) => {
