@@ -216,7 +216,9 @@ nav#header .wrap {
 }
 .uptime b { color: var(--amber-bright); font-weight: 500; }
 
-.menu-toggle { display: none; background: none; border: none; color: var(--text); font-size: 20px; cursor: pointer; font-family: var(--font-mono); }
+.menu-toggle { display: none; align-items: center; justify-content: center; background: none; border: none; color: var(--text); cursor: pointer; padding: 4px; }
+.menu-toggle svg { display: block; }
+.menu-toggle:hover { color: var(--green); }
 
 /* ============================================================
    TERMINAL WINDOW
@@ -860,9 +862,8 @@ footer a.f-link:hover { color: var(--green); }
   .nav-links { display: none; position: absolute; top: var(--nav-h); left: 0; right: 0;
     flex-direction: column; gap: 0; background: var(--bg-2); border-bottom: 1px solid var(--border); padding: 8px; }
   .nav-links.open { display: flex; }
-  .nav-links a { padding: 12px; border-radius: 0; }
-  .menu-toggle { display: block; }
-  .uptime .lbl { display: none; }
+  .nav-links a { padding: 11px 14px; border-radius: 8px; margin: 2px 0; }
+  .menu-toggle { display: inline-flex; }
   .term-body { height: 360px; font-size: 13px; }
   .wrap { padding: 0 18px; }
 }
