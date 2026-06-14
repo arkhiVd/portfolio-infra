@@ -70,17 +70,14 @@
   if (counter) {
     const API = window.VISITOR_API || null;
     const render = (n) => { counter.textContent = String(n).padStart(4, "0"); };
+    // Real backend only. No fabricated/localStorage fallback — show "----" if unavailable.
     if (API) {
-      fetch(API, { method: "POST" }).then(r => r.json()).then(d => render(d.count)).catch(() => render("----"));
+      fetch(API, { method: "POST" })
+        .then(r => r.json())
+        .then(d => render(d.count))
+        .catch(() => { counter.textContent = "----"; });
     } else {
-      let base = parseInt(localStorage.getItem("visitor-count") || "0", 10);
-      if (!base) base = 1247 + Math.floor(Math.random() * 50);
-      base += 1;
-      localStorage.setItem("visitor-count", String(base));
-      // count-up animation
-      let cur = Math.max(0, base - 28);
-      const tick = () => { render(cur); if (cur < base) { cur++; setTimeout(tick, 22); } };
-      setTimeout(tick, 900);
+      counter.textContent = "----";
     }
   }
 
