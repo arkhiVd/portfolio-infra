@@ -22,8 +22,8 @@
   <nav id="header">
     <div class="wrap">
       <a href="index.html" class="brand">
-        <span class="dot"></span>
-        <span class="path">~/aravind</span><span class="caret">&nbsp;$</span>
+        <span class="avail-dot"></span>
+        <span class="brand-otw">open to work</span>
       </a>
       <div class="nav-links" id="nav-links">
         <a href="index.html" class="active"><span class="pfx">cd </span>~</a>
@@ -44,59 +44,26 @@
   <main>
     <!-- HERO -->
     <section class="hero">
-      <div class="wrap hero-grid">
+      <div class="wrap">
         <div class="hero-intro">
-          <span class="kicker reveal d1">cloud engineer · infra · automation</span>
           <h1 class="reveal d2">
-            <span data-typewriter="Aravind">Hello, I'm&nbsp;<span class="type-cursor">▌</span></span>
+            <span data-typewriter="Aravindakrishnan">Hello, I'm&nbsp;<span class="type-cursor">▌</span></span>
           </h1>
-          <p class="lede reveal d3">I build scalable infrastructure and automate the parts that should never be manual.</p>
-          <p class="sub reveal d3"><span class="green">$</span> currently <span class="b">Cloud Engineer @ Centilytics</span> — AWS · Terraform · Docker</p>
+          <p class="lede reveal d3">I build systems that are cheap to run, simple to reason about, and quiet at 3am.<br>
+            <span class="lede-sub">Cloud Engineer with ~1 year turning over-engineered setups into lean, automated infrastructure. AWS Solutions Architect certified, CCNA certified — I've shipped containerized pipelines on ECS, managed multi-cloud environments, and built the kind of homelab that breaks at 2am so production doesn't have to.</span>
+          </p>
           <div class="cta-row reveal d4">
-            <a href="projects.html" class="btn"><span class="pfx">$</span> view projects</a>
-            <a href="about.html" class="btn amber"><span class="pfx">$</span> cat about</a>
+            <a href="projects.html" class="btn">projects</a>
+            <a href="about.html" class="btn amber">about</a>
             <a href="https://github.com/arkhiVd" target="_blank" class="btn ghost"><i class="fab fa-github"></i> github</a>
           </div>
-        </div>
-
-        <!-- status panel -->
-        <div class="status-card reveal d3">
-          <div class="status-head">
-            <span>system://status</span>
-            <span class="rec"><i></i> READY</span>
-          </div>
-          <div class="status-grid">
-            <div class="status-item">
-              <span>cloud</span>
-              <b>AWS · Terraform</b>
-            </div>
-            <div class="status-item">
-              <span>deploy</span>
-              <b>CI/CD · OIDC</b>
-            </div>
-            <div class="status-item">
-              <span>focus</span>
-              <b>Reliability · Automation</b>
-            </div>
-            <div class="status-item">
-              <span>region</span>
-              <b>India · UTC+5:30</b>
-            </div>
-          </div>
-          <p class="status-note">Projection removed — the page now stays text-first and fully reliable.</p>
         </div>
       </div>
     </section>
 
     <!-- INTERACTIVE TERMINAL -->
-    <section class="section" style="padding-top:14px;">
+    <section class="section term-section">
       <div class="wrap">
-        <div class="section-head reveal">
-          <span class="label"><span class="pfx">//</span> interactive shell</span>
-          <h2>Poke around. It actually works.</h2>
-          <p>This is a real shell — type a command or tap a chip. Try <span class="mono green">neofetch</span>, <span class="mono green">projects</span>, or <span class="mono green">whoami</span>.</p>
-        </div>
-
         <div class="term reveal" id="terminal">
           <div class="term-bar">
             <span class="lights"><i></i><i></i><i></i></span>
@@ -109,35 +76,48 @@
             </div>
           </div>
         </div>
-
-        <div class="cmd-hints reveal">
-          <button data-cmd="help">help</button>
-          <button data-cmd="neofetch">neofetch</button>
-          <button data-cmd="whoami">whoami</button>
-          <button data-cmd="skills">skills</button>
-          <button data-cmd="projects">projects</button>
-          <button data-cmd="contact">contact</button>
-          <button data-cmd="clear">clear</button>
-        </div>
       </div>
     </section>
 
-    <!-- TECH STACK -->
-    <section class="section">
+    <!-- TECH MARQUEE -->
+    <section class="marquee-section">
       <div class="wrap">
-        <div class="section-head reveal">
-          <span class="label"><span class="pfx">$</span> stack --list</span>
-          <h2>The toolbox</h2>
+        <div class="marquee-label">
+          <span class="mono" style="color:var(--text-faint)">$</span>
+          <span class="mono cyan"> stack --all</span>
         </div>
-        <div class="stack-grid">
-          <div class="chip reveal"><i class="devicon-amazonwebservices-plain-wordmark" style="color:#ff9900"></i><span class="meta"><b>AWS</b><span>cloud platform</span></span></div>
-          <div class="chip reveal"><i class="devicon-terraform-plain" style="color:#844fba"></i><span class="meta"><b>Terraform</b><span>infra as code</span></span></div>
-          <div class="chip reveal"><i class="devicon-docker-plain" style="color:#2496ed"></i><span class="meta"><b>Docker</b><span>containers</span></span></div>
-          <div class="chip reveal"><i class="devicon-kubernetes-plain" style="color:#326ce5"></i><span class="meta"><b>Kubernetes</b><span>orchestration</span></span></div>
-          <div class="chip reveal"><i class="devicon-python-plain" style="color:#ffd43b"></i><span class="meta"><b>Python</b><span>automation</span></span></div>
-          <div class="chip reveal"><i class="devicon-linux-plain" style="color:#f6f6f6"></i><span class="meta"><b>Linux</b><span>daily driver</span></span></div>
-          <div class="chip reveal"><i class="devicon-git-plain" style="color:#f05032"></i><span class="meta"><b>Git</b><span>version control</span></span></div>
-          <div class="chip reveal"><i class="devicon-github-original" style="color:#f6f6f6"></i><span class="meta"><b>GitHub Actions</b><span>CI/CD</span></span></div>
+      </div>
+      <div class="marquee-outer">
+        <div class="marquee-track">
+          <span class="mq-item"><i class="devicon-amazonwebservices-plain-wordmark" style="color:#ff9900"></i>AWS</span>
+          <span class="mq-item"><i class="devicon-terraform-plain" style="color:#844fba"></i>Terraform</span>
+          <span class="mq-item"><i class="devicon-docker-plain" style="color:#2496ed"></i>Docker</span>
+          <span class="mq-item"><i class="devicon-kubernetes-plain" style="color:#326ce5"></i>Kubernetes</span>
+          <span class="mq-item"><i class="devicon-python-plain" style="color:#ffd43b"></i>Python</span>
+          <span class="mq-item"><i class="devicon-linux-plain" style="color:#d4d4d4"></i>Linux</span>
+          <span class="mq-item"><i class="devicon-git-plain" style="color:#f05032"></i>Git</span>
+          <span class="mq-item"><i class="devicon-github-original" style="color:#d4d4d4"></i>GitHub</span>
+          <span class="mq-item"><i class="devicon-ansible-plain" style="color:#EE0000"></i>Ansible</span>
+          <span class="mq-item"><i class="devicon-bash-plain" style="color:#4EAA25"></i>Bash</span>
+          <span class="mq-item"><i class="devicon-postgresql-plain" style="color:#336791"></i>PostgreSQL</span>
+          <span class="mq-item"><i class="devicon-redis-plain" style="color:#DC382D"></i>Redis</span>
+          <span class="mq-item"><i class="devicon-nginx-plain" style="color:#009900"></i>Nginx</span>
+          <span class="mq-item"><i class="devicon-grafana-plain" style="color:#F46800"></i>Grafana</span>
+          <!-- duplicate for seamless loop -->
+          <span class="mq-item"><i class="devicon-amazonwebservices-plain-wordmark" style="color:#ff9900"></i>AWS</span>
+          <span class="mq-item"><i class="devicon-terraform-plain" style="color:#844fba"></i>Terraform</span>
+          <span class="mq-item"><i class="devicon-docker-plain" style="color:#2496ed"></i>Docker</span>
+          <span class="mq-item"><i class="devicon-kubernetes-plain" style="color:#326ce5"></i>Kubernetes</span>
+          <span class="mq-item"><i class="devicon-python-plain" style="color:#ffd43b"></i>Python</span>
+          <span class="mq-item"><i class="devicon-linux-plain" style="color:#d4d4d4"></i>Linux</span>
+          <span class="mq-item"><i class="devicon-git-plain" style="color:#f05032"></i>Git</span>
+          <span class="mq-item"><i class="devicon-github-original" style="color:#d4d4d4"></i>GitHub</span>
+          <span class="mq-item"><i class="devicon-ansible-plain" style="color:#EE0000"></i>Ansible</span>
+          <span class="mq-item"><i class="devicon-bash-plain" style="color:#4EAA25"></i>Bash</span>
+          <span class="mq-item"><i class="devicon-postgresql-plain" style="color:#336791"></i>PostgreSQL</span>
+          <span class="mq-item"><i class="devicon-redis-plain" style="color:#DC382D"></i>Redis</span>
+          <span class="mq-item"><i class="devicon-nginx-plain" style="color:#009900"></i>Nginx</span>
+          <span class="mq-item"><i class="devicon-grafana-plain" style="color:#F46800"></i>Grafana</span>
         </div>
       </div>
     </section>
@@ -170,16 +150,8 @@
     </div>
   </footer>
 
-  <div id="tweaks-root"></div>
-
   <script src="terminal.js"></script>
+  <script src="assets/js/visitorscript.js"></script>
   <script src="site.js"></script>
-
-  <!-- Tweaks panel -->
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-  <script type="text/babel" src="tweaks-panel.jsx"></script>
-  <script type="text/babel" src="tweaks-app.jsx"></script>
 </body>
 </html>
