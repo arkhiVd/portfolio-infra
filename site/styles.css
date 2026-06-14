@@ -370,8 +370,9 @@ nav#header .wrap {
   font-weight: 600;
   color: var(--text-bright);
   margin-bottom: 22px;
+  /* Let the name wrap as a whole word; only hard-break if it can't fit a line
+     on its own (very narrow phones). No char-splitting on laptop widths. */
   overflow-wrap: break-word;
-  word-break: break-word;
 }
 .hero h1 .accent { color: var(--green-bright); text-shadow: 0 0 32px rgba(78,240,138,0.45); }
 .hero h1 .type-cursor { color: var(--green); font-weight: 400; animation: blink 1.05s steps(1) infinite; }
