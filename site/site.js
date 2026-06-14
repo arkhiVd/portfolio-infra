@@ -69,7 +69,7 @@
   const counter = document.getElementById("visitor-count");
   if (counter) {
     const API = window.VISITOR_API || null;
-    const render = (n) => { counter.textContent = String(n).padStart(4, "0"); };
+    const render = (n) => { counter.textContent = String(n); };
     // Real backend only. No fabricated/localStorage fallback — show "----" if unavailable.
     if (API) {
       fetch(API, { method: "POST" })
