@@ -18,8 +18,9 @@
   <nav id="header">
     <div class="wrap">
       <a href="index.html" class="brand">
-        <span class="dot"></span>
-        <span class="path">~/aravind</span><span class="caret">&nbsp;$</span>
+        <span class="avail-dot"></span>
+        <span class="brand-otw">open to work</span>
+      </a>
       </a>
       <div class="nav-links" id="nav-links">
         <a href="index.html"><span class="pfx">cd </span>~</a>
@@ -42,7 +43,7 @@
       <div class="wrap">
         <div class="section-head reveal">
           <span class="label"><span class="pfx">$</span> ls ~/projects</span>
-          <h2>Things I've built &amp; broken</h2>
+          <h2>Projects</h2>
           <p>Infrastructure, pipelines, and self-hosted experiments. <span class="mono green">●</span> shipped &nbsp; <span class="mono amber">◐</span> in&nbsp;progress</p>
         </div>
 
@@ -55,14 +56,14 @@
               <span class="status live"><i></i> live</span>
             </div>
             <div class="project-body">
-              <h3><a href="https://github.com/arkhiVd/portfolio-infra" target="_blank">Cloud-Native Portfolio</a></h3>
+              <h3><a href="https://github.com/arkhiVd/portfolio-frontend" target="_blank">Cloud-Native Portfolio</a></h3>
               <div class="project-tags">
                 <span>AWS</span><span>Terraform</span><span>Lambda</span><span>DynamoDB</span><span>CloudFront</span><span>GitHub Actions</span>
               </div>
-              <p>The live portfolio stack in this repository: private S3 origin, CloudFront delivery, Lambda + DynamoDB visitor counter, and Terraform-managed infrastructure shipped through GitHub Actions with keyless OIDC auth.</p>
+              <p>A serverless portfolio (the very thing this site is built on) hosted on S3 and delivered globally through a secure CloudFront CDN with a custom domain. A Python/Lambda + DynamoDB backend powers the live visitor counter. The whole stack is defined as code in Terraform and shipped through a GitHub Actions CI/CD pipeline using keyless OIDC auth.</p>
               <div class="project-links">
-                <a href="https://github.com/arkhiVd/portfolio-infra" target="_blank" class="link-pill primary"><i class="fab fa-github"></i> infra</a>
-                <a href="https://github.com/arkhiVd/portfolio-infra/tree/main/lambda" target="_blank" class="link-pill"><i class="fab fa-github"></i> lambda</a>
+                <a href="https://github.com/arkhiVd/portfolio-frontend" target="_blank" class="link-pill primary"><i class="fab fa-github"></i> frontend</a>
+                <a href="https://github.com/arkhiVd/portfolio-backend" target="_blank" class="link-pill"><i class="fab fa-github"></i> backend</a>
               </div>
             </div>
           </article>

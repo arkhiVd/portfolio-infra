@@ -59,31 +59,31 @@
           </div>
         </div>
 
-        <!-- status panel -->
-        <div class="status-card reveal d3">
-          <div class="status-head">
-            <span>system://status</span>
-            <span class="rec"><i></i> READY</span>
+        <!-- hologram projector -->
+        <div class="holo reveal d3">
+          <div class="holo-head">
+            <span>holo://aravind</span>
+            <span class="rec"><i></i> PROJECTING</span>
           </div>
-          <div class="status-grid">
-            <div class="status-item">
-              <span>cloud</span>
-              <b>AWS · Terraform</b>
-            </div>
-            <div class="status-item">
-              <span>deploy</span>
-              <b>CI/CD · OIDC</b>
-            </div>
-            <div class="status-item">
-              <span>focus</span>
-              <b>Reliability · Automation</b>
-            </div>
-            <div class="status-item">
-              <span>region</span>
-              <b>India · UTC+5:30</b>
-            </div>
+          <div class="holo-stage" id="holo-stage">
+            <div class="holo-cone"></div>
+            <img class="holo-fallback" id="holo-fallback" src="assets/profile-phosphor.png" alt="Aravind — hologram" />
+            <model-viewer
+              src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+              alt="3D figure — swap with your own .glb"
+              auto-rotate auto-rotate-delay="0" rotation-per-second="22deg"
+              camera-controls disable-zoom interaction-prompt="none"
+              camera-orbit="0deg 82deg 2.4m" field-of-view="28deg"
+              shadow-intensity="0" exposure="1.1"
+              loading="eager">
+            </model-viewer>
+            <div class="holo-pad"></div>
+            <div class="holo-scan"></div>
           </div>
-          <p class="status-note">Projection removed — the page now stays text-first and fully reliable.</p>
+          <div class="holo-foot">
+            <span id="holo-cap">projection · aravind.v</span>
+            <span class="amber">swap → your .glb</span>
+          </div>
         </div>
       </div>
     </section>
@@ -153,7 +153,7 @@
         </div>
         <div>
           <div class="f-label">// mail</div>
-          <a href="mailto:aravindakrishnanv@tutamail.com" class="f-link"><i class="fas fa-envelope"></i> aravindakrishnanv@tutamail.com</a>
+          <a href="/cdn-cgi/l/email-protection#d2b3a0b3a4bbbcb6b3b9a0bba1babcb3bca492a6a7a6b3bfb3bbbefcb1bdbf" class="f-link"><i class="fas fa-envelope"></i> <span class="__cf_email__" data-cfemail="92f3e0f3e4fbfcf6f3f9e0fbe1fafcf3fce4d2e6e7e6f3fff3fbfebcf1fdff">[email&#160;protected]</span></a>
         </div>
         <div>
           <div class="f-label">// connect</div>
@@ -172,6 +172,7 @@
 
   <div id="tweaks-root"></div>
 
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
   <script src="terminal.js"></script>
   <script src="site.js"></script>
 
