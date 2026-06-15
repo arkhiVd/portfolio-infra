@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>portfolio/v1 — deep dive — aravind@cloud</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="boot"><div class="boot-inner"></div></div>
+  <div class="grid-bg"></div>
+
+  <nav id="header">
+    <div class="wrap">
+      <a href="index.html" class="brand">
+        <span class="avail-dot"></span>
+        <span class="brand-otw">open to work</span>
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html"><span class="pfx">cd </span>~</a>
+        <a href="projects.html" class="active"><span class="pfx">cd </span>projects</a>
+        <a href="about.html"><span class="pfx">cd </span>about</a>
+      </div>
+      <div class="nav-right">
+        <div class="uptime">
+          <span class="led"></span>
+          <span class="lbl">visitors</span>
+          <b id="visitor-count">····</b>
+        </div>
+        <button class="menu-toggle" id="menu-toggle" aria-label="menu"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="section" style="padding-top:48px;">
+      <div class="wrap">
+
+        <a href="projects.html" class="back-link reveal"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-0.15em"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> cd ../projects</a>
+
+        <div class="dd-head reveal">
+          <span class="label"><span class="pfx">$</span> cat portfolio/v1/README.md</span>
+          <span class="dd-badge">previous architecture</span>
+          <h1>Cloud-Native Portfolio <span class="dim mono">— v1</span></h1>
+          <p class="dd-lede">The original full-stack serverless portfolio: a security-first AWS build, fully defined in Terraform and shipped through GitHub Actions. The live site has since been rebuilt as a leaner single-stack design — this page documents the version that came before.</p>
+          <div class="dd-meta">
+            <div class="dd-meta-item">
+              <span class="k">// frontend repo</span>
+              <a href="https://github.com/arkhiVd/old-portfolio-frontend" target="_blank">old-portfolio-frontend</a>
+            </div>
+            <div class="dd-meta-item">
+              <span class="k">// backend repo</span>
+              <a href="https://github.com/arkhiVd/old-portfolio-backend" target="_blank">old-portfolio-backend</a>
+            </div>
+            <div class="dd-meta-item">
+              <span class="k">// live url</span>
+              <span class="dim mono">.. (decommissioned)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHILOSOPHY -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> echo $GOAL</div>
+          <p class="dd-text">Not just build a website — architect, deploy, and automate a complete full-stack serverless application on AWS. The project served as a tangible portfolio of cloud infrastructure, security, automation, and CI/CD skills, mirroring the standards of a professional enterprise environment.</p>
+        </div>
+
+        <!-- KEY ACHIEVEMENTS -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> ls achievements/</div>
+          <div class="dd-grid">
+            <div class="dd-feature">
+              <span class="dd-icon green"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+              <h4>Security-First Design</h4>
+              <p>Private-by-default architecture: a private S3 bucket, CloudFront OAC, and least-privilege IAM roles across the board.</p>
+            </div>
+            <div class="dd-feature">
+              <span class="dd-icon violet"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></span>
+              <h4>Fully Serverless</h4>
+              <p>Cost-effective, scalable stack on Lambda + DynamoDB + API Gateway — zero servers to manage or patch.</p>
+            </div>
+            <div class="dd-feature">
+              <span class="dd-icon cyan"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
+              <h4>100% Infrastructure as Code</h4>
+              <p>Entire frontend and backend declared in Terraform — repeatable, version-controlled, drift-free deployments.</p>
+            </div>
+            <div class="dd-feature">
+              <span class="dd-icon amber"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91 0z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></span>
+              <h4>Automated CI/CD</h4>
+              <p>"Push-to-deploy" GitHub Actions workflows with automated tests, security scanning, and seamless deploys.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TECH STACK -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> cat stack.txt</div>
+          <div class="dd-grid dd-grid-3">
+            <div class="dd-col">
+              <h5 class="green">frontend</h5>
+              <ul>
+                <li>Amazon S3</li>
+                <li>CloudFront (CDN)</li>
+                <li>Route 53 (DNS)</li>
+                <li>ACM (SSL)</li>
+                <li>HTML5 &amp; CSS3</li>
+                <li>JavaScript (Fetch API)</li>
+              </ul>
+            </div>
+            <div class="dd-col">
+              <h5 class="amber">backend</h5>
+              <ul>
+                <li>AWS Lambda (Python)</li>
+                <li>Amazon DynamoDB</li>
+                <li>Amazon API Gateway</li>
+                <li>IAM roles &amp; policies</li>
+                <li>Boto3 SDK</li>
+              </ul>
+            </div>
+            <div class="dd-col">
+              <h5 class="cyan">devops</h5>
+              <ul>
+                <li>Terraform (IaC)</li>
+                <li>GitHub Actions (CI/CD)</li>
+                <li>Git &amp; GitHub</li>
+                <li>AWS CLI</li>
+                <li>OIDC authentication</li>
+                <li>tfsec scanner</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ARCHITECTURE DIAGRAMS -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> open architecture/*.png</div>
+          <p class="dd-text" style="margin-bottom:22px;">Two distinct layers: a global delivery network for the frontend and a regional serverless stack for the backend API.</p>
+          <div class="dd-diagrams">
+            <figure class="dd-figure">
+              <div class="dd-figure-img"><img src="assets/img/architecture-diagram.png" alt="Frontend architecture: users → Route 53 → CloudFront (ACM TLS) → S3 via OAC" loading="lazy" /></div>
+              <figcaption>Frontend — delivery layer (Route 53 · CloudFront · ACM · S3/OAC)</figcaption>
+            </figure>
+            <figure class="dd-figure">
+              <div class="dd-figure-img"><img src="assets/img/backend.png" alt="Backend architecture: API Gateway → Lambda → DynamoDB visitor counter" loading="lazy" /></div>
+              <figcaption>Backend — application logic (API Gateway · Lambda · DynamoDB)</figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <!-- DEEP DIVE -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> man architecture</div>
+          <div class="dd-dive">
+            <div class="dd-dive-item">
+              <h4><span class="dd-dot blue"></span> The Frontend — delivery layer</h4>
+              <p>Designed for performance, security, and low cost by offloading all traffic to the AWS global edge.</p>
+              <ul>
+                <li><b>Private S3 bucket</b> — all static assets in a secure, non-public bucket.</li>
+                <li><b>CloudFront CDN</b> — public entry point, global caching, HTTP→HTTPS redirect.</li>
+                <li><b>Origin Access Control</b> — only this distribution can read the bucket; no direct origin access.</li>
+                <li><b>ACM &amp; Route 53</b> — free auto-renewing TLS cert + alias records from the custom domain to the CDN.</li>
+              </ul>
+            </div>
+            <div class="dd-dive-item">
+              <h4><span class="dd-dot violet"></span> The Backend API — application logic</h4>
+              <p>An intelligent <em>unique</em> visitor counter, not a naive hit counter — a real serverless + data-privacy pattern.</p>
+              <ul>
+                <li><b>AWS Lambda (Python)</b> — pseudonymizes visitor IPs with a salted HMAC-SHA256; secret held in an env var.</li>
+                <li><b>DynamoDB</b> — single-table design: one item holds the aggregate count, others store IP hashes. A fast <code>GetItem</code> check decides if a visitor is new before an atomic <code>UpdateItem</code> avoids race conditions.</li>
+                <li><b>API Gateway</b> — secure REST endpoint via Lambda proxy integration; CORS scoped to the frontend domain.</li>
+              </ul>
+            </div>
+            <div class="dd-dive-item">
+              <h4><span class="dd-dot green"></span> The Automation Layer — IaC</h4>
+              <p>The whole project declared in Terraform — no manual console clicking, fully reproducible.</p>
+              <ul>
+                <li><b>Remote state</b> — Terraform state in an S3 backend, the foundation for CI/CD automation.</li>
+                <li><b>Modular design</b> — split into independent <code>frontend</code> and <code>backend</code> Terraform projects.</li>
+                <li><b>Real problem-solving</b> — debugged S3 <code>BucketOwnerEnforced</code> vs legacy ACLs and used Terraform's implicit dependency graph to resolve the CloudFront ↔ S3 circular reference.</li>
+              </ul>
+            </div>
+            <div class="dd-dive-item">
+              <h4><span class="dd-dot amber"></span> The Deployment Engine — CI/CD</h4>
+              <p>"Push-to-deploy" GitHub Actions pipelines automating test and deploy for both repos.</p>
+              <ul>
+                <li><b>Secure auth</b> — passwordless OIDC connection to AWS; no long-lived keys stored as secrets.</li>
+                <li><b>Backend pipeline</b> — Python unit tests + <code>tfsec</code> scan gate the build before <code>terraform apply</code>.</li>
+                <li><b>Frontend pipeline</b> — applies infra, then uses Terraform outputs to <code>aws s3 sync</code> the site and <code>cloudfront create-invalidation</code> to purge the cache instantly.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="dd-actions reveal">
+          <a href="projects.html" class="btn ghost"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-0.15em"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> back to projects</a>
+          <a href="https://github.com/arkhiVd/old-portfolio-frontend" target="_blank" class="btn"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> frontend repo</a>
+          <a href="https://github.com/arkhiVd/old-portfolio-backend" target="_blank" class="btn amber"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> backend repo</a>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <div class="f-label">// get in touch</div>
+          <p>Actively seeking new opportunities and always up for a conversation about infrastructure, automation, or a good homelab setup.</p>
+        </div>
+        <div>
+          <div class="f-label">// mail</div>
+          <a href="mailto:aravindakrishnanv@tutamail.com" class="f-link"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="vertical-align:-0.2em"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7L22 6"/></svg> aravindakrishnanv@tutamail.com</a>
+        </div>
+        <div>
+          <div class="f-label">// connect</div>
+          <div class="social-row">
+            <a href="https://www.linkedin.com/in/aravindakrishnan-v-2b0651218" target="_blank" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg></a>
+            <a href="https://github.com/arkhiVd" target="_blank" aria-label="GitHub"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>designed &amp; built by Aravindakrishnan V — © 2026</span>
+        <span class="green">aravind@cloud:~$ <span style="color:var(--text-faint)">exit</span></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/visitorscript.js"></script>
+  <script src="site.js"></script>
+</body>
+</html>
