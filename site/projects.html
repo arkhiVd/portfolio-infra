@@ -55,14 +55,14 @@
               <span class="status live"><i></i> live</span>
             </div>
             <div class="project-body">
-              <h3><a href="https://github.com/arkhiVd/portfolio-frontend" target="_blank">Cloud-Native Portfolio</a></h3>
+              <h3><a href="https://github.com/arkhiVd/portfolio-infra" target="_blank">Cloud-Native Portfolio</a></h3>
               <div class="project-tags">
-                <span>AWS</span><span>Terraform</span><span>Lambda</span><span>DynamoDB</span><span>CloudFront</span><span>GitHub Actions</span>
+                <span>AWS</span><span>Terraform</span><span>Lambda</span><span>DynamoDB</span><span>CloudFront</span><span>OIDC</span><span>GitHub Actions</span>
               </div>
-              <p>A serverless portfolio (the very thing this site is built on) hosted on S3 and delivered globally through a secure CloudFront CDN with a custom domain. A Python/Lambda + DynamoDB backend powers the live visitor counter. The whole stack is defined as code in Terraform and shipped through a GitHub Actions CI/CD pipeline using keyless OIDC auth.</p>
+              <p>This very site. A serverless portfolio in a single Terraform stack — private S3 behind a CloudFront CDN with a custom domain, and a Python/Lambda + DynamoDB backend (Function URL, no API Gateway) powering the live visitor counter. Shipped through a secure GitHub Actions pipeline with keyless OIDC, remote S3 state, and branch-protected plan/apply. A leaner rebuild of the original two-repo design — the deep dive below documents that earlier version.</p>
               <div class="project-links">
-                <a href="https://github.com/arkhiVd/portfolio-frontend" target="_blank" class="link-pill primary"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> frontend</a>
-                <a href="https://github.com/arkhiVd/portfolio-backend" target="_blank" class="link-pill"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> backend</a>
+                <a href="https://github.com/arkhiVd/portfolio-infra" target="_blank" class="link-pill primary"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> repo</a>
+                <a href="project-detail.html" class="link-pill"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-0.15em"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg> deep dive (v1)</a>
               </div>
             </div>
           </article>
@@ -70,6 +70,42 @@
           <article class="project reveal">
             <div class="project-head">
               <span class="idx">[02]</span>
+              <span>appstack-infra/</span>
+              <span class="status wip"><i></i> in progress</span>
+            </div>
+            <div class="project-body">
+              <h3><a href="https://github.com/arkhiVd/appstack-infra" target="_blank">Microservices Platform Infrastructure</a></h3>
+              <div class="project-tags">
+                <span>ECS on EC2</span><span>RDS Postgres</span><span>Redis</span><span>OpenSearch</span><span>SQS</span><span>CloudFront</span><span>Terraform</span>
+              </div>
+              <p>Modular, free-tier-focused AWS infrastructure for a .NET microservices product platform (Angular admin + React Native app). A dedicated VPC with no NAT runs eight services plus PDF-ingest and search-sync workers on a single ECS-on-EC2 host behind an ALB. Two planes by design: a synchronous request path (ALB → ECS → Redis/OpenSearch/Postgres) and an async event path (S3 → SQS → containerized workers), each queue with a DLQ. Search hits OpenSearch only; the write path stays decoupled.</p>
+              <div class="project-links">
+                <a href="https://github.com/arkhiVd/appstack-infra" target="_blank" class="link-pill primary"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> repo</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project reveal">
+            <div class="project-head">
+              <span class="idx">[03]</span>
+              <span>cdc-infra/</span>
+              <span class="status wip"><i></i> in progress</span>
+            </div>
+            <div class="project-body">
+              <h3><a href="https://github.com/arkhiVd/cdc-infra" target="_blank">Change Data Capture Pipeline</a></h3>
+              <div class="project-tags">
+                <span>RDS PostgreSQL</span><span>Amazon MSK</span><span>Debezium</span><span>MSK Connect</span><span>Kafka</span><span>Terraform</span>
+              </div>
+              <p>Terraform for a real-time CDC pipeline: every INSERT / UPDATE / DELETE on RDS PostgreSQL is streamed into Amazon MSK (Kafka) by a Debezium connector on MSK Connect — read straight from the write-ahead log, no polling. A dedicated VPC with a self-referencing security group lets RDS, MSK, and MSK Connect reach each other, and an S3 gateway endpoint pulls the Debezium plugin with no NAT Gateway. Logical replication is enabled via a custom RDS parameter group.</p>
+              <div class="project-links">
+                <a href="https://github.com/arkhiVd/cdc-infra" target="_blank" class="link-pill primary"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> repo</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project reveal">
+            <div class="project-head">
+              <span class="idx">[04]</span>
               <span>cicd-containers/</span>
               <span class="status live"><i></i> live</span>
             </div>
@@ -88,7 +124,7 @@
 
           <article class="project reveal">
             <div class="project-head">
-              <span class="idx">[03]</span>
+              <span class="idx">[05]</span>
               <span>homelab/</span>
               <span class="status live"><i></i> live</span>
             </div>
@@ -106,7 +142,7 @@
 
           <article class="project reveal">
             <div class="project-head">
-              <span class="idx">[04]</span>
+              <span class="idx">[06]</span>
               <span>net-automation/</span>
               <span class="status wip"><i></i> in progress</span>
             </div>
