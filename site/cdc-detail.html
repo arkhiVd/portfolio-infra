@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>cdc-infra — deep dive — aravind@cloud</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="boot"><div class="boot-inner"></div></div>
+  <div class="grid-bg"></div>
+
+  <nav id="header">
+    <div class="wrap">
+      <a href="index.html" class="brand">
+        <span class="avail-dot"></span>
+        <span class="brand-otw">open to work</span>
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html"><span class="pfx">cd </span>~</a>
+        <a href="projects.html" class="active"><span class="pfx">cd </span>projects</a>
+        <a href="about.html"><span class="pfx">cd </span>about</a>
+      </div>
+      <div class="nav-right">
+        <div class="uptime">
+          <span class="led"></span>
+          <span class="lbl">visitors</span>
+          <b id="visitor-count">····</b>
+        </div>
+        <button class="menu-toggle" id="menu-toggle" aria-label="menu"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="section" style="padding-top:48px;">
+      <div class="wrap">
+
+        <a href="projects.html" class="back-link reveal"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-0.15em"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> cd ../projects</a>
+
+        <div class="dd-head reveal">
+          <span class="label"><span class="pfx">$</span> cat cdc-infra/README.md</span>
+          <span class="dd-badge">real-time data pipeline</span>
+          <h1>Change Data Capture Pipeline</h1>
+          <p class="dd-lede">A real-time CDC pipeline defined entirely in Terraform: every INSERT / UPDATE / DELETE on RDS PostgreSQL is streamed into Amazon MSK (Kafka) by a Debezium connector running on MSK Connect — read straight from the database write-ahead log, no application code and no polling.</p>
+          <div class="dd-meta">
+            <div class="dd-meta-item">
+              <span class="k">// repo</span>
+              <a href="https://github.com/arkhiVd/cdc-infra" target="_blank">cdc-infra</a>
+            </div>
+            <div class="dd-meta-item">
+              <span class="k">// region</span>
+              <span class="dim mono">us-east-1</span>
+            </div>
+            <div class="dd-meta-item">
+              <span class="k">// status</span>
+              <span class="dim mono">in progress</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- WHAT / GOAL -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> echo $GOAL</div>
+          <p class="dd-text">Turn a database into a stream of events. Instead of polling a table asking "what changed?", CDC reads the database's own transaction log (the PostgreSQL write-ahead log) and emits one event per row change — operation type (<code>c</code> create, <code>u</code> update, <code>d</code> delete, <code>r</code> snapshot) plus the before/after row values. Debezium reads the log, Kafka carries the events, any consumer subscribes; the source database does no extra work beyond what it already writes to its WAL. The whole stack stands up from a single <code>terraform apply</code> and tears down just as cleanly.</p>
+        </div>
+
+        <!-- KEY ACHIEVEMENTS -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> ls highlights/</div>
+          <div class="dd-grid">
+            <div class="dd-feature">
+              <span class="dd-icon green"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+              <h4>Log-Based, No Polling</h4>
+              <p>Debezium reads the Postgres WAL via logical replication and emits one event per row change — sub-second, no schedule, no load on the source from polling queries.</p>
+            </div>
+            <div class="dd-feature">
+              <span class="dd-icon cyan"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></span>
+              <h4>Decoupled Modules</h4>
+              <p>Five independent Terraform modules — networking, iam, rds, msk, msk_connect — each handing one value to the next. The graph wires RDS↔MSK↔Connect with zero manual config.</p>
+            </div>
+            <div class="dd-feature">
+              <span class="dd-icon amber"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+              <h4>No NAT, Cost-Conscious</h4>
+              <p>An S3 gateway endpoint (free) lets MSK Connect pull the Debezium plugin with no NAT Gateway or internet egress. A self-referencing security group replaces per-port rules.</p>
+            </div>
+            <div class="dd-feature">
+              <span class="dd-icon violet"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
+              <h4>100% Infrastructure as Code</h4>
+              <p>VPC, RDS parameter group, Kafka cluster, plugin build, and connector all declared in Terraform. The plugin ZIP is even fetched from Maven and uploaded at apply time.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TECH STACK -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> cat stack.txt</div>
+          <div class="dd-grid dd-grid-3">
+            <div class="dd-col">
+              <h5 class="green">source</h5>
+              <ul>
+                <li>Amazon RDS (PostgreSQL)</li>
+                <li>Logical replication (WAL)</li>
+                <li>Custom parameter group</li>
+                <li>Replication slot + publication</li>
+              </ul>
+            </div>
+            <div class="dd-col">
+              <h5 class="amber">streaming</h5>
+              <ul>
+                <li>Amazon MSK (Kafka)</li>
+                <li>MSK Connect</li>
+                <li>Debezium Postgres connector</li>
+                <li>Kafka Connect (topic.creation.*)</li>
+              </ul>
+            </div>
+            <div class="dd-col">
+              <h5 class="cyan">platform</h5>
+              <ul>
+                <li>Terraform (IaC)</li>
+                <li>Dedicated VPC + subnets</li>
+                <li>S3 gateway endpoint</li>
+                <li>IAM (scoped exec role)</li>
+                <li>CloudWatch Logs</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ARCHITECTURE DIAGRAM -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> open architecture.png</div>
+          <p class="dd-text" style="margin-bottom:22px;">One dedicated VPC: RDS PostgreSQL feeds MSK Connect (Debezium), which streams into the Amazon MSK cluster. The connector plugin is pulled from S3 over a gateway endpoint, and worker logs land in CloudWatch.</p>
+          <div class="dd-diagrams">
+            <figure class="dd-figure">
+              <div class="dd-figure-img"><img src="assets/img/cdc-architecture.png" alt="CDC pipeline architecture: RDS PostgreSQL → MSK Connect (Debezium) → Amazon MSK, plugin pulled from S3 over a gateway endpoint, worker logs to CloudWatch, all inside a dedicated VPC" loading="lazy" /></div>
+              <figcaption>RDS PostgreSQL · MSK Connect (Debezium) · Amazon MSK · S3 plugin · CloudWatch</figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <!-- DEEP DIVE -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> man architecture</div>
+          <div class="dd-dive">
+            <div class="dd-dive-item">
+              <h4><span class="dd-dot blue"></span> networking — the isolated VPC</h4>
+              <p>Nothing touches the account default VPC, so <code>terraform destroy</code> removes everything cleanly.</p>
+              <ul>
+                <li><b>Dedicated VPC</b> — <code>10.20.0.0/16</code> with two public subnets across two AZs (MSK and the RDS subnet group both require multi-AZ).</li>
+                <li><b>Self-referencing security group</b> — one SG shared by RDS, MSK, and Connect; anything inside the SG can reach anything else, no per-port rules.</li>
+                <li><b>S3 gateway endpoint</b> — free; lets MSK Connect download the Debezium plugin with no NAT Gateway or internet egress.</li>
+              </ul>
+            </div>
+            <div class="dd-dive-item">
+              <h4><span class="dd-dot green"></span> rds — the source database</h4>
+              <p>The switch that makes CDC possible lives here.</p>
+              <ul>
+                <li><b>Logical replication</b> — a custom parameter group sets <code>rds.logical_replication = 1</code> (→ <code>wal_level = logical</code>). Without it, the WAL isn't readable by Debezium.</li>
+                <li><b>Pending-reboot apply</b> — the parameter uses <code>apply_method = pending-reboot</code>; the instance reboots once before the replication slot can be created.</li>
+              </ul>
+            </div>
+            <div class="dd-dive-item">
+              <h4><span class="dd-dot amber"></span> msk — the event backbone</h4>
+              <p>Kafka carries the change events to any number of consumers.</p>
+              <ul>
+                <li><b>kafka.t3.small</b> — the smallest MSK broker; the console blocks it, so it must be provisioned via API / Terraform.</li>
+                <li><b>No auto-create topics</b> — <code>auto.create.topics.enable = false</code>; the connector creates its own topics instead, with replication factor matching the broker count.</li>
+              </ul>
+            </div>
+            <div class="dd-dive-item">
+              <h4><span class="dd-dot violet"></span> msk_connect — the CDC engine</h4>
+              <p>Where the actual capture runs — built and registered at apply time.</p>
+              <ul>
+                <li><b>Plugin built on apply</b> — a <code>local-exec</code> provisioner fetches the Debezium tarball from Maven, repacks it as a flat ZIP, and uploads it to S3, where it's registered as a custom plugin.</li>
+                <li><b>The connector</b> — runs the plugin against the RDS host + MSK brokers, opens a logical replication slot named <code>debezium</code>, auto-creates a filtered Postgres publication, and streams changes.</li>
+                <li><b>Topic shape</b> — emits to <code>{topic_prefix}.{schema}.{table}</code>; the defaults give a single topic <code>rds.public.users</code>, self-created via Kafka Connect's <code>topic.creation.*</code> config.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="dd-actions reveal">
+          <a href="projects.html" class="btn ghost"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-0.15em"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> back to projects</a>
+          <a href="https://github.com/arkhiVd/cdc-infra" target="_blank" class="btn"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> view repo</a>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <div class="f-label">// get in touch</div>
+          <p>Actively seeking new opportunities and always up for a conversation about infrastructure, automation, or a good homelab setup.</p>
+        </div>
+        <div>
+          <div class="f-label">// mail</div>
+          <a href="mailto:aravindakrishnanv@tutamail.com" class="f-link"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="vertical-align:-0.2em"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7L22 6"/></svg> aravindakrishnanv@tutamail.com</a>
+        </div>
+        <div>
+          <div class="f-label">// connect</div>
+          <div class="social-row">
+            <a href="https://www.linkedin.com/in/aravindakrishnan-v-2b0651218" target="_blank" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg></a>
+            <a href="https://github.com/arkhiVd" target="_blank" aria-label="GitHub"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>designed &amp; built by Aravindakrishnan V — © 2026</span>
+        <span class="green">aravind@cloud:~$ <span style="color:var(--text-faint)">exit</span></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/visitorscript.js"></script>
+  <script src="site.js"></script>
+</body>
+</html>
