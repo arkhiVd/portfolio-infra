@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>appstack-infra — deep dive — aravind@cloud</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="boot"><div class="boot-inner"></div></div>
+  <div class="grid-bg"></div>
+
+  <nav id="header">
+    <div class="wrap">
+      <a href="index.html" class="brand">
+        <span class="avail-dot"></span>
+        <span class="brand-otw">open to work</span>
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html"><span class="pfx">cd </span>~</a>
+        <a href="projects.html" class="active"><span class="pfx">cd </span>projects</a>
+        <a href="about.html"><span class="pfx">cd </span>about</a>
+      </div>
+      <div class="nav-right">
+        <div class="uptime">
+          <span class="led"></span>
+          <span class="lbl">visitors</span>
+          <b id="visitor-count">····</b>
+        </div>
+        <button class="menu-toggle" id="menu-toggle" aria-label="menu"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="section" style="padding-top:48px;">
+      <div class="wrap">
+
+        <a href="projects.html" class="back-link reveal"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-0.15em"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> cd ../projects</a>
+
+        <div class="dd-head reveal">
+          <span class="label"><span class="pfx">$</span> cat appstack-infra/README.md</span>
+          <span class="dd-badge">microservices platform</span>
+          <h1>Microservices Platform Infrastructure</h1>
+          <p class="dd-lede">Modular, free-tier-focused AWS infrastructure for a .NET microservices product platform (Angular admin panel + React Native app), defined entirely in Terraform. A dedicated VPC with no NAT Gateway runs eight services plus two workers on a single ECS-on-EC2 host behind an ALB — split into a synchronous request plane and an asynchronous event plane by design.</p>
+          <div class="dd-meta">
+            <div class="dd-meta-item">
+              <span class="k">// repo</span>
+              <a href="https://github.com/arkhiVd/appstack-infra" target="_blank">appstack-infra</a>
+            </div>
+            <div class="dd-meta-item">
+              <span class="k">// region</span>
+              <span class="dim mono">ap-south-1</span>
+            </div>
+            <div class="dd-meta-item">
+              <span class="k">// status</span>
+              <span class="dim mono">in progress</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- GOAL -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> echo $GOAL</div>
+          <p class="dd-text">Provision the full platform — not the application images — for a product search &amp; management system, on AWS, at the lowest possible cost. The whole stack stands up from a single <code>terraform apply</code> against a custom VPC (no default VPC used anywhere) and tears down just as cleanly. Every sizing decision is pinned to the free tier, and the single biggest cost — the NAT Gateway — is deliberately engineered away.</p>
+        </div>
+
+        <!-- KEY ACHIEVEMENTS -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> ls highlights/</div>
+          <div class="dd-grid">
+            <div class="dd-feature">
+              <span class="dd-icon green"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></span>
+              <h4>Two-Plane Design</h4>
+              <p>A synchronous request path (ALB → ECS → Redis / OpenSearch / Postgres) and an async event path (S3 → SQS → containerized workers) are intentionally separated, so an upload burst can't take down the API.</p>
+            </div>
+            <div class="dd-feature">
+              <span class="dd-icon amber"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+              <h4>No NAT, Free-Tier First</h4>
+              <p>Public-subnet ECS plus S3/DynamoDB gateway endpoints avoid the ~$32/mo NAT Gateway. Every component pinned to free-tier sizes — t3.micro compute, db, and cache.</p>
+            </div>
+            <div class="dd-feature">
+              <span class="dd-icon cyan"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+              <h4>Layered Least-Privilege SGs</h4>
+              <p>internet → ALB SG → ECS SG → Data SG. Databases take traffic only from ECS, ECS only from the ALB. No public IPs on data, no SSH — ops via SSM Session Manager.</p>
+            </div>
+            <div class="dd-feature">
+              <span class="dd-icon violet"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
+              <h4>Fully Modular IaC</h4>
+              <p>Nine composable Terraform modules wired in <code>environments/dev</code>, with a bootstrap S3 + DynamoDB remote-state backend and OIDC GitHub Actions for plan / apply / destroy.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TECH STACK -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> cat stack.txt</div>
+          <div class="dd-grid dd-grid-3">
+            <div class="dd-col">
+              <h5 class="green">edge &amp; compute</h5>
+              <ul>
+                <li>CloudFront + S3 (OAC)</li>
+                <li>Application Load Balancer</li>
+                <li>ECS on EC2 (t3.micro)</li>
+                <li>ECR (per-service repos)</li>
+              </ul>
+            </div>
+            <div class="dd-col">
+              <h5 class="amber">data &amp; messaging</h5>
+              <ul>
+                <li>RDS PostgreSQL (private)</li>
+                <li>ElastiCache Redis (private)</li>
+                <li>OpenSearch (VPC, SG-locked)</li>
+                <li>SQS + DLQs</li>
+              </ul>
+            </div>
+            <div class="dd-col">
+              <h5 class="cyan">platform</h5>
+              <ul>
+                <li>Terraform (modular IaC)</li>
+                <li>Dedicated VPC, no NAT</li>
+                <li>S3/DynamoDB gateway endpoints</li>
+                <li>SSM Session Manager</li>
+                <li>GitHub Actions (OIDC)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ARCHITECTURE DIAGRAM -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> open architecture.png</div>
+          <p class="dd-text" style="margin-bottom:22px;">One dedicated <code>10.0.0.0/16</code> VPC across two AZs. Public subnets hold the ALB and ECS host; private subnets hold RDS, Redis, and OpenSearch with no route to the internet. The admin SPA is served from S3 via CloudFront, and SQS-driven workers handle the asynchronous plane.</p>
+          <div class="dd-diagrams">
+            <figure class="dd-figure">
+              <div class="dd-figure-img"><img src="assets/img/appstack-architecture.png" alt="AppStack architecture: CloudFront/S3 admin SPA and an ALB fronting ECS-on-EC2 microservices in a dedicated ap-south-1 VPC, with private RDS Postgres, ElastiCache Redis and OpenSearch, plus SQS-driven workers and GitHub Actions OIDC CI/CD" loading="lazy" /></div>
+              <figcaption>CloudFront/S3 · ALB · ECS-on-EC2 · RDS · Redis · OpenSearch · SQS · OIDC CI/CD</figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <!-- DEEP DIVE -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> man architecture</div>
+          <div class="dd-dive">
+            <div class="dd-dive-item">
+              <h4><span class="dd-dot blue"></span> The synchronous request plane</h4>
+              <p>User → API → data, served fast and cheap by pushing reads off Postgres.</p>
+              <ul>
+                <li><b>Admin SPA</b> — Angular static files in a private S3 bucket, served by CloudFront via OAC; 403/404 fall back to <code>/index.html</code> for client-side routing.</li>
+                <li><b>ALB → ECS</b> — the ALB is the only thing in front of ECS; the ECS security group accepts traffic only from the ALB's SG.</li>
+                <li><b>Read offload</b> — .NET services use Redis for caching/sessions and OpenSearch for search; Postgres handles writes and transactional reads only. Search never hits Postgres.</li>
+              </ul>
+            </div>
+            <div class="dd-dive-item">
+              <h4><span class="dd-dot violet"></span> The asynchronous event plane</h4>
+              <p>Spiky, heavy work runs off queues so it can't take down the API.</p>
+              <ul>
+                <li><b>PDF ingestion</b> — an admin uploads a 5–6k-item PDF to S3; an <code>ObjectCreated</code> event goes to the <code>pdf-ingest</code> queue, and the <code>pdf-ingest-worker</code> (a container, not Lambda) batch-inserts into Postgres.</li>
+                <li><b>DB → search sync</b> — a price change publishes to the <code>price-sync</code> queue; the <code>search-sync-worker</code> updates the matching OpenSearch document, keeping the index eventually-consistent without coupling the write path to search.</li>
+                <li><b>DLQs</b> — each queue has a redrive dead-letter queue so poison messages don't loop forever.</li>
+              </ul>
+            </div>
+            <div class="dd-dive-item">
+              <h4><span class="dd-dot green"></span> The network &amp; security model</h4>
+              <p>A dedicated VPC with layered, least-privilege security groups.</p>
+              <ul>
+                <li><b>Dedicated VPC</b> — own IGW, subnets, route tables, SGs across 2 AZs; no default VPC anywhere. Public subnets face the internet, private subnets have no internet route at all.</li>
+                <li><b>Layered SGs</b> — internet → ALB SG (80/443) → ECS SG (from ALB only) → Data SG (5432/6379/443 from ECS only). No public IPs on any database.</li>
+                <li><b>Ops without SSH</b> — SSM Session Manager via the instance role; no bastion, no VPN, no key pairs.</li>
+              </ul>
+            </div>
+            <div class="dd-dive-item">
+              <h4><span class="dd-dot amber"></span> Cost engineering &amp; CI/CD</h4>
+              <p>Free-tier by construction, shipped through keyless pipelines.</p>
+              <ul>
+                <li><b>No NAT Gateway</b> — public-subnet ECS + free S3/DynamoDB gateway endpoints let the private route table reach those services, avoiding the single biggest line item (~$32/mo).</li>
+                <li><b>Free-tier sizing</b> — ECS on EC2 t3.micro (not Fargate), db.t3.micro Postgres, cache.t3.micro Redis, single-node OpenSearch, ECR with a keep-5 lifecycle policy.</li>
+                <li><b>OIDC CI/CD</b> — GitHub Actions with no static keys: <code>plan</code> on PRs, <code>apply</code> gated by a production environment approval, <code>destroy</code> manual-only with a typed confirmation.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="dd-actions reveal">
+          <a href="projects.html" class="btn ghost"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-0.15em"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> back to projects</a>
+          <a href="https://github.com/arkhiVd/appstack-infra" target="_blank" class="btn"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> view repo</a>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <div class="f-label">// get in touch</div>
+          <p>Actively seeking new opportunities and always up for a conversation about infrastructure, automation, or a good homelab setup.</p>
+        </div>
+        <div>
+          <div class="f-label">// mail</div>
+          <a href="mailto:aravindakrishnanv@tutamail.com" class="f-link"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="vertical-align:-0.2em"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7L22 6"/></svg> aravindakrishnanv@tutamail.com</a>
+        </div>
+        <div>
+          <div class="f-label">// connect</div>
+          <div class="social-row">
+            <a href="https://www.linkedin.com/in/aravindakrishnan-v-2b0651218" target="_blank" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg></a>
+            <a href="https://github.com/arkhiVd" target="_blank" aria-label="GitHub"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>designed &amp; built by Aravindakrishnan V — © 2026</span>
+        <span class="green">aravind@cloud:~$ <span style="color:var(--text-faint)">exit</span></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/visitorscript.js"></script>
+  <script src="site.js"></script>
+</body>
+</html>
