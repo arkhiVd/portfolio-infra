@@ -132,23 +132,14 @@
 
         <!-- ARCHITECTURE DIAGRAM -->
         <div class="dd-block reveal">
-          <div class="card-label"><span class="pfx">$</span> cat architecture.txt</div>
+          <div class="card-label"><span class="pfx">$</span> open architecture.png</div>
           <p class="dd-text" style="margin-bottom:22px;">Static multipage dashboard on CloudFront over a single Lambda API (function URL locked to CloudFront by OAC SigV4). The scanner fans out across regions and member accounts on read-only roles; everything meets in a DynamoDB finding store.</p>
-          <pre class="mono" style="overflow-x:auto; font-size:0.78rem; line-height:1.5; padding:18px; border:1px solid var(--border, #2a2a2a); border-radius:8px;">
- browser ──► CloudFront ──┬─► S3 (dashboard, OAC)
-                          └─► /api/* ──► Lambda API ──► Cognito JWT verify (in-process)
-                                              │
-              ┌───────────────────────────────┼──────────────────┐
-              ▼                               ▼                  ▼
-        scanner Lambda                  chat Lambda        arch Lambda
-        24+ detectors                   agentic tool-use   resource discovery
-        all regions, daily              read-only aws_read draw.io render
-              │                               │                  │
-              └────────► DynamoDB findings ◄──┴──────────────────┘
-                         (new / open / resolved)
-              │
-              ├─► member accts: sts:AssumeRole ─► clearsky-readonly (SSM registry)
-              └─► SNS daily digest · EventBridge schedule · budget guardrail</pre>
+          <div class="dd-diagrams">
+            <figure class="dd-figure">
+              <div class="dd-figure-img"><img src="assets/img/clearsky-architecture.png" alt="ClearSky architecture: CloudFront serving an S3 dashboard and a Lambda API with Cognito auth, fanning out to scanner, agentic chat, and diagram Lambdas over a DynamoDB finding store, with cross-account assume-role scanning, SNS digests, and OIDC CI/CD" loading="lazy" /></div>
+              <figcaption>CloudFront/S3 · Cognito · Lambda API + scanner/chat/diagrams · DynamoDB · cross-account assume-role · OIDC CI/CD</figcaption>
+            </figure>
+          </div>
         </div>
 
         <!-- DEEP DIVE -->
