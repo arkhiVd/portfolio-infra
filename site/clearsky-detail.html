@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>clearsky — deep dive — aravind@cloud</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="boot"><div class="boot-inner"></div></div>
+  <div class="grid-bg"></div>
+
+  <nav id="header">
+    <div class="wrap">
+      <a href="index.html" class="brand">
+        <span class="avail-dot"></span>
+        <span class="brand-otw">open to work</span>
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html"><span class="pfx">cd </span>~</a>
+        <a href="projects.html" class="active"><span class="pfx">cd </span>projects</a>
+        <a href="about.html"><span class="pfx">cd </span>about</a>
+      </div>
+      <div class="nav-right">
+        <div class="uptime">
+          <span class="led"></span>
+          <span class="lbl">visitors</span>
+          <b id="visitor-count">····</b>
+        </div>
+        <button class="menu-toggle" id="menu-toggle" aria-label="menu"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="section" style="padding-top:48px;">
+      <div class="wrap">
+
+        <a href="projects.html" class="back-link reveal"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-0.15em"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> cd ../projects</a>
+
+        <div class="dd-head reveal">
+          <span class="label"><span class="pfx">$</span> cat clearsky/README.md</span>
+          <span class="dd-badge">security &amp; cost platform</span>
+          <h1>ClearSky — Multi-Account AWS Posture &amp; Cost Platform</h1>
+          <p class="dd-lede">A serverless security-posture, cost, and inventory platform for AWS. Deterministic detectors scan every enabled region on a daily schedule, findings live a full lifecycle in DynamoDB, and an agentic AI investigator answers questions against the live account through a read-only tool-use loop — all behind a Cognito-authenticated dashboard on CloudFront.</p>
+          <div class="dd-meta">
+            <div class="dd-meta-item">
+              <span class="k">// repo</span>
+              <a href="https://github.com/arkhiVd/clearsky" target="_blank">clearsky</a>
+            </div>
+            <div class="dd-meta-item">
+              <span class="k">// region</span>
+              <span class="dim mono">us-east-1 · all-region scanning</span>
+            </div>
+            <div class="dd-meta-item">
+              <span class="k">// status</span>
+              <span class="dim mono">completed — deployed, validated, torn down on demand</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- GOAL -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> echo $GOAL</div>
+          <p class="dd-text">Answer two questions for any AWS account, continuously: <i>what is running, and is it safe?</i> ClearSky scans an entire organization — the management account plus any number of member accounts onboarded from the dashboard — with 24+ deterministic, read-only detectors, scores the security posture, tracks cost against baselines, and lets an AI investigator dig into any finding without ever getting write access. The whole platform is serverless and stands up or tears down with one pipeline run.</p>
+        </div>
+
+        <!-- KEY ACHIEVEMENTS -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> ls highlights/</div>
+          <div class="dd-grid">
+            <div class="dd-feature">
+              <span class="dd-icon green"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></span>
+              <h4>Deterministic Detection, AI Explanation</h4>
+              <p>24+ detectors are pure functions — API responses in, findings out — fixture-tested and reproducible. AI is additive: it investigates and explains but never decides what's a finding.</p>
+            </div>
+            <div class="dd-feature">
+              <span class="dd-icon amber"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+              <h4>Agentic AI Investigator</h4>
+              <p>An LLM runs a tool-use loop against the live account: <code>aws_read</code> allowlisted to describe/list/get calls, findings, and Cost Explorer. Read-only IAM is the hard boundary — the agent physically cannot mutate anything.</p>
+            </div>
+            <div class="dd-feature">
+              <span class="dd-icon cyan"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+              <h4>Multi-Account by Assume-Role</h4>
+              <p>Member accounts onboard from the dashboard: paste a role ARN, the API validates it by assuming it, and an SSM registry tracks the fleet. Scans fan out cross-account on read-only roles.</p>
+            </div>
+            <div class="dd-feature">
+              <span class="dd-icon violet"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
+              <h4>Zero-Dependency Lambda Backend</h4>
+              <p>The entire engine — scanner, API, chat, diagram generator, JWT verification (RS256 in pure stdlib) — runs on Python stdlib + boto3. No layers, no packages, nothing to patch.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TECH STACK -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> cat stack.txt</div>
+          <div class="dd-grid dd-grid-3">
+            <div class="dd-col">
+              <h5 class="green">edge &amp; auth</h5>
+              <ul>
+                <li>CloudFront + S3 (OAC)</li>
+                <li>Cognito (custom login, no hosted UI)</li>
+                <li>Lambda Function URL (OAC SigV4)</li>
+                <li>In-process JWT verification</li>
+              </ul>
+            </div>
+            <div class="dd-col">
+              <h5 class="amber">engine &amp; data</h5>
+              <ul>
+                <li>Lambda (stdlib + boto3 only)</li>
+                <li>DynamoDB finding lifecycle</li>
+                <li>EventBridge daily schedule</li>
+                <li>SNS digest email</li>
+              </ul>
+            </div>
+            <div class="dd-col">
+              <h5 class="cyan">platform</h5>
+              <ul>
+                <li>Terraform (remote S3 state)</li>
+                <li>GitHub Actions (OIDC plan/apply)</li>
+                <li>SSM registry + SecureString</li>
+                <li>Cross-account IAM assume-role</li>
+                <li>113 unit tests (fixtures)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ARCHITECTURE DIAGRAM -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> cat architecture.txt</div>
+          <p class="dd-text" style="margin-bottom:22px;">Static multipage dashboard on CloudFront over a single Lambda API (function URL locked to CloudFront by OAC SigV4). The scanner fans out across regions and member accounts on read-only roles; everything meets in a DynamoDB finding store.</p>
+          <pre class="mono" style="overflow-x:auto; font-size:0.78rem; line-height:1.5; padding:18px; border:1px solid var(--border, #2a2a2a); border-radius:8px;">
+ browser ──► CloudFront ──┬─► S3 (dashboard, OAC)
+                          └─► /api/* ──► Lambda API ──► Cognito JWT verify (in-process)
+                                              │
+              ┌───────────────────────────────┼──────────────────┐
+              ▼                               ▼                  ▼
+        scanner Lambda                  chat Lambda        arch Lambda
+        24+ detectors                   agentic tool-use   resource discovery
+        all regions, daily              read-only aws_read draw.io render
+              │                               │                  │
+              └────────► DynamoDB findings ◄──┴──────────────────┘
+                         (new / open / resolved)
+              │
+              ├─► member accts: sts:AssumeRole ─► clearsky-readonly (SSM registry)
+              └─► SNS daily digest · EventBridge schedule · budget guardrail</pre>
+        </div>
+
+        <!-- DEEP DIVE -->
+        <div class="dd-block reveal">
+          <div class="card-label"><span class="pfx">$</span> man architecture</div>
+          <div class="dd-dive">
+            <div class="dd-dive-item">
+              <h4><span class="dd-dot blue"></span> The detection engine</h4>
+              <p>Rules detect; AI explains. Detection stays deterministic and testable.</p>
+              <ul>
+                <li><b>Pure-function detectors</b> — each detector takes recorded API responses and returns findings; 113 unit tests run on JSON fixtures, no AWS needed.</li>
+                <li><b>Finding lifecycle</b> — DynamoDB tracks new / open / resolved per account+region+resource; partial scans reconcile only the accounts they actually scanned.</li>
+                <li><b>Coverage</b> — cost waste (EBS, EIP, S3 hygiene, idle EC2/RDS, orphaned ELBs, log retention) and posture (MFA, key age, open SGs, public buckets, encryption, CloudTrail), plus a day-over-day posture score.</li>
+              </ul>
+            </div>
+            <div class="dd-dive-item">
+              <h4><span class="dd-dot violet"></span> The AI investigator</h4>
+              <p>An agent with real access to the account — and a hard read-only ceiling.</p>
+              <ul>
+                <li><b>Tool-use loop</b> — the LLM iterates over <code>aws_read</code> (allowlisted to <code>describe_/list_/get_</code>), findings, Cost Explorer, and the architecture model until it can answer; a denylist blocks secrets and data-plane reads.</li>
+                <li><b>Provider-agnostic</b> — a zero-dependency OpenAI-compatible client (urllib); the API key is entered in the dashboard and stored as an SSM SecureString, never in code or state.</li>
+                <li><b>Architecture diagrams</b> — a separate worker discovers live resources and renders a deterministic draw.io file with inferred data-flow edges; AI can annotate, never invent.</li>
+              </ul>
+            </div>
+            <div class="dd-dive-item">
+              <h4><span class="dd-dot green"></span> The security model</h4>
+              <p>Every boundary enforced twice — at the edge and in the code.</p>
+              <ul>
+                <li><b>API reachable only via CloudFront</b> — the Lambda function URL requires OAC SigV4; direct calls fail. The Lambda then re-verifies every Cognito JWT in-process (pure-stdlib RS256).</li>
+                <li><b>Custom Cognito login</b> — <code>USER_PASSWORD_AUTH</code> against the Cognito API from a hand-built page; no hosted UI, no client secret, admin-only user creation.</li>
+                <li><b>Read-only scanning</b> — scanner, chat, and diagram roles are read-only everywhere; member accounts grant a scoped <code>clearsky-readonly</code> role whose trust policy is the real gate.</li>
+              </ul>
+            </div>
+            <div class="dd-dive-item">
+              <h4><span class="dd-dot amber"></span> Operations &amp; CI/CD</h4>
+              <p>Fully serverless and pay-per-use; ships and tears down through one pipeline.</p>
+              <ul>
+                <li><b>OIDC pipelines</b> — GitHub Actions with no static keys: read-only <code>plan</code> role on PRs, scoped <code>apply</code> role on main; state in a versioned, TLS-only S3 bucket injected at init time.</li>
+                <li><b>One-push deploy</b> — a push applies Terraform, bakes <code>config.js</code> from outputs, syncs the dashboard to S3, and invalidates CloudFront; <code>destroy</code> empties every managed bucket first.</li>
+                <li><b>Pay-per-use everywhere</b> — Lambda, DynamoDB on-demand, CloudFront, Cognito; idle cost is effectively zero with a budget guardrail watching for drift.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="dd-actions reveal">
+          <a href="projects.html" class="btn ghost"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-0.15em"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> back to projects</a>
+          <a href="https://github.com/arkhiVd/clearsky" target="_blank" class="btn"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> view repo</a>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <div class="f-label">// get in touch</div>
+          <p>Actively seeking new opportunities and always up for a conversation about infrastructure, automation, or a good homelab setup.</p>
+        </div>
+        <div>
+          <div class="f-label">// mail</div>
+          <a href="mailto:aravindakrishnanv@tutamail.com" class="f-link"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="vertical-align:-0.2em"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7L22 6"/></svg> aravindakrishnanv@tutamail.com</a>
+        </div>
+        <div>
+          <div class="f-label">// connect</div>
+          <div class="social-row">
+            <a href="https://www.linkedin.com/in/aravindakrishnan-v-2b0651218" target="_blank" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg></a>
+            <a href="https://github.com/arkhiVd" target="_blank" aria-label="GitHub"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="vertical-align:-0.15em"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>designed &amp; built by Aravindakrishnan V — © 2026</span>
+        <span class="green">aravind@cloud:~$ <span style="color:var(--text-faint)">exit</span></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/visitorscript.js"></script>
+  <script src="site.js"></script>
+</body>
+</html>
