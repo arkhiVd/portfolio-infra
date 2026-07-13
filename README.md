@@ -1,8 +1,8 @@
 # portfolio-infra
 
-Streamlined single-stack rebuild of the portfolio (previously split across
-`portfolio-frontend` + `portfolio-backend`, ap-south-1). Local Terraform state.
-Goal: ~₹0/month.
+Single Terraform stack behind [www.aravindakrishnan.cloud](https://www.aravindakrishnan.cloud) —
+a static site on CloudFront + S3 with a serverless visitor-counter API, shipped
+through OIDC-authenticated GitHub Actions (no stored AWS keys).
 
 ## Architecture
 
@@ -15,27 +15,14 @@ Goal: ~₹0/month.
 Terraform injects the Function URL into `templates/visitorscript.js.tftpl` and
 uploads it as `assets/js/visitorscript.js` — no manual API URL copying.
 
-## Why this account
+## Cost profile
 
-CloudFront's **always-free tier** (1 TB egress + 10M requests/month) never expires,
-even after the 12-month free tier ends. Lambda (1M req/mo) and DynamoDB (25 GB) are
-always-free too. Only S3 storage bills after 12 months — a few MB ≈ ₹0. Route 53 is
-avoided ($0.50/mo); Namecheap provides free DNS. Net ≈ ₹0/mo.
+All components are pay-per-use: CloudFront's always-free tier (1 TB egress,
+10M requests/month), Lambda (1M requests/month) and DynamoDB (25 GB) cover this
+workload indefinitely; S3 stores a few MB. DNS lives at the registrar, so
+Route 53's hosted-zone fee is avoided. Steady-state cost rounds to zero.
 
-The original new account (348032171026) is on the **AWS Free account plan**, which
-hard-blocks CloudFront/MSK with a misleading "account must be verified" error
-(`aws freetier get-account-plan-state` → `accountPlanType: FREE`). Unfixable without
-a paid upgrade — so this stack targets the older account where CloudFront is unlocked.
-
-## Status (2026-06-10)
-
-- Full stack written + `terraform validate` clean. Lambda+DynamoDB+Function URL
-  previously applied & verified in the free-plan account (counter increments, same-IP
-  dedupe, single CORS header after fix), then **all destroyed** — state empty.
-- `counter.py` no longer sets CORS headers (Function URL owns CORS; avoids `*, *` bug).
-- CloudFront + ACM custom-domain wiring added, gated by `var.domain_name`.
-
-## Deploy steps (in the CloudFront-unlocked account)
+## Deploy steps
 
 1. Switch AWS CLI creds to that account (`aws configure` or a named profile;
    confirm with `aws sts get-caller-identity`).
