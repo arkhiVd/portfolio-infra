@@ -45,7 +45,7 @@
           <span class="label"><span class="pfx">$</span> cat appstack-infra/README.md</span>
           <span class="dd-badge">microservices platform</span>
           <h1>Microservices Platform Infrastructure</h1>
-          <p class="dd-lede">Modular, free-tier-focused AWS infrastructure for a .NET microservices product platform (Angular admin panel + React Native app), defined entirely in Terraform. A dedicated VPC with no NAT Gateway runs eight services plus two workers on a single ECS-on-EC2 host behind an ALB — split into a synchronous request plane and an asynchronous event plane by design.</p>
+          <p class="dd-lede">Modular AWS infrastructure for a .NET microservices product platform (Angular admin panel + React Native app), defined entirely in Terraform. A dedicated VPC with no NAT Gateway runs eight services plus two workers on a single ECS-on-EC2 host behind an ALB — split into a synchronous request plane and an asynchronous event plane by design.</p>
           <div class="dd-meta">
             <div class="dd-meta-item">
               <span class="k">// repo</span>
@@ -65,7 +65,7 @@
         <!-- GOAL -->
         <div class="dd-block reveal">
           <div class="card-label"><span class="pfx">$</span> echo $GOAL</div>
-          <p class="dd-text">Provision the full platform — not the application images — for a product search &amp; management system, on AWS, at the lowest possible cost. The whole stack stands up from a single <code>terraform apply</code> against a custom VPC (no default VPC used anywhere) and tears down just as cleanly. Every sizing decision is pinned to the free tier, and the single biggest cost — the NAT Gateway — is deliberately engineered away.</p>
+          <p class="dd-text">Provision the full platform — not the application images — for a product search &amp; management system on AWS. The whole stack stands up from a single <code>terraform apply</code> against a custom VPC (no default VPC used anywhere) and tears down just as cleanly. The design holds a strict cost ceiling: every component is deliberately sized, and the single biggest fixed cost — the NAT Gateway — is engineered away.</p>
         </div>
 
         <!-- KEY ACHIEVEMENTS -->
@@ -79,8 +79,8 @@
             </div>
             <div class="dd-feature">
               <span class="dd-icon amber"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
-              <h4>No NAT, Free-Tier First</h4>
-              <p>Public-subnet ECS plus S3/DynamoDB gateway endpoints avoid the ~$32/mo NAT Gateway. Every component pinned to free-tier sizes — t3.micro compute, db, and cache.</p>
+              <h4>NAT-Free Network Design</h4>
+              <p>Public-subnet ECS plus S3/DynamoDB gateway endpoints eliminate the ~$32/mo NAT Gateway. Compute, database, and cache each sized deliberately (t3.micro class) to hold a strict cost ceiling.</p>
             </div>
             <div class="dd-feature">
               <span class="dd-icon cyan"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
@@ -175,10 +175,10 @@
             </div>
             <div class="dd-dive-item">
               <h4><span class="dd-dot amber"></span> Cost engineering &amp; CI/CD</h4>
-              <p>Free-tier by construction, shipped through keyless pipelines.</p>
+              <p>Engineered to a strict cost budget, shipped through keyless pipelines.</p>
               <ul>
                 <li><b>No NAT Gateway</b> — public-subnet ECS + free S3/DynamoDB gateway endpoints let the private route table reach those services, avoiding the single biggest line item (~$32/mo).</li>
-                <li><b>Free-tier sizing</b> — ECS on EC2 t3.micro (not Fargate), db.t3.micro Postgres, cache.t3.micro Redis, single-node OpenSearch, ECR with a keep-5 lifecycle policy.</li>
+                <li><b>Deliberate sizing</b> — ECS on EC2 t3.micro (not Fargate), db.t3.micro Postgres, cache.t3.micro Redis, single-node OpenSearch, ECR with a keep-5 lifecycle policy.</li>
                 <li><b>OIDC CI/CD</b> — GitHub Actions with no static keys: <code>plan</code> on PRs, <code>apply</code> gated by a production environment approval, <code>destroy</code> manual-only with a typed confirmation.</li>
               </ul>
             </div>
