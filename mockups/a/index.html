@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Aravindakrishnan V — Cloud Engineer (mockup A)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html">Aravindakrishnan V</a>
+    <nav class="nav-right" aria-label="Primary">
+      <a href="index.html" aria-current="page">home</a>
+      <a href="#projects">projects</a>
+      <a href="#about">about</a>
+      <span class="status"><span class="dot" aria-hidden="true"></span>open to work</span>
+      <span class="status">···· visitors</span>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero wrap">
+    <h1>I build AWS infrastructure that stays boring in production.</h1>
+    <p>Cloud engineer at Centilytics. AWS Solutions Architect and CCNA certified. Terraform,
+       containers, and the parts of Linux nobody sees until they break.</p>
+    <ul class="proof">
+      <li><b>live</b><span>aravindakrishnan.cloud</span></li>
+      <li><b>₹0/mo</b><span>steady state</span></li>
+      <li><b>34</b><span>Terraform resources</span></li>
+      <li><b>OIDC</b><span>zero stored keys</span></li>
+    </ul>
+  </section>
+
+  <section class="section wrap" id="projects">
+    <div class="section-head">
+      <h2>Selected work</h2>
+      <span class="label">3 of 8 · all projects →</span>
+    </div>
+
+    <div class="cards">
+
+      <a class="card" href="clearsky.html">
+        <figure><img src="/assets/img/clearsky-architecture.png" alt="ClearSky architecture: CloudFront and Cognito in front of Lambda function URLs, DynamoDB, EventBridge and cross-account IAM roles" /></figure>
+        <h3>ClearSky — multi-account AWS posture &amp; cost platform</h3>
+        <p>24+ deterministic, read-only detectors scan every enabled region daily; findings
+           live a full lifecycle in DynamoDB behind a Cognito dashboard. An agentic AI
+           investigator queries the live account through a read-only tool-use loop.</p>
+        <div class="card-foot">
+          <span>Lambda · DynamoDB · Cognito · Terraform</span>
+          <span><b>113 unit tests</b> · deployed, validated, torn down <span class="go" aria-hidden="true">→</span></span>
+        </div>
+      </a>
+
+      <a class="card" href="clearsky.html">
+        <figure><img src="/assets/img/appstack-architecture.png" alt="AppStack architecture: ALB in front of ECS on EC2, with RDS Postgres, Redis, OpenSearch and SQS workers inside one VPC" /></figure>
+        <h3>Microservices platform infrastructure</h3>
+        <p>Modular Terraform for a .NET product platform. Eight services plus PDF-ingest and
+           search-sync workers on ECS-on-EC2 behind an ALB, split into a synchronous request
+           path and an async S3 → SQS event path, every queue with a DLQ.</p>
+        <div class="card-foot">
+          <span>ECS · RDS · OpenSearch · SQS</span>
+          <span><b>no NAT gateway</b> <span class="go" aria-hidden="true">→</span></span>
+        </div>
+      </a>
+
+      <a class="card" href="clearsky.html">
+        <figure><img src="/assets/img/cdc-architecture.png" alt="CDC pipeline architecture: RDS PostgreSQL write-ahead log streamed by Debezium on MSK Connect into Amazon MSK topics" /></figure>
+        <h3>Change data capture pipeline</h3>
+        <p>Every INSERT, UPDATE and DELETE on RDS PostgreSQL streamed into Amazon MSK by a
+           Debezium connector on MSK Connect — read straight from the write-ahead log, no
+           polling. S3 gateway endpoint pulls the plugin, so no NAT gateway.</p>
+        <div class="card-foot">
+          <span>RDS · MSK · Debezium · Terraform</span>
+          <span><b>log-based, not polled</b> <span class="go" aria-hidden="true">→</span></span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <section class="section wrap" id="about">
+    <div class="section-head">
+      <h2>About</h2>
+      <span class="label">more →</span>
+    </div>
+    <p style="max-width:74ch;margin:24px 0 0;color:var(--muted)">
+      Cloud engineer at Centilytics since October 2025, working on cloud management and
+      infrastructure automation. ECE grad, AWS Solutions Architect – Associate and CCNA
+      certified, currently working through the CKA. Everything above runs in my own AWS
+      account, built with Terraform and shipped by keyless OIDC pipelines.
+    </p>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>aravindakrishnanv@tutamail.com</span>
+    <span>github.com/arkhiVd</span>
+    <span>built with Terraform + Astro · source on GitHub</span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,369 @@
+/* Variant A — "Console". Spike only: deleted in Phase 2 once DESIGN.md is frozen.
+   Tokens mirror DESIGN.md; contrast ratios are noted where they matter. */
+
+:root {
+  --ink: #050507;
+  --surface: #111114;
+  --hairline: rgba(255, 255, 255, 0.08);
+  --text: #ededf0;        /* 17.4:1 on ink */
+  --muted: #9b9ba3;       /* 7.4:1 on ink */
+  --accent: #4fc1d4;      /* 9.6:1 on ink */
+  --accent-dim: rgba(79, 193, 212, 0.14);
+
+  --sans: "Instrument Sans", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --pad: clamp(24px, 5vw, 72px);
+  --max: 1400px;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--text);
+  font: 400 17px/1.65 var(--sans);
+  letter-spacing: 0;
+  /* single static wash — no animation, per DESIGN.md */
+  background-image:
+    radial-gradient(900px 600px at 12% -10%, rgba(79, 193, 212, 0.10), transparent 60%),
+    radial-gradient(700px 500px at 88% 0%, rgba(22, 41, 92, 0.35), transparent 65%);
+  background-repeat: no-repeat;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--text); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+img { max-width: 100%; display: block; }
+
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding-inline: var(--pad);
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+}
+.skip:focus {
+  left: var(--pad);
+  top: 12px;
+  z-index: 50;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  padding: 10px 16px;
+  color: var(--text);
+}
+
+.label {
+  font: 500 13px/1.4 var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+/* ---------- nav ---------- */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding-block: 16px;
+  background: rgba(5, 5, 7, 0.72);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  border-bottom: 1px solid var(--hairline);
+}
+.nav .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+  flex-wrap: wrap;
+}
+.brand {
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2vw, 28px);
+  font: 400 13px/1 var(--mono);
+  letter-spacing: 0.02em;
+}
+.nav-right a { color: var(--muted); }
+.nav-right a[aria-current="page"] { color: var(--text); }
+.nav-right a:hover { color: var(--accent); }
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+/* Below 680 the status readouts wrap into a three-line mess — links come first. */
+@media (max-width: 680px) {
+  .status { display: none; }
+  .nav-right { gap: 20px; }
+}
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--accent);
+  flex: none;
+}
+
+/* ---------- hero ---------- */
+
+.hero { padding-block: clamp(48px, 9vh, 96px) 32px; }
+.hero h1 {
+  margin: 0;
+  max-width: 26ch;
+  font-size: clamp(34px, 4.4vw, 56px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.hero p {
+  margin: 16px 0 0;
+  max-width: 74ch;
+  color: var(--muted);
+}
+
+/* ---------- proof chips ---------- */
+
+.proof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 32px;
+  padding: 0;
+  list-style: none;
+}
+.proof li {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--accent-dim);
+  border: 1px solid var(--hairline);
+  font: 400 13px/1.3 var(--mono);
+  letter-spacing: 0.02em;
+}
+.proof b { color: var(--text); font-weight: 500; }
+.proof span { color: var(--muted); }
+
+/* ---------- case cards ---------- */
+
+.section { padding-block: 48px; }
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--hairline);
+}
+.section-head h2 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
+.cards {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 900px) {
+  .cards { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 1200px) {
+  .cards { grid-template-columns: repeat(3, 1fr); }
+}
+
+.card {
+  display: block;
+  padding: 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  transition: background 200ms var(--ease), border-color 200ms var(--ease);
+}
+.card:hover {
+  background: var(--surface);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: inherit;
+}
+/* The architecture diagrams are white-background exports. Rather than bleed a bright
+   block into a dark page, they sit in a deliberate paper panel and are contained, not
+   cropped — a dense diagram cropped to 16:9 is illegible anyway. */
+.card figure {
+  margin: 0 0 12px;
+  height: 168px;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid var(--hairline);
+  background: #f7f7f5;
+  padding: 8px;
+}
+.card figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+.card h3 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+.card p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+.card-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--hairline);
+  font: 400 13px/1.3 var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+.card-foot b { color: var(--accent); font-weight: 500; }
+.card .go { color: var(--muted); transition: transform 200ms var(--ease), color 200ms var(--ease); }
+.card:hover .go { color: var(--accent); transform: translateX(3px); }
+
+/* ---------- case study ---------- */
+
+.study { padding-block: 32px 24px; }
+.study h1 {
+  margin: 8px 0 0;
+  font-size: clamp(34px, 4vw, 44px);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  max-width: 20ch;
+}
+.study .lede {
+  margin: 16px 0 0;
+  max-width: 74ch;
+  color: var(--muted);
+}
+
+.block { padding-block: 32px; border-top: 1px solid var(--hairline); }
+.block h2 {
+  margin: 12px 0 0;
+  font-size: 27px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+.block p { margin: 12px 0 0; max-width: 74ch; }
+.block p + p { margin-top: 16px; }
+
+figure.arch { margin: 24px 0 0; }
+figure.arch img {
+  width: 100%;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: #08080b;
+}
+figure.arch figcaption {
+  margin-top: 12px;
+  font: 400 13px/1.5 var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.rows { margin: 16px 0 0; border-top: 1px solid var(--hairline); }
+.row {
+  display: grid;
+  gap: 4px 32px;
+  padding-block: 16px;
+  border-bottom: 1px solid var(--hairline);
+}
+@media (min-width: 900px) {
+  .row { grid-template-columns: 320px 1fr; }
+}
+.row dt { font-weight: 500; }
+.row dd { margin: 0; color: var(--muted); }
+
+.metrics {
+  display: grid;
+  gap: 16px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.metrics li {
+  padding: 16px;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.metrics b {
+  display: block;
+  font: 500 27px/1.2 var(--mono);
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.metrics span { color: var(--muted); font-size: 15px; }
+
+/* ---------- footer ---------- */
+
+.foot {
+  margin-top: 48px;
+  padding-block: 32px 48px;
+  border-top: 1px solid var(--hairline);
+  font: 400 13px/1.8 var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+.foot .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  justify-content: space-between;
+}
+.foot a { color: var(--muted); }
+.foot a:hover { color: var(--accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

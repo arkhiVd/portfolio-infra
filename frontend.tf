@@ -1,13 +1,24 @@
 locals {
+  # Every uploaded object is typed from this map. An extension missing here ships as
+  # binary/octet-stream, and browsers refuse to use that for fonts, SVG or XML — the
+  # failure is silent. Add the extension in the same phase that first emits it.
   mime_types = {
-    "html" = "text/html",
-    "css"  = "text/css",
-    "js"   = "application/javascript",
-    "jpeg" = "image/jpeg",
-    "jpg"  = "image/jpeg",
-    "png"  = "image/png",
-    "ico"  = "image/vnd.microsoft.icon",
-    "txt"  = "text/plain"
+    "html"  = "text/html",
+    "css"   = "text/css",
+    "js"    = "application/javascript",
+    "jpeg"  = "image/jpeg",
+    "jpg"   = "image/jpeg",
+    "png"   = "image/png",
+    "ico"   = "image/vnd.microsoft.icon",
+    "txt"   = "text/plain",
+    "svg"   = "image/svg+xml",
+    "webp"  = "image/webp",
+    "avif"  = "image/avif",
+    "woff2" = "font/woff2",
+    "json"  = "application/json",
+    "xml"   = "application/xml",
+    "pdf"   = "application/pdf",
+    "map"   = "application/json"
   }
 }
 
@@ -52,6 +63,20 @@ resource "aws_s3_object" "portfolio_files" {
   source       = "${path.module}/site/${each.value}"
   content_type = lookup(local.mime_types, regex("\\.(\\w+)$", each.value)[0], "binary/octet-stream")
   etag         = filemd5("${path.module}/site/${each.value}")
+}
+
+# Phase 1 design spike: two static mockup variants served under the preview/ key prefix
+# so they can be judged on real CloudFront without touching what the site root serves.
+# They are noindex, unlinked from the live site, and are deleted in Phase 2 once
+# DESIGN.md is frozen from the winner.
+resource "aws_s3_object" "mockups" {
+  for_each = fileset("${path.module}/mockups/", "**")
+
+  bucket       = aws_s3_bucket.portfolio_bucket.id
+  key          = "preview/${each.value}"
+  source       = "${path.module}/mockups/${each.value}"
+  content_type = lookup(local.mime_types, regex("\\.(\\w+)$", each.value)[0], "binary/octet-stream")
+  etag         = filemd5("${path.module}/mockups/${each.value}")
 }
 
 # Rendered separately so Terraform can inject the Lambda Function URL.
