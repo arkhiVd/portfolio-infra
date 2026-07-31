@@ -40,8 +40,8 @@ re-verified with a checker before the freeze.
 
 | Token | Value | Use | Contrast |
 |---|---|---|---|
-| `--ink` | `#05070f` | page background (blue-black, not neutral) | — |
-| `--surface` | `#101422` | cards, raised panels | structure, not text |
+| `--ink` | `#050507` | page background — stays black; the blue is light, not paint | — |
+| `--surface` | `#0F1218` | cards, raised panels | structure, not text |
 | `--hairline` | `rgba(255,255,255,.08)` | 1 px separators, card borders | — |
 | `--text` | `#EDEDF0` | headings, body | **17.4:1** on ink |
 | `--muted` | `#9B9BA3` | secondary copy, labels | **7.4:1** on ink · 6.8:1 on surface |
@@ -51,24 +51,34 @@ re-verified with a checker before the freeze.
 Rules: no pure black, no pure white. Never state information with colour alone — pair with
 a label, an icon, or weight. Body text is never `--muted` at sizes below 15 px.
 
-**Background — the deep-blue wash.** Carried over from the design exports, but static: five
-layered radial ellipses in navy and teal over `--ink`, plus a downward fade, painted once on
-a `position: fixed` pseudo-element behind the content (`z-index: -1`). It costs nothing to
-render, does not scroll away, and needs no reduced-motion exception because nothing moves.
-Reference implementation: `body::before` in the Phase 1 variant A stylesheet.
+**Background — the ocean layer.** The page is black; deep-blue and teal light moves slowly
+behind it. This is the site's one piece of ambient motion, and it is deliberate: it sets the
+water register the iconography (containers, pipelines) will follow.
 
-```
-radial-gradient(1150px 820px at  6% -10%, rgba( 26, 74,190,.72), transparent 64%)
-radial-gradient( 980px 760px at 96%  -4%, rgba( 15,100,150,.52), transparent 66%)
-radial-gradient(1400px 1000px at 66% 26%, rgba( 18, 44,128,.58), transparent 72%)
-radial-gradient( 900px 720px at 14%  72%, rgba( 13, 60,132,.44), transparent 74%)
-radial-gradient(1000px 800px at 88%  92%, rgba( 11, 82,116,.34), transparent 76%)
-linear-gradient(180deg, rgba(5,7,15,0) 55%, rgba(5,7,15,.55) 100%)
-```
+Structure — `<div class="ocean" aria-hidden="true"><i></i><i></i><i></i></div>`, fixed at
+`z-index: -1`, black base:
 
-No animated canvas, no parallax on this layer — the exports' moving nebula is deliberately
-not carried over. Cards and the nav sit above it with their own opaque or glass surfaces so
-text contrast never depends on where a gradient happens to land.
+| Layer | Colour | Size / anchor | Cycle |
+|---|---|---|---|
+| blob 1 | `rgba(24,70,180,.70)` navy | 78vw, off-canvas top-left | 41 s |
+| blob 2 | `rgba(16,118,142,.62)` teal | 64vw, off-canvas top-right | 53 s |
+| blob 3 | `rgba(13,64,150,.52)` cold blue | 86vw, rising from below | 67 s |
+
+Rules that make it safe to ship:
+
+- `filter: blur(90px)`, and **only `transform` and `opacity` animate** — compositor work, no
+  layout, no paint. No canvas, no WebGL, no per-frame JavaScript, no scroll coupling.
+- Cycle lengths are mutually indivisible (41 / 53 / 67 s) so the composition never visibly
+  repeats. `ease-in-out … alternate`; linear reads mechanical.
+- **A vignette (`.ocean::after`) sits over the blobs** — a radial black mask at 86% centre
+  opacity plus a downward fade. Without it the whole viewport tints and the page stops being
+  black. Black dominates; blue is glow arriving from the edges.
+- Content never sits directly on the glow: cards are `--surface`, the nav is glass, so text
+  contrast never depends on where a blob happens to be.
+- `prefers-reduced-motion: reduce` **freezes** the layer at a fixed opacity rather than
+  hiding it — same picture, no movement.
+
+Reference implementation: `.ocean` in the Phase 1 variant A stylesheet.
 
 ## Type
 
@@ -106,7 +116,10 @@ text contrast never depends on where a gradient happens to land.
   may use 320 ms; nothing longer.
 - Allowed: hover/focus colour and background transitions, one fade-and-rise entrance per
   section, nav collapse.
-- Forbidden: parallax, autoplaying canvas, marquees, page transitions, tilt, typewriters.
+- **One exception, named:** the ocean background layer animates continuously (see Colour).
+  Nothing else on the page may move on its own.
+- Forbidden: parallax, canvas/WebGL, marquees, page transitions, tilt, typewriters, and any
+  motion attached to scroll position.
 - `@media (prefers-reduced-motion: reduce)` disables every transition and entrance —
   content must be fully visible with no animation at all.
 
@@ -187,7 +200,9 @@ column was centred. Deleted in this phase; recoverable from git history if ever 
 
 Amendments made after the choice, on the author's call:
 
-- deep-blue flowing background adopted from the design exports, static (see Colour)
+- ocean background adopted from the design exports and made *living*: black base with three
+  slow-drifting blurred blobs under a vignette (see Colour). Static was tried first and
+  rejected by the author — the wash has to move.
 - "₹0/mo" language dropped everywhere in favour of "minimal running cost"
 - the "34 Terraform resources" chip dropped; resource counts banned from the fold
 - headline plainer: "I build and run AWS infrastructure."
