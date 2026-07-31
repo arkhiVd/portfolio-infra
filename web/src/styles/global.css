@@ -1,22 +1,5 @@
-/* Variant A — "Console". Spike only: deleted in Phase 2 once DESIGN.md is frozen.
-   Tokens mirror DESIGN.md; contrast ratios are noted where they matter. */
-
-:root {
-  --ink: #050507;
-  --surface: #0f1218;
-  --hairline: rgba(255, 255, 255, 0.08);
-  --text: #ededf0;        /* 17.4:1 on ink */
-  --muted: #9b9ba3;       /* 7.4:1 on ink */
-  --accent: #4fc1d4;      /* 9.6:1 on ink */
-  --accent-dim: rgba(79, 193, 212, 0.14);
-
-  --sans: "Instrument Sans", system-ui, sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, monospace;
-
-  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
-  --pad: clamp(24px, 5vw, 72px);
-  --max: 1400px;
-}
+/* Global styles. Tokens live in tokens.css; this file is layout and components only.
+   Ported from the Phase 1 variant A mockup, which is what DESIGN.md was frozen from. */
 
 *,
 *::before,
@@ -28,8 +11,7 @@ body {
   margin: 0;
   background: var(--ink);
   color: var(--text);
-  font: 400 17px/1.65 var(--sans);
-  letter-spacing: 0;
+  font: 400 var(--t-17) / 1.65 var(--sans);
   min-height: 100vh;
 }
 

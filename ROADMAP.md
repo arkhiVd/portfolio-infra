@@ -1,6 +1,6 @@
 # portfolio-infra — roadmap
 
-Site rebuild v3. Status: **Phase 0 complete (PR #15) · Phase 1 in review.**
+Site rebuild v3. Status: **Phases 0-1 in review (PRs #15, #16) · Phase 2 in review.**
 
 One phase = one PR = one review. The live site keeps serving from `site/` at the root
 until Phase 8; everything before that lands under the `preview/` key prefix, so no phase

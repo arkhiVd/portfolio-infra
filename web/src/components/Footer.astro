@@ -1,0 +1,12 @@
+---
+import { site } from "../lib/site";
+---
+
+<footer class="foot">
+  <div class="wrap">
+    <a href={`mailto:${site.email}`}>{site.email}</a>
+    <a href={site.github} rel="me noopener">github.com/arkhiVd</a>
+    {site.linkedin && <a href={site.linkedin} rel="me noopener">linkedin</a>}
+    <span>built with Terraform + Astro · <a href="https://github.com/arkhiVd/portfolio-infra">source</a></span>
+  </div>
+</footer>

@@ -1,0 +1,31 @@
+---
+import { site, url } from "../lib/site";
+
+interface Props {
+  /** which primary link is the current page */
+  current?: "home" | "projects" | "about";
+}
+const { current } = Astro.props;
+---
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href={url("/")}>{site.name}</a>
+    <nav class="nav-right" aria-label="Primary">
+      <a href={url("/")} aria-current={current === "home" ? "page" : undefined}>home</a>
+      <a href={url("/projects")} aria-current={current === "projects" ? "page" : undefined}>projects</a>
+      <a href={url("/about")} aria-current={current === "about" ? "page" : undefined}>about</a>
+      {
+        site.openToWork && (
+          <span class="status">
+            <span class="dot" aria-hidden="true" />
+            open to work
+          </span>
+        )
+      }
+      {/* Renders ···· until the counter resolves, and keeps rendering ···· if it fails.
+          Never shows a fabricated number (DESIGN.md § Visitor counter). */}
+      <span class="status"><span id="visitor-count">····</span> visitors</span>
+    </nav>
+  </div>
+</header>

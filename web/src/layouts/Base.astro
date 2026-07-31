@@ -1,0 +1,65 @@
+---
+import "../styles/tokens.css";
+import "../styles/global.css";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import Ocean from "../components/Ocean.astro";
+import { site, url } from "../lib/site";
+
+interface Props {
+  title: string;
+  description?: string;
+  current?: "home" | "projects" | "about";
+}
+
+const { title, description = site.description, current } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    {/* Preview builds must never be indexed; the Phase 8 cutover removes this. */}
+    <meta name="robots" content="noindex, nofollow" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {/* Self-hosted — no Google Fonts round-trip, no third-party origin sees a visitor. */}
+    <link
+      rel="preload"
+      href={url("/fonts/instrument-sans-var.woff2")}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href={url("/fonts/jetbrains-mono-var.woff2")}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+  </head>
+
+  <body>
+    <Ocean />
+    <a class="skip" href="#main">Skip to content</a>
+    <Nav current={current} />
+    <main id="main"><slot /></main>
+    <Footer />
+
+    {/* Rendered by Terraform with the Lambda Function URL injected; served from the site
+        root in both preview and production, so it is referenced absolutely on purpose. */}
+    <script is:inline src="/assets/js/visitorscript.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+---
+import Base from "../layouts/Base.astro";
+import { site, url } from "../lib/site";
+
+/**
+ * Phase 2 ships the shell: layout, design system, fonts and the build pipeline.
+ * The real home page — case cards, the full selected-work section — is Phase 3.
+ */
+---
+
+<Base title={`${site.name} — ${site.role}`} current="home">
+  <section class="hero wrap">
+    <h1>I build and run cloud infrastructure.</h1>
+    <p>
+      Cloud engineer at Centilytics, working across AWS, Terraform, containers and CI/CD —
+      and the Linux underneath all of it. AWS Solutions Architect – Associate and CCNA
+      certified, CKA in progress.
+    </p>
+    <div class="cta">
+      <a class="btn" href={url("/projects")}>View projects</a>
+      <a class="btn-quiet" href={`mailto:${site.email}`}>get in touch →</a>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <h2>Selected work</h2>
+      <span class="label">phase 3</span>
+    </div>
+    <p style="max-width:var(--measure);margin:24px 0 0;color:var(--muted)">
+      Case cards land in the next phase. This build exists to prove the pipeline: Astro
+      output uploaded to the preview prefix, design tokens applied, fonts served from this
+      origin, and no third-party request on the page.
+    </p>
+  </section>
+</Base>

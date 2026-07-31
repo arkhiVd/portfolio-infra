@@ -1,40 +1,35 @@
 # portfolio-infra — tasks
 
-## Current phase: 1 — mockup spike
+## Current phase: 2 — Astro scaffold, design system, pipeline
 
-- [ ] Choose the design by looking at it
-  - Scope: two static HTML variants of home + the ClearSky case study under `mockups/a`
-    and `mockups/b`, uploaded to the `preview/` key prefix; `local.mime_types` extended
-    for the extensions the Astro build will emit.
-  - Acceptance criteria: both variants reachable under `preview/`, reviewed at 1440 and
-    375 px, one chosen (or both rejected), `DESIGN.md` frozen from the winner and the
-    loser deleted.
-  - Automated validation: `terraform fmt -check -recursive`, `terraform validate`,
-    `terraform plan` in CI — creates only, zero destroys.
-  - Manual validation: rendered at 1440 and 375 px in Chromium; diagram legibility and
-    the eight-second test judged on a phone.
-  - Blockers: none. Local plan runs with `AWS_PROFILE=second` (the default profile points
-    at the free-tier account `348032171026`, not this one) and reports
-    `Plan: 6 to add, 0 to change, 0 to destroy`.
-
-## Completed phase: 0 — guardrails and design draft
-
-- [x] Scaffold repo guardrails and the design contract
-  - Scope: `AGENTS.md`, `CLAUDE.md`, `SPEC.md`, `ROADMAP.md`, `TASKS.md`,
-    `DESIGN.md` (DRAFT), `.github/pull_request_template.md`. Docs only — no Terraform,
-    no site, no workflow changes.
-  - Acceptance criteria: pinned versions verified against upstream on the day of writing;
-    no placeholder text anywhere; human approves `SPEC.md` and the `DESIGN.md` draft.
-  - Automated validation: `git diff --check`, `terraform fmt -check -recursive`
-    (unchanged files must still pass).
-  - Manual validation: Aravind reads `SPEC.md` and `DESIGN.md` and accepts or amends them.
+- [ ] Ship the styled shell under `preview/`, built by CI
+  - Scope: `web/` Astro project (7.1.6, Node 24.18.1); `tokens.css` implementing the frozen
+    `DESIGN.md`; `Base.astro` with nav, footer, meta, skip link and the ocean layer;
+    self-hosted Instrument Sans + JetBrains Mono variable woff2; `frontend.tf` uploading
+    `web/dist` to `preview/` with cache-control split by asset type; `npm ci && npm run lint
+    && npm run build` added to `plan.yml` and `apply.yml` **before** `terraform init`;
+    `.nvmrc`; gitignore for build output. Phase 1 mockups deleted.
+  - Acceptance criteria: `/preview/` serves the styled shell over CloudFront; no third-party
+    origin is requested; plan shows creates only against the preview prefix and no change to
+    root-served objects.
+  - Automated validation: `npm ci`, `npm run lint` (astro check), `npm run build`,
+    `terraform fmt -check -recursive`, `terraform validate`,
+    `AWS_PROFILE=second terraform plan`.
+  - Manual validation: built output served locally and rendered at 1440 and 375 px; emitted
+    HTML grepped for external origins.
   - Blockers: none.
 
-## Next phase preview (do not start before Phase 0 is approved)
+## Completed phase: 1 — mockup spike
 
-Phase 1 — two static mockup variants (Console / Editorial dark) of home + one case study,
-deployed under `preview/a/` and `preview/b/`, reviewed on desktop and phone, winner
-freezes `DESIGN.md`, loser deleted.
+- [x] 2026-08-01 Two variants built and rendered; **A (console grid) chosen**, `DESIGN.md`
+  frozen from it with the deep-ocean background, vendor-neutral headline and the chip row
+  cut; variant B deleted — validated by `terraform plan` (3 to add, 0 to change, 0 to
+  destroy) and side-by-side renders at 1440 and 375 px (PR #16)
+
+## Next phase preview
+
+Phase 3 — home and projects index: hero, `CaseCard` component, the selected-work section
+and the projects index, with the visitor counter wired to `window.VISITOR_API`.
 
 ## Open questions
 
