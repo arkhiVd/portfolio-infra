@@ -65,18 +65,24 @@ resource "aws_s3_object" "portfolio_files" {
   etag         = filemd5("${path.module}/site/${each.value}")
 }
 
-# Phase 1 design spike: two static mockup variants served under the preview/ key prefix
-# so they can be judged on real CloudFront without touching what the site root serves.
-# They are noindex, unlinked from the live site, and are deleted in Phase 2 once
-# DESIGN.md is frozen from the winner.
-resource "aws_s3_object" "mockups" {
-  for_each = fileset("${path.module}/mockups/", "**")
+# The v3 rebuild, served under the preview/ key prefix until the Phase 8 cutover so the
+# live site at the root cannot degrade mid-rebuild. Pages are noindex and unlinked from
+# the live site.
+#
+# web/dist is GENERATED — `cd web && npm ci && npm run build` must run before any
+# terraform plan/apply, locally and in CI, or this plans against stale or absent output.
+resource "aws_s3_object" "preview_site" {
+  for_each = fileset("${path.module}/web/dist/", "**")
 
   bucket       = aws_s3_bucket.portfolio_bucket.id
   key          = "preview/${each.value}"
-  source       = "${path.module}/mockups/${each.value}"
+  source       = "${path.module}/web/dist/${each.value}"
   content_type = lookup(local.mime_types, regex("\\.(\\w+)$", each.value)[0], "binary/octet-stream")
-  etag         = filemd5("${path.module}/mockups/${each.value}")
+  etag         = filemd5("${path.module}/web/dist/${each.value}")
+
+  # Hashed asset filenames are immutable; HTML must not be cached hard or a deploy is
+  # invisible until the CloudFront invalidation lands.
+  cache_control = can(regex("^_astro/", each.value)) ? "public, max-age=31536000, immutable" : "public, max-age=300"
 }
 
 # Rendered separately so Terraform can inject the Lambda Function URL.
