@@ -13,9 +13,9 @@
     `terraform plan` in CI — creates only, zero destroys.
   - Manual validation: rendered at 1440 and 375 px in Chromium; diagram legibility and
     the eight-second test judged on a phone.
-  - Blockers: none. Local `terraform plan` is not possible on this laptop (no credentials
-    for account 486539985928 — `HeadObject` 403 on the state bucket), so the plan evidence
-    is the CI run on the PR.
+  - Blockers: none. Local plan runs with `AWS_PROFILE=second` (the default profile points
+    at the free-tier account `348032171026`, not this one) and reports
+    `Plan: 6 to add, 0 to change, 0 to destroy`.
 
 ## Completed phase: 0 — guardrails and design draft
 
