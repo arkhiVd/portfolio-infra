@@ -42,8 +42,9 @@
       someone else's. I wanted findings that were reproducible — the same account state
       producing the same findings every time — with the AI layer strictly additive, able to
       explain and investigate but never to decide what counts as a finding.</p>
-    <p>The second constraint was money. This runs in a personal AWS account, so nothing may
-      idle: no always-on compute, no NAT gateway, no managed scanner service.</p>
+    <p>The second constraint was cost. This runs in a personal AWS account, so nothing may
+      idle: no always-on compute, no NAT gateway, no managed scanner service, and everything
+      tears down when it is not needed.</p>
   </section>
 
   <section class="block wrap">
@@ -110,7 +111,7 @@
       <li><b>24+</b><span>read-only detectors, every enabled region</span></li>
       <li><b>113</b><span>unit tests against fixtures</span></li>
       <li><b>10</b><span>phased commits from empty repo to deployed</span></li>
-      <li><b>₹0</b><span>after teardown — zero AWS footprint remains</span></li>
+      <li><b>none</b><span>left running after teardown</span></li>
     </ul>
   </section>
 

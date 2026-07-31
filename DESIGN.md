@@ -1,9 +1,9 @@
 # DESIGN.md — visual contract
 
-**Status: DRAFT.** Frozen in Phase 1 from whichever mockup variant wins. Until then,
-values here are proposals. After the freeze, every UI diff is graded against this file;
+**Status: FROZEN 2026-08-01** from mockup variant **A (Console)**, with the deep-blue
+background carried over from the design exports. Every UI diff is graded against this file;
 if a request conflicts with it, flag the conflict and propose the complying alternative
-before building.
+before building. Changes to this file are a human decision, not an implementation detail.
 
 ## Thesis
 
@@ -40,8 +40,8 @@ re-verified with a checker before the freeze.
 
 | Token | Value | Use | Contrast |
 |---|---|---|---|
-| `--ink` | `#050507` | page background | — |
-| `--surface` | `#111114` | cards, raised panels | 1.09:1 vs ink (structure, not text) |
+| `--ink` | `#05070f` | page background (blue-black, not neutral) | — |
+| `--surface` | `#101422` | cards, raised panels | structure, not text |
 | `--hairline` | `rgba(255,255,255,.08)` | 1 px separators, card borders | — |
 | `--text` | `#EDEDF0` | headings, body | **17.4:1** on ink |
 | `--muted` | `#9B9BA3` | secondary copy, labels | **7.4:1** on ink · 6.8:1 on surface |
@@ -50,6 +50,25 @@ re-verified with a checker before the freeze.
 
 Rules: no pure black, no pure white. Never state information with colour alone — pair with
 a label, an icon, or weight. Body text is never `--muted` at sizes below 15 px.
+
+**Background — the deep-blue wash.** Carried over from the design exports, but static: five
+layered radial ellipses in navy and teal over `--ink`, plus a downward fade, painted once on
+a `position: fixed` pseudo-element behind the content (`z-index: -1`). It costs nothing to
+render, does not scroll away, and needs no reduced-motion exception because nothing moves.
+Reference implementation: `body::before` in the Phase 1 variant A stylesheet.
+
+```
+radial-gradient(1150px 820px at  6% -10%, rgba( 26, 74,190,.72), transparent 64%)
+radial-gradient( 980px 760px at 96%  -4%, rgba( 15,100,150,.52), transparent 66%)
+radial-gradient(1400px 1000px at 66% 26%, rgba( 18, 44,128,.58), transparent 72%)
+radial-gradient( 900px 720px at 14%  72%, rgba( 13, 60,132,.44), transparent 74%)
+radial-gradient(1000px 800px at 88%  92%, rgba( 11, 82,116,.34), transparent 76%)
+linear-gradient(180deg, rgba(5,7,15,0) 55%, rgba(5,7,15,.55) 100%)
+```
+
+No animated canvas, no parallax on this layer — the exports' moving nebula is deliberately
+not carried over. Cards and the nav sit above it with their own opaque or glass surfaces so
+text contrast never depends on where a gradient happens to land.
 
 ## Type
 
@@ -109,9 +128,13 @@ Collapses to a disclosure menu below 680 px. No "open to work" dot unless it is 
 true.
 
 **Proof chip** — the fold's evidence row. Mono, 13 px, `--accent-dim` fill, 8 px radius,
-`--text` value + `--muted` label. Three to five, never more. Each is a fact traceable to a
-repo or a vault note. Example set: `live · aravindakrishnan.cloud`, `₹0/mo steady state`,
-`34 Terraform resources`, `OIDC · zero stored keys`.
+`--text` value + `--muted` label. Three to five, never more. Each states a *property* of the
+work, not a scorecard number. Frozen set: `live · aravindakrishnan.cloud`,
+`minimal · running cost`, `OIDC · no stored keys`, `AWS SAA · CCNA`.
+
+Resource counts ("34 Terraform resources") are banned from the fold — they read as padding,
+and nobody is hired for a resource count. Counts that carry engineering weight (test counts,
+detector counts, phase counts) belong inside a case study, next to what they prove.
 
 **Case card** — architecture thumbnail (16:9, real diagram, not a stock graphic) · project
 name (21 px) · one-line outcome (`--muted`) · stack chips (mono, 13 px) · one hard number.
@@ -137,33 +160,34 @@ showing `····` if the API fails. **Never renders a fabricated number.**
 ## Content rules
 
 - The fold answers, in order: what he does → proof → the work. No slogans above the fold.
+  The headline states the work plainly ("I build and run AWS infrastructure."), not a
+  personality claim about 3am or boredom.
+- **Cost language:** never publish "₹0", "zero cost", or "free" — it invites an argument
+  about what is really free and reads as a gimmick. Say **"minimal running cost"**, or
+  describe the engineering: no NAT gateway, no idle compute, torn down when not in use.
 - Every number traces to a repo or a vault note; the PR that introduces a number lists its
-  source. No rounded-up, unverifiable, or aspirational metrics — ever.
+  source. No rounded-up, unverifiable, or aspirational metrics — ever. Vanity counts stay
+  out of the fold entirely (see "Proof chip").
 - Project copy is written for an engineer on a panel: decisions, tradeoffs, failures, fixes.
 - No sales language, no "passionate about", no buzzword lists posing as skills.
 
-## Phase 1 spike — the two variants
+## Phase 1 outcome — why A won
 
-Both are evidence-first dark and share the tokens above. They differ in structure so the
-choice is meaningful:
+Both variants were built as real pages (home + the ClearSky case study) and rendered at
+1440 and 375 px before the choice was made.
 
-**A — Console.** Denser grid, mono section labels, 2-up case cards with architecture
-thumbnails, cyan accent, tighter spacing (32 between sections). Reads as an operator's
-dashboard: high signal, low ornament.
+**A — Console (chosen).** Dense grid, mono section labels, three case cards with contained
+architecture thumbnails, cyan accent. High signal per screen; the work is visible without
+scrolling, and the layout still carries information at 1440 px instead of gutter.
 
-**B — Editorial dark.** Larger display type (up to 56), numbered index list instead of a
-card grid, one full-bleed architecture figure per case study, off-white/amber accent
-instead of cyan, more air (72–96 between sections). Reads as a technical essay.
+**B — Editorial dark (rejected).** Larger display type, numbered index instead of cards,
+full-bleed figure, warm accent, much more air. It read well as an essay but showed less
+work per screen and left the right half of a 1440 px viewport empty until the reading
+column was centred. Deleted in this phase; recoverable from git history if ever wanted.
 
-Judged on: the eight-second test on a phone, legibility of diagrams at 375 px, how well
-each holds up at 1440 px without gutter waste, and which one the author is willing to
-maintain.
+Amendments made after the choice, on the author's call:
 
-## Open questions for the freeze
-
-- **Accent** — stays cyan `#4FC1D4`, or moves to the warmer off-white/amber of variant B?
-  This is the one thing the spike exists to settle; it is not decided in advance.
-
-Settled 2026-07-31 (in `SPEC.md`): the nav carries an "open to work" indicator driven by a
-single boolean in `web/src/config.ts`, to be switched off the day it stops being true; home
-shows **three** featured case cards with the full index at `/projects/`.
+- deep-blue flowing background adopted from the design exports, static (see Colour)
+- "₹0/mo" language dropped everywhere in favour of "minimal running cost"
+- the "34 Terraform resources" chip dropped; resource counts banned from the fold
+- headline plainer: "I build and run AWS infrastructure."
