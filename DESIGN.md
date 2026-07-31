@@ -140,14 +140,11 @@ right; visitor count as a quiet mono readout. Active item in `--text`, others `-
 Collapses to a disclosure menu below 680 px. No "open to work" dot unless it is currently
 true.
 
-**Proof chip** — the fold's evidence row. Mono, 13 px, `--accent-dim` fill, 8 px radius,
-`--text` value + `--muted` label. Three to five, never more. Each states a *property* of the
-work, not a scorecard number. Frozen set: `live · aravindakrishnan.cloud`,
-`minimal · running cost`, `OIDC · no stored keys`, `AWS SAA · CCNA`.
-
-Resource counts ("34 Terraform resources") are banned from the fold — they read as padding,
-and nobody is hired for a resource count. Counts that carry engineering weight (test counts,
-detector counts, phase counts) belong inside a case study, next to what they prove.
+**Hero** — headline, one lede paragraph, then two actions: a solid pill (`View projects`)
+and a quiet mono link (`get in touch →`). Nothing else. Badge/chip rows were tried and cut:
+they read as generic template furniture, and the facts they carried (cost, certifications,
+keyless CI) belong in About and the case studies, where they can be argued instead of
+asserted.
 
 **Case card** — architecture thumbnail (16:9, real diagram, not a stock graphic) · project
 name (21 px) · one-line outcome (`--muted`) · stack chips (mono, 13 px) · one hard number.
@@ -172,9 +169,13 @@ showing `····` if the API fails. **Never renders a fabricated number.**
 
 ## Content rules
 
-- The fold answers, in order: what he does → proof → the work. No slogans above the fold.
-  The headline states the work plainly ("I build and run AWS infrastructure."), not a
-  personality claim about 3am or boredom.
+- The fold answers, in order: what he does → how to act on it → the work. No slogans above
+  the fold, and no personality claims about 3am or boredom.
+- **The headline names the discipline, not a vendor.** "I build and run cloud
+  infrastructure." — not AWS, not any product name. The work is broader than one provider,
+  and pinning the headline to a vendor narrows the roles it speaks to. Vendors, services and
+  versions belong in the lede, the cards and the case studies, where they are evidence
+  rather than identity.
 - **Cost language:** never publish "₹0", "zero cost", or "free" — it invites an argument
   about what is really free and reads as a gimmick. Say **"minimal running cost"**, or
   describe the engineering: no NAT gateway, no idle compute, torn down when not in use.
@@ -204,5 +205,6 @@ Amendments made after the choice, on the author's call:
   slow-drifting blurred blobs under a vignette (see Colour). Static was tried first and
   rejected by the author — the wash has to move.
 - "₹0/mo" language dropped everywhere in favour of "minimal running cost"
-- the "34 Terraform resources" chip dropped; resource counts banned from the fold
+- the proof-chip row dropped entirely (generic); resource counts banned from the fold
+- headline de-vendored: "cloud infrastructure", not "AWS infrastructure"
 - headline plainer: "I build and run AWS infrastructure."
