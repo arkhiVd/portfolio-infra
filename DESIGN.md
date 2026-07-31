@@ -1,9 +1,9 @@
 # DESIGN.md — visual contract
 
-**Status: DRAFT.** Frozen in Phase 1 from whichever mockup variant wins. Until then,
-values here are proposals. After the freeze, every UI diff is graded against this file;
+**Status: FROZEN 2026-08-01** from mockup variant **A (Console)**, with the deep-blue
+background carried over from the design exports. Every UI diff is graded against this file;
 if a request conflicts with it, flag the conflict and propose the complying alternative
-before building.
+before building. Changes to this file are a human decision, not an implementation detail.
 
 ## Thesis
 
@@ -40,8 +40,8 @@ re-verified with a checker before the freeze.
 
 | Token | Value | Use | Contrast |
 |---|---|---|---|
-| `--ink` | `#050507` | page background | — |
-| `--surface` | `#111114` | cards, raised panels | 1.09:1 vs ink (structure, not text) |
+| `--ink` | `#050507` | page background — stays black; the blue is light, not paint | — |
+| `--surface` | `#0F1218` | cards, raised panels | structure, not text |
 | `--hairline` | `rgba(255,255,255,.08)` | 1 px separators, card borders | — |
 | `--text` | `#EDEDF0` | headings, body | **17.4:1** on ink |
 | `--muted` | `#9B9BA3` | secondary copy, labels | **7.4:1** on ink · 6.8:1 on surface |
@@ -50,6 +50,35 @@ re-verified with a checker before the freeze.
 
 Rules: no pure black, no pure white. Never state information with colour alone — pair with
 a label, an icon, or weight. Body text is never `--muted` at sizes below 15 px.
+
+**Background — the ocean layer.** The page is black; deep-blue and teal light moves slowly
+behind it. This is the site's one piece of ambient motion, and it is deliberate: it sets the
+water register the iconography (containers, pipelines) will follow.
+
+Structure — `<div class="ocean" aria-hidden="true"><i></i><i></i><i></i></div>`, fixed at
+`z-index: -1`, black base:
+
+| Layer | Colour | Size / anchor | Cycle |
+|---|---|---|---|
+| blob 1 | `rgba(24,70,180,.70)` navy | 78vw, off-canvas top-left | 41 s |
+| blob 2 | `rgba(16,118,142,.62)` teal | 64vw, off-canvas top-right | 53 s |
+| blob 3 | `rgba(13,64,150,.52)` cold blue | 86vw, rising from below | 67 s |
+
+Rules that make it safe to ship:
+
+- `filter: blur(90px)`, and **only `transform` and `opacity` animate** — compositor work, no
+  layout, no paint. No canvas, no WebGL, no per-frame JavaScript, no scroll coupling.
+- Cycle lengths are mutually indivisible (41 / 53 / 67 s) so the composition never visibly
+  repeats. `ease-in-out … alternate`; linear reads mechanical.
+- **A vignette (`.ocean::after`) sits over the blobs** — a radial black mask at 86% centre
+  opacity plus a downward fade. Without it the whole viewport tints and the page stops being
+  black. Black dominates; blue is glow arriving from the edges.
+- Content never sits directly on the glow: cards are `--surface`, the nav is glass, so text
+  contrast never depends on where a blob happens to be.
+- `prefers-reduced-motion: reduce` **freezes** the layer at a fixed opacity rather than
+  hiding it — same picture, no movement.
+
+Reference implementation: `.ocean` in the Phase 1 variant A stylesheet.
 
 ## Type
 
@@ -87,7 +116,10 @@ a label, an icon, or weight. Body text is never `--muted` at sizes below 15 px.
   may use 320 ms; nothing longer.
 - Allowed: hover/focus colour and background transitions, one fade-and-rise entrance per
   section, nav collapse.
-- Forbidden: parallax, autoplaying canvas, marquees, page transitions, tilt, typewriters.
+- **One exception, named:** the ocean background layer animates continuously (see Colour).
+  Nothing else on the page may move on its own.
+- Forbidden: parallax, canvas/WebGL, marquees, page transitions, tilt, typewriters, and any
+  motion attached to scroll position.
 - `@media (prefers-reduced-motion: reduce)` disables every transition and entrance —
   content must be fully visible with no animation at all.
 
@@ -108,10 +140,11 @@ right; visitor count as a quiet mono readout. Active item in `--text`, others `-
 Collapses to a disclosure menu below 680 px. No "open to work" dot unless it is currently
 true.
 
-**Proof chip** — the fold's evidence row. Mono, 13 px, `--accent-dim` fill, 8 px radius,
-`--text` value + `--muted` label. Three to five, never more. Each is a fact traceable to a
-repo or a vault note. Example set: `live · aravindakrishnan.cloud`, `₹0/mo steady state`,
-`34 Terraform resources`, `OIDC · zero stored keys`.
+**Hero** — headline, one lede paragraph, then two actions: a solid pill (`View projects`)
+and a quiet mono link (`get in touch →`). Nothing else. Badge/chip rows were tried and cut:
+they read as generic template furniture, and the facts they carried (cost, certifications,
+keyless CI) belong in About and the case studies, where they can be argued instead of
+asserted.
 
 **Case card** — architecture thumbnail (16:9, real diagram, not a stock graphic) · project
 name (21 px) · one-line outcome (`--muted`) · stack chips (mono, 13 px) · one hard number.
@@ -136,34 +169,42 @@ showing `····` if the API fails. **Never renders a fabricated number.**
 
 ## Content rules
 
-- The fold answers, in order: what he does → proof → the work. No slogans above the fold.
+- The fold answers, in order: what he does → how to act on it → the work. No slogans above
+  the fold, and no personality claims about 3am or boredom.
+- **The headline names the discipline, not a vendor.** "I build and run cloud
+  infrastructure." — not AWS, not any product name. The work is broader than one provider,
+  and pinning the headline to a vendor narrows the roles it speaks to. Vendors, services and
+  versions belong in the lede, the cards and the case studies, where they are evidence
+  rather than identity.
+- **Cost language:** never publish "₹0", "zero cost", or "free" — it invites an argument
+  about what is really free and reads as a gimmick. Say **"minimal running cost"**, or
+  describe the engineering: no NAT gateway, no idle compute, torn down when not in use.
 - Every number traces to a repo or a vault note; the PR that introduces a number lists its
-  source. No rounded-up, unverifiable, or aspirational metrics — ever.
+  source. No rounded-up, unverifiable, or aspirational metrics — ever. Vanity counts stay
+  out of the fold entirely (see "Proof chip").
 - Project copy is written for an engineer on a panel: decisions, tradeoffs, failures, fixes.
 - No sales language, no "passionate about", no buzzword lists posing as skills.
 
-## Phase 1 spike — the two variants
+## Phase 1 outcome — why A won
 
-Both are evidence-first dark and share the tokens above. They differ in structure so the
-choice is meaningful:
+Both variants were built as real pages (home + the ClearSky case study) and rendered at
+1440 and 375 px before the choice was made.
 
-**A — Console.** Denser grid, mono section labels, 2-up case cards with architecture
-thumbnails, cyan accent, tighter spacing (32 between sections). Reads as an operator's
-dashboard: high signal, low ornament.
+**A — Console (chosen).** Dense grid, mono section labels, three case cards with contained
+architecture thumbnails, cyan accent. High signal per screen; the work is visible without
+scrolling, and the layout still carries information at 1440 px instead of gutter.
 
-**B — Editorial dark.** Larger display type (up to 56), numbered index list instead of a
-card grid, one full-bleed architecture figure per case study, off-white/amber accent
-instead of cyan, more air (72–96 between sections). Reads as a technical essay.
+**B — Editorial dark (rejected).** Larger display type, numbered index instead of cards,
+full-bleed figure, warm accent, much more air. It read well as an essay but showed less
+work per screen and left the right half of a 1440 px viewport empty until the reading
+column was centred. Deleted in this phase; recoverable from git history if ever wanted.
 
-Judged on: the eight-second test on a phone, legibility of diagrams at 375 px, how well
-each holds up at 1440 px without gutter waste, and which one the author is willing to
-maintain.
+Amendments made after the choice, on the author's call:
 
-## Open questions for the freeze
-
-- **Accent** — stays cyan `#4FC1D4`, or moves to the warmer off-white/amber of variant B?
-  This is the one thing the spike exists to settle; it is not decided in advance.
-
-Settled 2026-07-31 (in `SPEC.md`): the nav carries an "open to work" indicator driven by a
-single boolean in `web/src/config.ts`, to be switched off the day it stops being true; home
-shows **three** featured case cards with the full index at `/projects/`.
+- ocean background adopted from the design exports and made *living*: black base with three
+  slow-drifting blurred blobs under a vignette (see Colour). Static was tried first and
+  rejected by the author — the wash has to move.
+- "₹0/mo" language dropped everywhere in favour of "minimal running cost"
+- the proof-chip row dropped entirely (generic); resource counts banned from the fold
+- headline de-vendored: "cloud infrastructure", not "AWS infrastructure"
+- headline plainer: "I build and run AWS infrastructure."

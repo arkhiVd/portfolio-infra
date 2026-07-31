@@ -1,8 +1,25 @@
 # portfolio-infra — tasks
 
-## Current phase: 0 — guardrails and design draft
+## Current phase: 1 — mockup spike
 
-- [ ] Scaffold repo guardrails and the design contract
+- [ ] Choose the design by looking at it
+  - Scope: two static HTML variants of home + the ClearSky case study under `mockups/a`
+    and `mockups/b`, uploaded to the `preview/` key prefix; `local.mime_types` extended
+    for the extensions the Astro build will emit.
+  - Acceptance criteria: both variants reachable under `preview/`, reviewed at 1440 and
+    375 px, one chosen (or both rejected), `DESIGN.md` frozen from the winner and the
+    loser deleted.
+  - Automated validation: `terraform fmt -check -recursive`, `terraform validate`,
+    `terraform plan` in CI — creates only, zero destroys.
+  - Manual validation: rendered at 1440 and 375 px in Chromium; diagram legibility and
+    the eight-second test judged on a phone.
+  - Blockers: none. Local plan runs with `AWS_PROFILE=second` (the default profile points
+    at the free-tier account `348032171026`, not this one) and reports
+    `Plan: 6 to add, 0 to change, 0 to destroy`.
+
+## Completed phase: 0 — guardrails and design draft
+
+- [x] Scaffold repo guardrails and the design contract
   - Scope: `AGENTS.md`, `CLAUDE.md`, `SPEC.md`, `ROADMAP.md`, `TASKS.md`,
     `DESIGN.md` (DRAFT), `.github/pull_request_template.md`. Docs only — no Terraform,
     no site, no workflow changes.

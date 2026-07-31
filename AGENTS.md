@@ -45,10 +45,10 @@ cd web && npm run lint
 # local preview of the built site
 cd web && npm run preview
 
-# plan (repo root, after the build)
-terraform init -input=false
+# plan (repo root, after the build) — always with the second profile
+AWS_PROFILE=second terraform init -input=false
 terraform validate
-terraform plan -input=false
+AWS_PROFILE=second terraform plan -input=false
 
 # security scan
 checkov -d . --quiet --compact --framework terraform
@@ -57,8 +57,18 @@ checkov -d . --quiet --compact --framework terraform
 actionlint
 ```
 
-Terraform needs `TF_VAR_ip_hash_secret` (or `terraform.tfvars`, which is gitignored) and
-credentials for account `486539985928`. Confirm with `aws sts get-caller-identity` first.
+**Account safety — read before running any AWS command here.** This laptop has two profiles
+and the *default one is the wrong account*:
+
+| Profile | Account | What it is |
+|---|---|---|
+| default | `348032171026` (`admin-gbngg`) | free-tier experiment account — **not** this project |
+| `second` | `486539985928` (`admin`) | where the portfolio, its bucket, cert, domain and state live |
+
+Every Terraform command in this repo must run with `AWS_PROFILE=second`, e.g.
+`AWS_PROFILE=second terraform plan -input=false`. Confirm first with
+`aws sts get-caller-identity --profile second`. Terraform also needs
+`TF_VAR_ip_hash_secret` (or `terraform.tfvars`, which is gitignored).
 
 ## Working boundaries
 

@@ -1,0 +1,476 @@
+/* Variant A — "Console". Spike only: deleted in Phase 2 once DESIGN.md is frozen.
+   Tokens mirror DESIGN.md; contrast ratios are noted where they matter. */
+
+:root {
+  --ink: #050507;
+  --surface: #0f1218;
+  --hairline: rgba(255, 255, 255, 0.08);
+  --text: #ededf0;        /* 17.4:1 on ink */
+  --muted: #9b9ba3;       /* 7.4:1 on ink */
+  --accent: #4fc1d4;      /* 9.6:1 on ink */
+  --accent-dim: rgba(79, 193, 212, 0.14);
+
+  --sans: "Instrument Sans", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --pad: clamp(24px, 5vw, 72px);
+  --max: 1400px;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--text);
+  font: 400 17px/1.65 var(--sans);
+  letter-spacing: 0;
+  min-height: 100vh;
+}
+
+/* ---------- ocean: living background ----------
+   Black page with deep, murky blue moving behind it — abyss water, not clean cyan. Four
+   blurred masses drift on short, mutually indivisible cycles (13/17/23/29s) with many
+   irregular keyframe stops, so the motion never settles into a readable pattern. Each mass
+   also breathes: scale swings between roughly 0.7 and 1.4, so the light grows and shrinks
+   rather than only sliding.
+
+   Only transform and opacity animate — compositor work, no layout, no paint. No canvas, no
+   WebGL, no per-frame JavaScript, no scroll coupling. */
+.ocean {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--ink);
+}
+/* Vignette over the masses: black stays dominant and the blue reads as light arriving from
+   depth. Without it the whole viewport tints and the page stops being black. */
+.ocean::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 92% at 50% 42%, rgba(5, 5, 7, 0.68) 28%, rgba(5, 5, 7, 0.20) 72%, rgba(5, 5, 7, 0) 100%),
+    linear-gradient(180deg, rgba(5, 5, 7, 0) 58%, rgba(5, 5, 7, 0.72) 100%);
+}
+.ocean i {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  filter: blur(86px);
+  will-change: transform, opacity;
+}
+/* All four are deep-ocean blue — no teal, no bright cyan. Darkness is the point. */
+.ocean i:nth-child(1) {
+  width: 74vw;
+  height: 60vw;
+  top: -22vw;
+  left: -20vw;
+  background: radial-gradient(circle at 50% 50%, rgba(13, 38, 96, 0.95), rgba(13, 38, 96, 0) 68%);
+  animation: drift-a 13s ease-in-out infinite alternate;
+}
+.ocean i:nth-child(2) {
+  width: 60vw;
+  height: 54vw;
+  top: -10vw;
+  right: -16vw;
+  background: radial-gradient(circle at 50% 50%, rgba(9, 27, 74, 0.92), rgba(9, 27, 74, 0) 70%);
+  animation: drift-b 17s ease-in-out infinite alternate;
+}
+.ocean i:nth-child(3) {
+  width: 82vw;
+  height: 58vw;
+  bottom: -28vw;
+  left: 8vw;
+  background: radial-gradient(circle at 50% 50%, rgba(16, 46, 112, 0.85), rgba(16, 46, 112, 0) 70%);
+  animation: drift-c 23s ease-in-out infinite alternate;
+}
+/* deepest mass, mostly felt rather than seen — keeps the middle from going flat */
+.ocean i:nth-child(4) {
+  width: 66vw;
+  height: 66vw;
+  top: 18vw;
+  left: 26vw;
+  background: radial-gradient(circle at 50% 50%, rgba(7, 20, 58, 0.9), rgba(7, 20, 58, 0) 72%);
+  animation: drift-d 29s ease-in-out infinite alternate;
+}
+
+@keyframes drift-a {
+  0%   { transform: translate3d(0, 0, 0) scale(0.86); opacity: 0.75; }
+  19%  { transform: translate3d(7vw, 4vw, 0) scale(1.18); opacity: 1; }
+  41%  { transform: translate3d(-5vw, 9vw, 0) scale(0.94); opacity: 0.62; }
+  67%  { transform: translate3d(11vw, -3vw, 0) scale(1.32); opacity: 0.95; }
+  100% { transform: translate3d(2vw, 12vw, 0) scale(0.78); opacity: 0.7; }
+}
+@keyframes drift-b {
+  0%   { transform: translate3d(0, 0, 0) scale(1.12); opacity: 0.65; }
+  23%  { transform: translate3d(-9vw, 7vw, 0) scale(0.74); opacity: 0.95; }
+  52%  { transform: translate3d(3vw, 14vw, 0) scale(1.28); opacity: 0.6; }
+  78%  { transform: translate3d(-13vw, 2vw, 0) scale(0.9); opacity: 1; }
+  100% { transform: translate3d(-2vw, 10vw, 0) scale(1.2); opacity: 0.72; }
+}
+@keyframes drift-c {
+  0%   { transform: translate3d(0, 0, 0) scale(1); opacity: 0.6; }
+  27%  { transform: translate3d(-12vw, -9vw, 0) scale(1.34); opacity: 0.9; }
+  49%  { transform: translate3d(6vw, -2vw, 0) scale(0.8); opacity: 0.55; }
+  73%  { transform: translate3d(14vw, -11vw, 0) scale(1.16); opacity: 0.85; }
+  100% { transform: translate3d(-4vw, -5vw, 0) scale(0.92); opacity: 0.65; }
+}
+@keyframes drift-d {
+  0%   { transform: translate3d(0, 0, 0) scale(1.1); opacity: 0.5; }
+  31%  { transform: translate3d(10vw, -7vw, 0) scale(0.72); opacity: 0.85; }
+  58%  { transform: translate3d(-8vw, 5vw, 0) scale(1.4); opacity: 0.45; }
+  84%  { transform: translate3d(4vw, 11vw, 0) scale(0.96); opacity: 0.8; }
+  100% { transform: translate3d(-11vw, -4vw, 0) scale(1.24); opacity: 0.55; }
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--text); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+img { max-width: 100%; display: block; }
+
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding-inline: var(--pad);
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+}
+.skip:focus {
+  left: var(--pad);
+  top: 12px;
+  z-index: 50;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  padding: 10px 16px;
+  color: var(--text);
+}
+
+.label {
+  font: 500 13px/1.4 var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+/* ---------- nav ---------- */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding-block: 16px;
+  background: rgba(5, 7, 15, 0.62);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  border-bottom: 1px solid var(--hairline);
+}
+.nav .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+  flex-wrap: wrap;
+}
+.brand {
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2vw, 28px);
+  font: 400 13px/1 var(--mono);
+  letter-spacing: 0.02em;
+}
+.nav-right a { color: var(--muted); }
+.nav-right a[aria-current="page"] { color: var(--text); }
+.nav-right a:hover { color: var(--accent); }
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+/* Below 680 the status readouts wrap into a three-line mess — links come first. */
+@media (max-width: 680px) {
+  .status { display: none; }
+  .nav-right { gap: 20px; }
+}
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--accent);
+  flex: none;
+}
+
+/* ---------- hero ---------- */
+
+.hero { padding-block: clamp(48px, 9vh, 96px) 32px; }
+.hero h1 {
+  margin: 0;
+  max-width: 26ch;
+  font-size: clamp(34px, 4.4vw, 56px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.hero p {
+  margin: 16px 0 0;
+  max-width: 74ch;
+  color: var(--muted);
+}
+
+/* ---------- hero call to action ----------
+   Replaces the proof-chip row: badge-shaped chips read as generic template furniture, and
+   the facts they carried (cost, certifications, keyless CI) belong in About and the case
+   studies where they can be argued rather than asserted. */
+
+.cta {
+  display: flex;
+  align-items: center;
+  gap: 12px 28px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 28px;
+  border-radius: 999px;
+  background: var(--text);
+  color: #08080b;
+  font-size: 15px;
+  font-weight: 500;
+  transition: opacity 200ms var(--ease);
+}
+.btn:hover { opacity: 0.78; color: #08080b; }
+.btn-quiet {
+  font: 400 13px/1.4 var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(255, 255, 255, 0.18);
+  transition: color 200ms var(--ease);
+}
+.btn-quiet:hover { color: var(--accent); }
+
+/* ---------- case cards ---------- */
+
+.section { padding-block: 48px; }
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--hairline);
+}
+.section-head h2 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
+.cards {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 900px) {
+  .cards { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 1200px) {
+  .cards { grid-template-columns: repeat(3, 1fr); }
+}
+
+.card {
+  display: block;
+  padding: 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  transition: background 200ms var(--ease), border-color 200ms var(--ease);
+}
+.card:hover {
+  background: var(--surface);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: inherit;
+}
+/* The architecture diagrams are white-background exports. Rather than bleed a bright
+   block into a dark page, they sit in a deliberate paper panel and are contained, not
+   cropped — a dense diagram cropped to 16:9 is illegible anyway. */
+.card figure {
+  margin: 0 0 12px;
+  height: 168px;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid var(--hairline);
+  background: #f4f6fa;
+  padding: 8px;
+}
+.card figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+.card h3 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+.card p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+.card-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--hairline);
+  font: 400 13px/1.3 var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+.card-foot b { color: var(--accent); font-weight: 500; }
+.card .go { color: var(--muted); transition: transform 200ms var(--ease), color 200ms var(--ease); }
+.card:hover .go { color: var(--accent); transform: translateX(3px); }
+
+/* ---------- case study ---------- */
+
+.study { padding-block: 32px 24px; }
+.study h1 {
+  margin: 8px 0 0;
+  font-size: clamp(34px, 4vw, 44px);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  max-width: 20ch;
+}
+.study .lede {
+  margin: 16px 0 0;
+  max-width: 74ch;
+  color: var(--muted);
+}
+
+.block { padding-block: 32px; border-top: 1px solid var(--hairline); }
+.block h2 {
+  margin: 12px 0 0;
+  font-size: 27px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+.block p { margin: 12px 0 0; max-width: 74ch; }
+.block p + p { margin-top: 16px; }
+
+figure.arch { margin: 24px 0 0; }
+figure.arch img {
+  width: 100%;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: #08080b;
+}
+figure.arch figcaption {
+  margin-top: 12px;
+  font: 400 13px/1.5 var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.rows { margin: 16px 0 0; border-top: 1px solid var(--hairline); }
+.row {
+  display: grid;
+  gap: 4px 32px;
+  padding-block: 16px;
+  border-bottom: 1px solid var(--hairline);
+}
+@media (min-width: 900px) {
+  .row { grid-template-columns: 320px 1fr; }
+}
+.row dt { font-weight: 500; }
+.row dd { margin: 0; color: var(--muted); }
+
+.metrics {
+  display: grid;
+  gap: 16px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.metrics li {
+  padding: 16px;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.metrics b {
+  display: block;
+  font: 500 27px/1.2 var(--mono);
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.metrics span { color: var(--muted); font-size: 15px; }
+
+/* ---------- footer ---------- */
+
+.foot {
+  margin-top: 48px;
+  padding-block: 32px 48px;
+  border-top: 1px solid var(--hairline);
+  font: 400 13px/1.8 var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+.foot .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  justify-content: space-between;
+}
+.foot a { color: var(--muted); }
+.foot a:hover { color: var(--accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  /* the ocean freezes rather than disappears — same picture, no movement */
+  .ocean i { opacity: 0.85; }
+}
