@@ -475,3 +475,59 @@ div.card:hover {
   background: transparent;
   border-color: var(--hairline);
 }
+
+/* ---------- about ---------- */
+
+.role { margin-top: var(--s-5); }
+.role-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-2) var(--s-4);
+  flex-wrap: wrap;
+}
+.role-head h3 {
+  margin: 0;
+  font-size: var(--t-21);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+.points {
+  margin: var(--s-4) 0 0;
+  padding-left: 1.1em;
+  max-width: var(--measure);
+  color: var(--muted);
+}
+.points li { margin-top: var(--s-2); }
+
+/* certification and contact lockups — one uniform treatment, no vendor badges */
+.lockups {
+  margin: var(--s-5) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--hairline);
+}
+.lockups li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-2) var(--s-5);
+  flex-wrap: wrap;
+  padding-block: var(--s-4);
+  border-bottom: 1px solid var(--hairline);
+}
+.lockup-name { font-size: var(--t-17); }
+.lockup-name a { color: var(--text); }
+.lockup-name a:hover { color: var(--accent); }
+
+.skills { margin: var(--s-5) 0 0; border-top: 1px solid var(--hairline); }
+.skill-row {
+  display: grid;
+  gap: var(--s-1) var(--s-6);
+  padding-block: var(--s-4);
+  border-bottom: 1px solid var(--hairline);
+}
+@media (min-width: 900px) {
+  .skill-row { grid-template-columns: 180px 1fr; }
+}
+.skill-row dd { margin: 0; color: var(--muted); }

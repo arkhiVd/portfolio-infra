@@ -1,19 +1,28 @@
 # portfolio-infra — tasks
 
-## Current phase: 3 — home and projects index
+## Current phase: 4 — about, resume, contact
 
-- [ ] The two pages a recruiter lands on
-  - Scope: `projects.ts` as the single project set; `CaseCard.astro`; home with three
-    featured cards; `/projects` split into "with architecture" and "also built";
-    `VisitorCount.astro` wired to `window.VISITOR_API`.
-  - Acceptance criteria: both pages render at 1440 and 375; every number sourced; the
-    counter shows a real count when the API answers and keeps its placeholder when it does
-    not; pages readable with JavaScript disabled.
-  - Automated validation: `npm run lint` (astro check), `npm run build`,
-    `AWS_PROFILE=second terraform plan`.
-  - Manual validation: rendered locally; counter proven against a stubbed API in both the
-    success and failure paths.
-  - Blockers: `/about` is linked from the nav and does not exist until Phase 4.
+- [ ] A recruiter can leave with something
+  - Scope: `/about` (experience, certifications as uniform mono-line lockups, skills,
+    education, contact); `about.ts` sourced from `resume.tex`; LinkedIn published.
+  - Acceptance criteria: `/about` renders and the nav link no longer 404s; certifications
+    are one visual system with working verify links; resume download either serves a
+    cleared PDF or is hidden — never a broken button.
+  - Automated validation: `astro check`, `npm run build`, `terraform plan`.
+  - Manual validation: rendered at 1440 and 375; verify links opened.
+  - **Blocked, needs Aravind:** the resume PDF is not committed. It carries a personal phone
+    number and would be permanent in a public repo; it is also stale (`.tex` newer than
+    `.pdf`) and there is no LaTeX toolchain here to rebuild it. The download CTA is hidden
+    until this is settled. The employer-name conflict (Zarthi vs Centilytics) is also open —
+    see `SPEC.md`.
+
+## Completed phase: 3 — home and projects index
+
+- [x] 2026-08-01 `projects.ts` as the single project set, `CaseCard`, home with three
+  featured cards, `/projects` index, visitor counter — validated by `astro check`
+  (0 errors), `npm run build`, `terraform plan` (5 to add, 0 to change, 0 to destroy), and
+  the counter proven against a stubbed API in both the success path (rendered 1329, API
+  incremented) and the failure path (placeholder held) (PR #18)
 
 ## Completed phase: 2 — Astro scaffold, design system, pipeline
 

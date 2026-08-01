@@ -161,7 +161,22 @@ Resolved 2026-07-31 (decisions, not guesses — change them here, not in a page)
   (`web/src/config.ts`) so switching it off is a one-line commit. It must be turned off the
   day it stops being true — a stale indicator is worse than none.
 
-Still open:
+Resolved 2026-08-01:
 
-- LinkedIn profile URL — publishing it is agreed; the exact URL must come from Aravind and
-  is not to be inferred or guessed. Blocks the contact block in Phase 4.
+- **LinkedIn:** `https://linkedin.com/in/aravindakrishnan-v-2b0651218`, taken from Aravind's
+  own `resume.tex` header rather than guessed. Published in the About contact block.
+
+Still open — these block the resume download and one factual claim:
+
+- **Resume PDF publication.** `~/Documents/resume/resume.pdf` carries a personal phone
+  number (`+91 …`). Committing it to this public repo makes it permanent in git history and
+  serves it on the open internet. Needs an explicit decision: publish as-is, publish a
+  variant with the phone number removed, or keep the resume out of the site. The download
+  CTA is hidden (`site.resume` empty) until this is settled.
+- **The PDF is stale.** `resume.tex` was edited 2026-07-17; `resume.pdf` was built
+  2026-07-14, so the PDF does not reflect the current source. There is no LaTeX toolchain on
+  this machine (`pdflatex`, `xelatex`, `tectonic` all absent), so it must be rebuilt
+  elsewhere or a toolchain installed before anything is published.
+- **Employer name conflict.** `resume.tex` says the employer is **Zarthi**; the published
+  site and this rebuild say **Centilytics**. The rebuild keeps Centilytics so it does not
+  silently change a fact, but one of the two is wrong and only Aravind can say which.

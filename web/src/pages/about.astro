@@ -1,0 +1,134 @@
+---
+import Base from "../layouts/Base.astro";
+import { site } from "../lib/site";
+import { certifications, education, employer, experience, skills } from "../lib/about";
+---
+
+<Base
+  title={`About — ${site.name}`}
+  description="Cloud engineer in Kochi. Experience, certifications, skills, and how to get in touch."
+  current="about"
+>
+  <section class="hero wrap">
+    <h1>About</h1>
+    <p>
+      I turn fragile, manual infrastructure work into something boring and repeatable. Day to
+      day that means AWS, Terraform and CI/CD; it started with wanting to know how networks
+      and Linux boxes actually talk to each other, and that part has never stopped being
+      useful.
+    </p>
+    <div class="cta">
+      {site.resume && <a class="btn" href={site.resume}>Download resume (PDF)</a>}
+      <a class={site.resume ? "btn-quiet" : "btn"} href={`mailto:${site.email}`}>
+        {site.resume ? "get in touch →" : "Get in touch"}
+      </a>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <h2>Experience</h2>
+      <span class="label">{employer}</span>
+    </div>
+    {
+      experience.map((role) => (
+        <article class="role">
+          <div class="role-head">
+            <h3>
+              {role.title}, {role.org}
+            </h3>
+            <span class="label">
+              {role.period} · {role.location}
+            </span>
+          </div>
+          <ul class="points">
+            {role.points.map((point) => (
+              <li>{point}</li>
+            ))}
+          </ul>
+        </article>
+      ))
+    }
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <h2>Certifications</h2>
+      <span class="label">{certifications.length} · verifiable</span>
+    </div>
+    <ul class="lockups">
+      {
+        certifications.map((cert) => (
+          <li>
+            <span class="lockup-name">{cert.name}</span>
+            <span class="label">
+              {cert.issuer} ·{" "}
+              <a href={cert.verify} rel="noopener">
+                verify ↗
+              </a>
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <h2>Skills</h2>
+      <span class="label">what I actually use</span>
+    </div>
+    <dl class="skills">
+      {
+        skills.map((group) => (
+          <div class="skill-row">
+            <dt class="label">{group.label}</dt>
+            <dd>{group.items}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <h2>Education</h2>
+      <span class="label">{education.finished}</span>
+    </div>
+    <p class="prose">
+      <strong>{education.school}</strong>, {education.place} — {education.degree}
+    </p>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <h2>Get in touch</h2>
+      <span class="label">{site.openToWork ? "open to work" : "say hello"}</span>
+    </div>
+    <p class="prose">
+      Always up for a conversation about infrastructure, automation, or a good homelab setup.
+    </p>
+    <ul class="lockups">
+      <li>
+        <span class="lockup-name"><a href={`mailto:${site.email}`}>{site.email}</a></span>
+        <span class="label">email</span>
+      </li>
+      <li>
+        <span class="lockup-name"><a href={site.github} rel="me noopener">github.com/arkhiVd</a></span>
+        <span class="label">code</span>
+      </li>
+      {
+        site.linkedin && (
+          <li>
+            <span class="lockup-name">
+              <a href={site.linkedin} rel="me noopener">
+                linkedin
+              </a>
+            </span>
+            <span class="label">profile</span>
+          </li>
+        )
+      }
+    </ul>
+  </section>
+</Base>

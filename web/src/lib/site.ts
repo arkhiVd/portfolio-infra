@@ -10,9 +10,17 @@ export const site = {
   domain: "www.aravindakrishnan.cloud",
   email: "aravindakrishnanv@tutamail.com",
   github: "https://github.com/arkhiVd",
-  // LinkedIn is still unresolved in SPEC.md — the URL must come from Aravind, never guessed.
-  linkedin: "",
+  // Taken from Aravind's own resume.tex, not guessed.
+  linkedin: "https://linkedin.com/in/aravindakrishnan-v-2b0651218",
   openToWork: true,
+  /**
+   * Empty until the PDF is cleared for publication. Two things block it:
+   * the committed PDF is public and permanent in a public repo, and the current
+   * ~/Documents/resume/resume.pdf carries a personal phone number; and it is stale —
+   * resume.tex is newer than the built PDF and there is no LaTeX toolchain on this
+   * machine to rebuild it. The download CTA is hidden while this is empty.
+   */
+  resume: "",
   description:
     "Cloud engineer working across AWS, Terraform, containers and CI/CD. Selected infrastructure work, with the decisions and failures behind it.",
 } as const;
