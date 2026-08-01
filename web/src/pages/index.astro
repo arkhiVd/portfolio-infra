@@ -3,13 +3,14 @@ import Base from "../layouts/Base.astro";
 import CaseCard from "../components/CaseCard.astro";
 import { site, url } from "../lib/site";
 import { featured, projects } from "../lib/projects";
+import { employer } from "../lib/about";
 ---
 
 <Base title={`${site.name} — ${site.role}`} current="home">
   <section class="hero wrap">
     <h1>I build and run cloud infrastructure.</h1>
     <p>
-      Cloud engineer at Centilytics, working across AWS, Terraform, containers and CI/CD —
+      Cloud engineer at {employer}, working across AWS, Terraform, containers and CI/CD —
       and the Linux underneath all of it. AWS Solutions Architect – Associate and CCNA
       certified, CKA in progress.
     </p>
@@ -37,7 +38,7 @@ import { featured, projects } from "../lib/projects";
       <a class="label" href={url("/about")}>more →</a>
     </div>
     <p class="prose">
-      Cloud engineer at Centilytics since October 2025, working on cloud management and
+      Cloud engineer at {employer} since October 2025, working on cloud management and
       infrastructure automation. ECE graduate, AWS Solutions Architect – Associate and CCNA
       certified, currently working through the CKA. Everything above runs in my own AWS
       account, built with Terraform and shipped by keyless OIDC pipelines.

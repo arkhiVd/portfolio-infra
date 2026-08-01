@@ -1,20 +1,24 @@
 # portfolio-infra — tasks
 
-## Current phase: 4 — about, resume, contact
+## Current phase: 5 — case-study template and first deep dives
 
-- [ ] A recruiter can leave with something
-  - Scope: `/about` (experience, certifications as uniform mono-line lockups, skills,
-    education, contact); `about.ts` sourced from `resume.tex`; LinkedIn published.
-  - Acceptance criteria: `/about` renders and the nav link no longer 404s; certifications
-    are one visual system with working verify links; resume download either serves a
-    cleared PDF or is hidden — never a broken button.
+- [ ] Prove engineering judgment, twice
+  - Scope: `CaseStudy.astro` + `Block.astro` (problem → architecture → decisions and
+    tradeoffs → what broke → numbers); ClearSky and Cloud Detective deep dives; cards now
+    link to them.
+  - Acceptance criteria: each page carries at least one real failure and its fix; diagrams
+    are captioned figures legible at 375 px; every number traceable to the vault or a repo.
   - Automated validation: `astro check`, `npm run build`, `terraform plan`.
-  - Manual validation: rendered at 1440 and 375; verify links opened.
-  - **Blocked, needs Aravind:** the resume PDF is not committed. It carries a personal phone
-    number and would be permanent in a public repo; it is also stale (`.tex` newer than
-    `.pdf`) and there is no LaTeX toolchain here to rebuild it. The download CTA is hidden
-    until this is settled. The employer-name conflict (Zarthi vs Centilytics) is also open —
-    see `SPEC.md`.
+  - Manual validation: read end to end at 1440 and 375.
+  - Blockers: none.
+
+## Completed phase: 4 — about, resume, contact
+
+- [x] 2026-08-01 `/about` with experience, mono-line certification lockups, skills,
+  education and contact; LinkedIn published; **resume shipped** as a redacted build of
+  `resume.tex` (phone number removed, verified absent from the PDF binary), served as
+  `application/pdf`; employer corrected to **Zarthi** and sourced from one export
+  (PR #18)
 
 ## Completed phase: 3 — home and projects index
 

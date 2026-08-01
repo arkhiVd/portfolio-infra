@@ -14,13 +14,12 @@ export const site = {
   linkedin: "https://linkedin.com/in/aravindakrishnan-v-2b0651218",
   openToWork: true,
   /**
-   * Empty until the PDF is cleared for publication. Two things block it:
-   * the committed PDF is public and permanent in a public repo, and the current
-   * ~/Documents/resume/resume.pdf carries a personal phone number; and it is stale —
-   * resume.tex is newer than the built PDF and there is no LaTeX toolchain on this
-   * machine to rebuild it. The download CTA is hidden while this is empty.
+   * Committed at web/public/resume.pdf — public and permanent, so it is a redacted build:
+   * the personal phone number is removed from the header and nothing else is changed.
+   * Rebuild instructions are in SPEC.md; verify the phone is absent from the PDF binary
+   * before replacing this file.
    */
-  resume: "",
+  resume: "/resume.pdf",
   description:
     "Cloud engineer working across AWS, Terraform, containers and CI/CD. Selected infrastructure work, with the decisions and failures behind it.",
 } as const;

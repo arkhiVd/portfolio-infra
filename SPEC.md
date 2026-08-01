@@ -166,17 +166,29 @@ Resolved 2026-08-01:
 - **LinkedIn:** `https://linkedin.com/in/aravindakrishnan-v-2b0651218`, taken from Aravind's
   own `resume.tex` header rather than guessed. Published in the About contact block.
 
-Still open — these block the resume download and one factual claim:
+Resolved 2026-08-01 (continued):
 
-- **Resume PDF publication.** `~/Documents/resume/resume.pdf` carries a personal phone
-  number (`+91 …`). Committing it to this public repo makes it permanent in git history and
-  serves it on the open internet. Needs an explicit decision: publish as-is, publish a
-  variant with the phone number removed, or keep the resume out of the site. The download
-  CTA is hidden (`site.resume` empty) until this is settled.
-- **The PDF is stale.** `resume.tex` was edited 2026-07-17; `resume.pdf` was built
-  2026-07-14, so the PDF does not reflect the current source. There is no LaTeX toolchain on
-  this machine (`pdflatex`, `xelatex`, `tectonic` all absent), so it must be rebuilt
-  elsewhere or a toolchain installed before anything is published.
-- **Employer name conflict.** `resume.tex` says the employer is **Zarthi**; the published
-  site and this rebuild say **Centilytics**. The rebuild keeps Centilytics so it does not
-  silently change a fact, but one of the two is wrong and only Aravind can say which.
+- **Resume PDF: published, redacted.** `web/public/resume.pdf` is a build of `resume.tex`
+  with **only** the personal phone number removed from the header — email, location,
+  portfolio, LinkedIn and GitHub all stay. Verified by decompressing the PDF's FlateDecode
+  streams and searching for the digits, the spaced form, the country code, and a kerned
+  digit run; all absent, while the name, email, LinkedIn and employer are present.
+
+  To refresh it (there is no LaTeX toolchain on the laptop; this builds one in a container):
+
+  ```bash
+  mkdir -p /tmp/resume-build && cp ~/Documents/resume/resume.tex /tmp/resume-build/
+  # delete only the "+91 ..." fragment from the header line, keep everything else
+  cd /tmp/resume-build
+  printf 'FROM debian:stable-slim\nRUN apt-get update && apt-get install -y --no-install-recommends \\\n  texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended\n' > Dockerfile
+  docker build -t resume-latex:local .
+  docker run --rm -v "$PWD":/w -w /w resume-latex:local pdflatex -interaction=nonstopmode -halt-on-error resume.tex
+  # VERIFY the phone is absent from the binary before copying it into web/public/
+  ```
+
+  `~/Documents/resume/resume.tex` stays the canonical resume, phone number included — the
+  redaction applies only to the copy published on the web.
+
+- **Employer is Zarthi.** Confirmed by Aravind 2026-08-01. The v2 site said Centilytics;
+  that was wrong and does not carry over. `web/src/lib/about.ts` exports `employer` and both
+  the home page and About read from it, so the name exists in exactly one place.

@@ -38,7 +38,7 @@ export const projects: Project[] = [
     imageAlt:
       "ClearSky architecture: CloudFront and Cognito in front of Lambda function URLs, DynamoDB, EventBridge and cross-account IAM roles",
     repo: "https://github.com/arkhiVd/clearsky",
-    caseStudy: null,
+    caseStudy: "/projects/clearsky",
     featured: true,
   },
   {
@@ -52,7 +52,7 @@ export const projects: Project[] = [
     image: null,
     imageAlt: "",
     repo: "https://github.com/arkhiVd/cloud-detective",
-    caseStudy: null,
+    caseStudy: "/projects/cloud-detective",
     featured: false,
   },
   {

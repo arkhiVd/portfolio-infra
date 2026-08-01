@@ -1,0 +1,140 @@
+---
+import CaseStudy from "../../layouts/CaseStudy.astro";
+import Block from "../../components/Block.astro";
+import { projects } from "../../lib/projects";
+
+const project = projects.find((p) => p.slug === "clearsky")!;
+---
+
+<CaseStudy
+  project={project}
+  kicker="serverless · 2026"
+  lede="Answer two questions for any AWS account, continuously: what is running, and is it safe? Serverless end to end — it stands up or tears down in a single pipeline run."
+>
+  <Block label="problem" heading="Posture tools tell you what is wrong, then ask you to trust them">
+    <p>
+      Security scanners are usually opaque: a score appears and the reasoning behind it
+      belongs to someone else. I wanted findings that were reproducible — the same account
+      state producing the same findings every time — with any AI strictly additive, able to
+      explain and investigate but never to decide what counts as a finding.
+    </p>
+    <p>
+      The second constraint was cost. This runs in a personal AWS account, so nothing may
+      idle: no always-on compute, no NAT gateway, no managed scanner service, and the whole
+      platform tears down when it is not in use.
+    </p>
+  </Block>
+
+  <Block label="architecture" heading="Serverless, and read-only by construction">
+    <figure class="arch">
+      <img
+        src={project.image}
+        alt={project.imageAlt}
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>
+        A private S3 bucket behind CloudFront with origin access control serves a multipage
+        dashboard; one Lambda behind a function URL handles the API; DynamoDB holds the
+        finding lifecycle; member accounts are reached by cross-account assume-role.
+      </figcaption>
+    </figure>
+    <p>
+      The detectors are pure functions — API responses in, findings out — so they are tested
+      against fixtures rather than mocked against live AWS. The whole backend runs on the
+      Python standard library plus boto3: no layers, no third-party packages, nothing to
+      patch. JWT verification, RS256 included, is implemented in-process against Cognito's
+      JWKS.
+    </p>
+    <p>
+      Login is a custom page rather than Cognito's hosted UI, authenticating with
+      <code>USER_PASSWORD_AUTH</code> over fetch, which is what makes the new-password,
+      forgot-password and silent-refresh flows behave the way the rest of the dashboard does.
+    </p>
+  </Block>
+
+  <Block label="decisions and tradeoffs" heading="What I chose, and what it cost">
+    <dl class="rows">
+      <div class="row">
+        <dt>A Lambda function URL instead of API Gateway</dt>
+        <dd>
+          One less service to run and pay for. The tradeoff is real: no usage plans and no
+          request validation, so validation lives in the handler.
+        </dd>
+      </div>
+      <div class="row">
+        <dt>Detectors as pure functions</dt>
+        <dd>
+          Deterministic and fixture-testable, which is what makes a finding trustworthy. The
+          cost is that every new AWS API shape needs a fixture before it needs a detector.
+        </dd>
+      </div>
+      <div class="row">
+        <dt>Read-only IAM as the AI's hard boundary</dt>
+        <dd>
+          The agent's tool loop is allowlisted to describe, list and get calls. It cannot
+          mutate the account, so a prompt injection cannot become an incident — the boundary
+          is IAM, not a system prompt.
+        </dd>
+      </div>
+      <div class="row">
+        <dt>A zero-dependency backend</dt>
+        <dd>
+          No supply chain to audit and no layer builds in CI. The cost is code written by
+          hand that a library would otherwise provide, including RS256 verification.
+        </dd>
+      </div>
+      <div class="row">
+        <dt>Cost Explorer results cached per preset per day</dt>
+        <dd>
+          Cost Explorer charges per query. Caching keeps a page that is all about cost from
+          being the expensive part of the platform.
+        </dd>
+      </div>
+    </dl>
+  </Block>
+
+  <Block label="what broke" heading="A login loop, and an origin that refused to be verified">
+    <p>
+      <strong>CloudFront OAC to a Lambda function URL never worked.</strong> With SigV4
+      signing configured, the origin returned 403 and the function was never invoked —
+      correct OAC config, correct permissions, correct origin request policy. I could not
+      find a root cause and stopped trying to. The replacement is a secret header injected by
+      CloudFront and checked as the first thing the handler does, with the JWT still gating
+      every route. Two weaker mechanisms composed, instead of one that would not work.
+    </p>
+    <p>
+      Two related traps showed up on the way: the browser reserves the
+      <code>Authorization</code> header for origin auth when OAC is enabled, so the token
+      moved to <code>x-authorization</code>; and <code>x-amz-content-sha256</code> cannot be
+      whitelisted in an origin request policy at all, because it is reserved.
+    </p>
+    <p>
+      <strong>Then production ate itself.</strong> The API client signed the user out on
+      <em>any</em> 401 or 403. The origin-verify path — the newly added, least-tested path —
+      returned 403, so every request bounced the user to the login page, which made a
+      request, which returned 403. An infinite loop out of two individually reasonable
+      decisions.
+    </p>
+    <p>
+      The fix was to stop treating authentication and authorisation failures as the same
+      thing: only a 401 ends the session, and only after one silent refresh has been tried; a
+      403 raises a message and leaves the session alone. That distinction is now the first
+      thing I check in any client I write.
+    </p>
+  </Block>
+
+  <Block label="numbers" heading="What it covered, and what it left behind">
+    <ul class="metrics">
+      <li><b>24+</b><span>read-only detectors, every enabled region</span></li>
+      <li><b>113</b><span>unit tests against fixtures</span></li>
+      <li><b>66</b><span>findings on the first real scan (35 high, 9 medium, 22 low)</span></li>
+      <li><b>none</b><span>left running — destroyed from its own pipeline</span></li>
+    </ul>
+    <p>
+      It redeploys from an empty account by pushing to <code>main</code>. That is the part I
+      care about most: the platform is not a thing that exists on a server somewhere, it is a
+      description that can be re-created on demand.
+    </p>
+  </Block>
+</CaseStudy>

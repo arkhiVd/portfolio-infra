@@ -1,12 +1,11 @@
 /**
  * About-page content, sourced from ~/Documents/resume/resume.tex (the canonical resume).
  *
- * NOTE — unresolved: the resume names the employer **Zarthi**; the published site says
- * **Centilytics**. This file keeps what the live site currently says so the rebuild does
- * not silently change a fact about Aravind's job. Resolve in SPEC.md, then change here.
+ * The employer is Zarthi — confirmed by Aravind 2026-08-01. The v2 site said Centilytics;
+ * that was wrong and does not carry over.
  */
 
-export const employer = "Centilytics";
+export const employer = "Zarthi";
 
 export interface Role {
   title: string;

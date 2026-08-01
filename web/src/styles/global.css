@@ -531,3 +531,15 @@ div.card:hover {
   .skill-row { grid-template-columns: 180px 1fr; }
 }
 .skill-row dd { margin: 0; color: var(--muted); }
+
+/* case-study prose bits not carried from the mockup */
+.study .cta { margin-top: var(--s-5); }
+.block code {
+  font: 400 0.92em var(--mono);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.block strong { color: var(--text); font-weight: 500; }
+.metrics + p { margin-top: var(--s-6); }
