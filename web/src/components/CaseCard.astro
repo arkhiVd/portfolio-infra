@@ -1,0 +1,35 @@
+---
+import type { Project } from "../lib/projects";
+import { url } from "../lib/site";
+
+interface Props {
+  project: Project;
+  /** cards with a diagram lead with it; the index uses the compact form */
+  compact?: boolean;
+}
+const { project, compact = false } = Astro.props;
+
+// Never link to a deep dive that does not exist yet — fall back to the repo, and if there
+// is no public repo either, the card is not a link at all.
+const href = project.caseStudy ? url(project.caseStudy) : project.repo;
+const Tag = href ? "a" : "div";
+---
+
+<Tag class="card" href={href} {...(href && !project.caseStudy ? { rel: "noopener" } : {})}>
+  {
+    !compact && project.image && (
+      <figure>
+        <img src={project.image} alt={project.imageAlt} loading="lazy" decoding="async" />
+      </figure>
+    )
+  }
+  <h3>{project.name}</h3>
+  <p>{project.summary}</p>
+  <div class="card-foot">
+    <span>{project.stack.join(" · ")}</span>
+    <span>
+      <b>{project.metric}</b>
+      {href && <span class="go" aria-hidden="true">→</span>}
+    </span>
+  </div>
+</Tag>

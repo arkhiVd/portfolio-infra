@@ -1,6 +1,8 @@
 # portfolio-infra — roadmap
 
-Site rebuild v3. Status: **Phases 0-1 in review (PRs #15, #16) · Phase 2 in review.**
+Site rebuild v3. Status: **Phases 0-3 built and in review (PRs #15-#18).**
+
+Nothing merges to `main` until the whole site has been verified locally — Aravind's call.
 
 One phase = one PR = one review. The live site keeps serving from `site/` at the root
 until Phase 8; everything before that lands under the `preview/` key prefix, so no phase

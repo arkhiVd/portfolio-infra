@@ -1,23 +1,26 @@
 # portfolio-infra — tasks
 
-## Current phase: 2 — Astro scaffold, design system, pipeline
+## Current phase: 3 — home and projects index
 
-- [ ] Ship the styled shell under `preview/`, built by CI
-  - Scope: `web/` Astro project (7.1.6, Node 24.18.1); `tokens.css` implementing the frozen
-    `DESIGN.md`; `Base.astro` with nav, footer, meta, skip link and the ocean layer;
-    self-hosted Instrument Sans + JetBrains Mono variable woff2; `frontend.tf` uploading
-    `web/dist` to `preview/` with cache-control split by asset type; `npm ci && npm run lint
-    && npm run build` added to `plan.yml` and `apply.yml` **before** `terraform init`;
-    `.nvmrc`; gitignore for build output. Phase 1 mockups deleted.
-  - Acceptance criteria: `/preview/` serves the styled shell over CloudFront; no third-party
-    origin is requested; plan shows creates only against the preview prefix and no change to
-    root-served objects.
-  - Automated validation: `npm ci`, `npm run lint` (astro check), `npm run build`,
-    `terraform fmt -check -recursive`, `terraform validate`,
+- [ ] The two pages a recruiter lands on
+  - Scope: `projects.ts` as the single project set; `CaseCard.astro`; home with three
+    featured cards; `/projects` split into "with architecture" and "also built";
+    `VisitorCount.astro` wired to `window.VISITOR_API`.
+  - Acceptance criteria: both pages render at 1440 and 375; every number sourced; the
+    counter shows a real count when the API answers and keeps its placeholder when it does
+    not; pages readable with JavaScript disabled.
+  - Automated validation: `npm run lint` (astro check), `npm run build`,
     `AWS_PROFILE=second terraform plan`.
-  - Manual validation: built output served locally and rendered at 1440 and 375 px; emitted
-    HTML grepped for external origins.
-  - Blockers: none.
+  - Manual validation: rendered locally; counter proven against a stubbed API in both the
+    success and failure paths.
+  - Blockers: `/about` is linked from the nav and does not exist until Phase 4.
+
+## Completed phase: 2 — Astro scaffold, design system, pipeline
+
+- [x] 2026-08-01 Astro 7.1.6 on Node 24.18.1 building to `web/dist`, uploaded to `preview/`;
+  shared `Base.astro`; self-hosted variable woff2; build wired into both workflows before
+  Terraform — validated by `astro check` (0 errors), `npm run build`, and
+  `terraform plan` (4 to add, 0 to change, 0 to destroy) (PR #17)
 
 ## Completed phase: 1 — mockup spike
 

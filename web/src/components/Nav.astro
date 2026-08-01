@@ -1,5 +1,6 @@
 ---
 import { site, url } from "../lib/site";
+import VisitorCount from "./VisitorCount.astro";
 
 interface Props {
   /** which primary link is the current page */
@@ -23,9 +24,7 @@ const { current } = Astro.props;
           </span>
         )
       }
-      {/* Renders ···· until the counter resolves, and keeps rendering ···· if it fails.
-          Never shows a fabricated number (DESIGN.md § Visitor counter). */}
-      <span class="status"><span id="visitor-count">····</span> visitors</span>
+      <VisitorCount />
     </nav>
   </div>
 </header>

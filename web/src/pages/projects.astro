@@ -1,0 +1,43 @@
+---
+import Base from "../layouts/Base.astro";
+import CaseCard from "../components/CaseCard.astro";
+import { site } from "../lib/site";
+import { projects } from "../lib/projects";
+
+const withDiagram = projects.filter((p) => p.image);
+const rest = projects.filter((p) => !p.image);
+---
+
+<Base
+  title={`Projects — ${site.name}`}
+  description="Infrastructure, pipelines and self-hosted systems, with the architecture and decisions behind each."
+  current="projects"
+>
+  <section class="hero wrap">
+    <h1>Projects</h1>
+    <p>
+      Infrastructure, pipelines and self-hosted systems. Each one runs, or ran, in a real AWS
+      account or on real hardware — the architecture below is what was actually deployed.
+    </p>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <h2>With architecture</h2>
+      <span class="label">{withDiagram.length} projects</span>
+    </div>
+    <div class="cards">
+      {withDiagram.map((project) => <CaseCard project={project} />)}
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <h2>Also built</h2>
+      <span class="label">{rest.length} projects</span>
+    </div>
+    <div class="cards">
+      {rest.map((project) => <CaseCard project={project} compact />)}
+    </div>
+  </section>
+</Base>
