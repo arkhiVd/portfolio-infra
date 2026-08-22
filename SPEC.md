@@ -116,7 +116,8 @@ Re-verify when a phase reopens. Do not take versions from memory.
 ## Non-goals
 
 - No CMS, no blog, no comments, no newsletter.
-- No React, Vue, or client-side router. Astro ships zero JS by default; keep it that way.
+- No React, Vue, or client-side router. JavaScript is limited to the visitor counter, the
+  approved nebula background and its brief loading concealment; all content works without it.
 - No analytics SaaS, no tag manager, no third-party embeds.
 - No Route 53 migration, no DNS provider change, no new AWS account.
 - No change to the visitor-counter Lambda, DynamoDB table, or its Terraform.
@@ -153,12 +154,12 @@ Resolved 2026-07-31 (decisions, not guesses — change them here, not in a page)
   `~/Documents/resume/`. See "Required behavior" and the public-permanence warning above.
 - **Featured set:** the Projects index lists all eight (ClearSky, Cloud Detective, AppStack,
   CDC pipeline, this portfolio, CI/CD for AWS containers, self-hosted encrypted sync,
-  network automation scripts). **Five get deep dives** — ClearSky, Cloud Detective,
-  AppStack, CDC pipeline, this portfolio. The remaining three are listed with a one-line
-  outcome and a repo link, and are not linked to a page that does not exist.
-- **Home:** three featured case cards, not the full index. The index lives at `/projects/`.
+  network automation scripts). **Six get deep dives** — ClearSky, Cloud Detective,
+  AppStack, CDC pipeline, this portfolio and CI/CD for AWS containers. The remaining two
+  are listed without links to pages that do not exist.
+- **Home:** three compact featured rows, not the full index. The index lives at `/projects.html`.
 - **"Open to work" indicator:** shown, driven by a single boolean in one config module
-  (`web/src/config.ts`) so switching it off is a one-line commit. It must be turned off the
+  (`web/src/lib/site.ts`) so switching it off is a one-line commit. It must be turned off the
   day it stops being true — a stale indicator is worse than none.
 
 Resolved 2026-08-01:

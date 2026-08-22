@@ -1,24 +1,23 @@
 ---
 import Base from "../layouts/Base.astro";
-import { site } from "../lib/site";
+import { site, url } from "../lib/site";
 import { certifications, education, employer, experience, skills } from "../lib/about";
 ---
 
 <Base
   title={`About — ${site.name}`}
-  description="Cloud engineer in Kochi. Experience, certifications, skills, and how to get in touch."
+  description="Cloud engineering experience, certifications, technical skills and contact details."
   current="about"
 >
   <section class="hero wrap">
     <h1>About</h1>
     <p>
-      I turn fragile, manual infrastructure work into something boring and repeatable. Day to
-      day that means AWS, Terraform and CI/CD; it started with wanting to know how networks
-      and Linux boxes actually talk to each other, and that part has never stopped being
-      useful.
+      I am a cloud engineer based in Kerala with professional experience in AWS operations,
+      Linux administration, networking, security and monitoring. I use Terraform and automation
+      to make infrastructure changes repeatable and reviewable.
     </p>
     <div class="cta">
-      {site.resume && <a class="btn" href={site.resume}>Download resume (PDF)</a>}
+      {site.resume && <a class="btn" href={url(site.resume)}>Download resume (PDF)</a>}
       <a class={site.resume ? "btn-quiet" : "btn"} href={`mailto:${site.email}`}>
         {site.resume ? "get in touch →" : "Get in touch"}
       </a>
@@ -54,29 +53,27 @@ import { certifications, education, employer, experience, skills } from "../lib/
   <section class="section wrap">
     <div class="section-head">
       <h2>Certifications</h2>
-      <span class="label">{certifications.length} · verifiable</span>
+      <span class="label">{certifications.length} credentials</span>
     </div>
-    <ul class="lockups">
+    <div class="cert-grid">
       {
         certifications.map((cert) => (
-          <li>
-            <span class="lockup-name">{cert.name}</span>
-            <span class="label">
-              {cert.issuer} ·{" "}
-              <a href={cert.verify} rel="noopener">
-                verify ↗
-              </a>
+          <a class="cert" href={cert.verify} rel="noopener">
+            <img src={url(cert.image)} alt={cert.imageAlt} width="120" height="120" loading="lazy" />
+            <span>
+              <strong>{cert.name}</strong>
+              <small>{cert.issuer} · verify ↗</small>
             </span>
-          </li>
+          </a>
         ))
       }
-    </ul>
+    </div>
   </section>
 
   <section class="section wrap">
     <div class="section-head">
       <h2>Skills</h2>
-      <span class="label">what I actually use</span>
+      <span class="label">tools and platforms</span>
     </div>
     <dl class="skills">
       {
@@ -103,10 +100,10 @@ import { certifications, education, employer, experience, skills } from "../lib/
   <section class="section wrap">
     <div class="section-head">
       <h2>Get in touch</h2>
-      <span class="label">{site.openToWork ? "open to work" : "say hello"}</span>
+      <span class="label">{site.openToWork ? site.availability : "say hello"}</span>
     </div>
     <p class="prose">
-      Always up for a conversation about infrastructure, automation, or a good homelab setup.
+      I am looking for cloud and DevOps roles. Email is the best way to reach me.
     </p>
     <ul class="lockups">
       <li>

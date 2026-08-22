@@ -1,9 +1,9 @@
 # DESIGN.md — visual contract
 
-**Status: FROZEN 2026-08-01** from mockup variant **A (Console)**, with the deep-blue
-background carried over from the design exports. Every UI diff is graded against this file;
-if a request conflicts with it, flag the conflict and propose the complying alternative
-before building. Changes to this file are a human decision, not an implementation detail.
+**Status: REVISED BY AUTHOR 2026-08-22.** The design-tool exports in
+`../Portfolio redesign plan/*.dc.html` are the visual reference; the Astro site remains the
+production implementation. Preserve their spacious deep-ocean layout, contained glass nav,
+credential artwork and simple contact panel without copying the design runtime or WebGL.
 
 ## Thesis
 
@@ -55,30 +55,23 @@ a label, an icon, or weight. Body text is never `--muted` at sizes below 15 px.
 behind it. This is the site's one piece of ambient motion, and it is deliberate: it sets the
 water register the iconography (containers, pipelines) will follow.
 
-Structure — `<div class="ocean" aria-hidden="true"><i></i><i></i><i></i></div>`, fixed at
-`z-index: -1`, black base:
-
-| Layer | Colour | Size / anchor | Cycle |
-|---|---|---|---|
-| blob 1 | `rgba(24,70,180,.70)` navy | 78vw, off-canvas top-left | 41 s |
-| blob 2 | `rgba(16,118,142,.62)` teal | 64vw, off-canvas top-right | 53 s |
-| blob 3 | `rgba(13,64,150,.52)` cold blue | 86vw, rising from below | 67 s |
+Structure — one fixed, non-interactive WebGL canvas reproduces the approved `Base.dc.html`
+blue-green nebula shader exactly, followed by its subtle noise overlay and bottom fade. It
+sits at `z-index: 0`; every content child sits at `z-index: 1`.
 
 Rules that make it safe to ship:
 
-- `filter: blur(90px)`, and **only `transform` and `opacity` animate** — compositor work, no
-  layout, no paint. No canvas, no WebGL, no per-frame JavaScript, no scroll coupling.
-- Cycle lengths are mutually indivisible (41 / 53 / 67 s) so the composition never visibly
-  repeats. `ease-in-out … alternate`; linear reads mechanical.
-- **A vignette (`.ocean::after`) sits over the blobs** — a radial black mask at 86% centre
-  opacity plus a downward fade. Without it the whole viewport tints and the page stops being
-  black. Black dominates; blue is glow arriving from the edges.
+- The shader is the one explicit exception to the no-canvas rule. It has no input or scroll
+  coupling and draws one full-screen triangle with a low-complexity fragment shader.
+- Its two time cycles are 40 and 12 seconds, matching the approved export.
+- The bottom fade must preserve the blue-green upper glow while returning long pages to the
+  black base.
 - Content never sits directly on the glow: cards are `--surface`, the nav is glass, so text
   contrast never depends on where a blob happens to be.
 - `prefers-reduced-motion: reduce` **freezes** the layer at a fixed opacity rather than
   hiding it — same picture, no movement.
 
-Reference implementation: `.ocean` in the Phase 1 variant A stylesheet.
+Reference implementation: the nebula canvas and shader in `Base.dc.html`.
 
 ## Type
 
@@ -118,8 +111,8 @@ Reference implementation: `.ocean` in the Phase 1 variant A stylesheet.
   section, nav collapse.
 - **One exception, named:** the ocean background layer animates continuously (see Colour).
   Nothing else on the page may move on its own.
-- Forbidden: parallax, canvas/WebGL, marquees, page transitions, tilt, typewriters, and any
-  motion attached to scroll position.
+- Forbidden beyond the named background exception: parallax, additional canvas/WebGL,
+  marquees, page transitions, tilt, typewriters, and motion attached to scroll position.
 - `@media (prefers-reduced-motion: reduce)` disables every transition and entrance —
   content must be fully visible with no animation at all.
 
@@ -135,20 +128,23 @@ Reference implementation: `.ocean` in the Phase 1 variant A stylesheet.
 
 ## Components
 
-**Nav** — sticky, glass pill. Brand (full name) left; `home / projects / about` in mono
-right; visitor count as a quiet mono readout. Active item in `--text`, others `--muted`.
-Collapses to a disclosure menu below 680 px. No "open to work" dot unless it is currently
-true.
+**Nav** — sticky shell with a compact monochrome cloud mark at left; availability and
+`home / projects / about` sit right, with the links inside one contained glass pill. The same
+cloud mark is the browser favicon. Visitor count belongs in the footer. Below 680 px the mark
+stacks above a pill that retains all primary links.
 
-**Hero** — headline, one lede paragraph, then two actions: a solid pill (`View projects`)
-and a quiet mono link (`get in touch →`). Nothing else. Badge/chip rows were tried and cut:
-they read as generic template furniture, and the facts they carried (cost, certifications,
-keyless CI) belong in About and the case studies, where they can be argued instead of
-asserted.
+**Hero** — the person's full name is the primary heading, followed by a quiet mono role,
+one evidence-led paragraph, then two actions: a solid pill (`View projects`)
+and a quiet mono link (`download resume →`). Contact remains in About and the footer.
+Nothing else. Badge/chip rows were tried and cut: they read as generic template furniture,
+and the facts they carried (cost, certifications, keyless CI) belong in About and the case
+studies, where they can be argued instead of asserted.
 
-**Case card** — architecture thumbnail (16:9, real diagram, not a stock graphic) · project
-name (21 px) · one-line outcome (`--muted`) · stack chips (mono, 13 px) · one hard number.
-Whole card is one link; hover shifts background to `--surface` and reveals a `→`.
+**Project row** — the full Projects index uses project name (21 px), concise outcome
+(`--muted`), stack line (mono, 13 px), status and arrow. Home's Selected work variant is
+intentionally compact: name and arrow only. No highlighted metric or marketing tagline.
+The whole row links to its case study. GitHub is a secondary action within that detail page;
+only projects explicitly exempted from case studies may remain unlinked or link directly.
 
 **Case-study section** — fixed order: Problem · Architecture · Decisions and tradeoffs ·
 What broke and how it was fixed · Numbers. Each section led by a mono label at 13 px.
@@ -157,12 +153,14 @@ What broke and how it was fixed · Numbers. Each section led by a mono label at 
 **Figure** — diagrams full-width inside the content column, 12 px radius, hairline border,
 mono caption below in `--muted`. Must stay legible at 375 px — re-export rather than shrink.
 
-**Certification lockup** — uniform mono-line treatment: issuer, credential name, verify
-link. Same size, same weight, same alignment for every certification. Vendor badge PNGs
-are not used.
+**Certification lockup** — issuer badge artwork, credential name and direct verification
+link. Badge canvases are normalized to one size so different vendor artwork does not disrupt
+the grid.
 
-**Footer** — mono, `--muted`: email, GitHub, LinkedIn, "built with Terraform + Astro,
-source on GitHub" linking to this repo. No social icon soup.
+**Footer** — one restrained bordered surface panel with small mail, GitHub and LinkedIn
+icons, followed by copyright and visitor count. No implementation tagline and no repeated
+contact paragraph. The panel may echo the glass composition but does not add another
+backdrop-filter layer.
 
 **Visitor counter** — mono readout in the nav. Shows `····` until resolved, and keeps
 showing `····` if the API fails. **Never renders a fabricated number.**
@@ -207,4 +205,6 @@ Amendments made after the choice, on the author's call:
 - "₹0/mo" language dropped everywhere in favour of "minimal running cost"
 - the proof-chip row dropped entirely (generic); resource counts banned from the fold
 - headline de-vendored: "cloud infrastructure", not "AWS infrastructure"
-- headline plainer: "I build and run AWS infrastructure."
+- headline plainer: "I build and operate cloud infrastructure."
+- hero secondary action changed from email to resume download on 2026-08-22; recruiters get
+  a take-away artifact while contact remains available in About and the footer

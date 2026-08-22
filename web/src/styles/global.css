@@ -7,110 +7,51 @@
 
 html { -webkit-text-size-adjust: 100%; }
 
+html { background: var(--ink); }
 body {
   margin: 0;
-  background: var(--ink);
+  background: transparent;
   color: var(--text);
   font: 400 var(--t-17) / 1.65 var(--sans);
   min-height: 100vh;
 }
 
-/* ---------- ocean: living background ----------
-   Black page with deep, murky blue moving behind it — abyss water, not clean cyan. Four
-   blurred masses drift on short, mutually indivisible cycles (13/17/23/29s) with many
-   irregular keyframe stops, so the motion never settles into a readable pattern. Each mass
-   also breathes: scale swings between roughly 0.7 and 1.4, so the light grows and shrinks
-   rather than only sliding.
-
-   Only transform and opacity animate — compositor work, no layout, no paint. No canvas, no
-   WebGL, no per-frame JavaScript, no scroll coupling. */
+/* ---------- nebula background from the approved design export ---------- */
 .ocean {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   overflow: hidden;
   pointer-events: none;
   background: var(--ink);
 }
-/* Vignette over the masses: black stays dominant and the blue reads as light arriving from
-   depth. Without it the whole viewport tints and the page stops being black. */
-.ocean::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(120% 92% at 50% 42%, rgba(5, 5, 7, 0.68) 28%, rgba(5, 5, 7, 0.20) 72%, rgba(5, 5, 7, 0) 100%),
-    linear-gradient(180deg, rgba(5, 5, 7, 0) 58%, rgba(5, 5, 7, 0.72) 100%);
+.ocean canvas,
+.ocean-noise,
+.ocean-fade { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ocean-noise {
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-.ocean i {
-  position: absolute;
-  display: block;
-  border-radius: 50%;
-  filter: blur(86px);
-  will-change: transform, opacity;
-}
-/* All four are deep-ocean blue — no teal, no bright cyan. Darkness is the point. */
-.ocean i:nth-child(1) {
-  width: 74vw;
-  height: 60vw;
-  top: -22vw;
-  left: -20vw;
-  background: radial-gradient(circle at 50% 50%, rgba(13, 38, 96, 0.95), rgba(13, 38, 96, 0) 68%);
-  animation: drift-a 13s ease-in-out infinite alternate;
-}
-.ocean i:nth-child(2) {
-  width: 60vw;
-  height: 54vw;
-  top: -10vw;
-  right: -16vw;
-  background: radial-gradient(circle at 50% 50%, rgba(9, 27, 74, 0.92), rgba(9, 27, 74, 0) 70%);
-  animation: drift-b 17s ease-in-out infinite alternate;
-}
-.ocean i:nth-child(3) {
-  width: 82vw;
-  height: 58vw;
-  bottom: -28vw;
-  left: 8vw;
-  background: radial-gradient(circle at 50% 50%, rgba(16, 46, 112, 0.85), rgba(16, 46, 112, 0) 70%);
-  animation: drift-c 23s ease-in-out infinite alternate;
-}
-/* deepest mass, mostly felt rather than seen — keeps the middle from going flat */
-.ocean i:nth-child(4) {
-  width: 66vw;
-  height: 66vw;
-  top: 18vw;
-  left: 26vw;
-  background: radial-gradient(circle at 50% 50%, rgba(7, 20, 58, 0.9), rgba(7, 20, 58, 0) 72%);
-  animation: drift-d 29s ease-in-out infinite alternate;
-}
+.ocean-fade { background: linear-gradient(to bottom, transparent 0%, transparent 58%, var(--ink) 100%); }
+body > :not(.ocean):not(.loader) { position: relative; z-index: 1; }
 
-@keyframes drift-a {
-  0%   { transform: translate3d(0, 0, 0) scale(0.86); opacity: 0.75; }
-  19%  { transform: translate3d(7vw, 4vw, 0) scale(1.18); opacity: 1; }
-  41%  { transform: translate3d(-5vw, 9vw, 0) scale(0.94); opacity: 0.62; }
-  67%  { transform: translate3d(11vw, -3vw, 0) scale(1.32); opacity: 0.95; }
-  100% { transform: translate3d(2vw, 12vw, 0) scale(0.78); opacity: 0.7; }
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: rgba(5, 5, 7, 0.48);
+  transition: opacity 260ms var(--ease), visibility 260ms var(--ease);
 }
-@keyframes drift-b {
-  0%   { transform: translate3d(0, 0, 0) scale(1.12); opacity: 0.65; }
-  23%  { transform: translate3d(-9vw, 7vw, 0) scale(0.74); opacity: 0.95; }
-  52%  { transform: translate3d(3vw, 14vw, 0) scale(1.28); opacity: 0.6; }
-  78%  { transform: translate3d(-13vw, 2vw, 0) scale(0.9); opacity: 1; }
-  100% { transform: translate3d(-2vw, 10vw, 0) scale(1.2); opacity: 0.72; }
-}
-@keyframes drift-c {
-  0%   { transform: translate3d(0, 0, 0) scale(1); opacity: 0.6; }
-  27%  { transform: translate3d(-12vw, -9vw, 0) scale(1.34); opacity: 0.9; }
-  49%  { transform: translate3d(6vw, -2vw, 0) scale(0.8); opacity: 0.55; }
-  73%  { transform: translate3d(14vw, -11vw, 0) scale(1.16); opacity: 0.85; }
-  100% { transform: translate3d(-4vw, -5vw, 0) scale(0.92); opacity: 0.65; }
-}
-@keyframes drift-d {
-  0%   { transform: translate3d(0, 0, 0) scale(1.1); opacity: 0.5; }
-  31%  { transform: translate3d(10vw, -7vw, 0) scale(0.72); opacity: 0.85; }
-  58%  { transform: translate3d(-8vw, 5vw, 0) scale(1.4); opacity: 0.45; }
-  84%  { transform: translate3d(4vw, 11vw, 0) scale(0.96); opacity: 0.8; }
-  100% { transform: translate3d(-11vw, -4vw, 0) scale(1.24); opacity: 0.55; }
+html:not(.is-ready) .nav,
+html:not(.is-ready) main,
+html:not(.is-ready) .foot { visibility: hidden; }
+html.is-ready .loader { opacity: 0; visibility: hidden; pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .loader { transition: none; }
 }
 
 a { color: var(--accent); text-decoration: none; }
@@ -123,6 +64,7 @@ a:hover { color: var(--text); }
 }
 
 img { max-width: 100%; display: block; }
+::selection { background: rgba(79, 193, 212, 0.25); }
 
 .wrap {
   max-width: var(--max);
@@ -157,35 +99,37 @@ img { max-width: 100%; display: block; }
   position: sticky;
   top: 0;
   z-index: 20;
-  padding-block: 16px;
-  background: rgba(5, 7, 15, 0.62);
-  backdrop-filter: blur(22px) saturate(150%);
-  -webkit-backdrop-filter: blur(22px) saturate(150%);
-  border-bottom: 1px solid var(--hairline);
+  padding-block: 20px;
+}
+.nav .wrap,
+.nav-actions,
+.nav-links {
+  display: flex;
+  align-items: center;
 }
 .nav .wrap {
-  display: flex;
-  align-items: center;
   justify-content: space-between;
   gap: 16px 24px;
-  flex-wrap: wrap;
 }
-.brand {
-  color: var(--text);
-  font-size: 17px;
-  font-weight: 500;
-  letter-spacing: -0.015em;
-}
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: clamp(14px, 2vw, 28px);
+.brand { display: inline-flex; color: var(--muted); }
+.brand:hover { color: var(--text); }
+.brand svg { width: 42px; height: 30px; }
+.nav-actions { gap: clamp(16px, 2.5vw, 32px); }
+.nav-links {
+  gap: clamp(16px, 2.5vw, 30px);
+  padding: 10px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.045);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
   font: 400 13px/1 var(--mono);
   letter-spacing: 0.02em;
 }
-.nav-right a { color: var(--muted); }
-.nav-right a[aria-current="page"] { color: var(--text); }
-.nav-right a:hover { color: var(--accent); }
+.nav-links a { color: var(--muted); }
+.nav-links a[aria-current="page"] { color: var(--text); }
+.nav-links a:hover { color: var(--accent); }
 .status {
   display: inline-flex;
   align-items: center;
@@ -193,10 +137,12 @@ img { max-width: 100%; display: block; }
   color: var(--muted);
   white-space: nowrap;
 }
-/* Below 680 the status readouts wrap into a three-line mess — links come first. */
 @media (max-width: 680px) {
+  .nav { padding-block: 16px; }
+  .nav .wrap { align-items: flex-start; flex-direction: column; }
+  .nav-actions { width: 100%; }
   .status { display: none; }
-  .nav-right { gap: 20px; }
+  .nav-links { width: 100%; justify-content: space-between; }
 }
 .dot {
   width: 7px;
@@ -223,7 +169,14 @@ img { max-width: 100%; display: block; }
   max-width: 74ch;
   color: var(--muted);
 }
-
+.hero .hero-role {
+  margin-top: 10px;
+  color: var(--text);
+  font: 400 15px/1.5 var(--mono);
+  letter-spacing: 0.02em;
+}
+.project-row.compact { padding-block: 18px; }
+.project-row.compact h2 { font-size: 21px; }
 /* ---------- hero call to action ----------
    Replaces the proof-chip row: badge-shaped chips read as generic template furniture, and
    the facts they carried (cost, certifications, keyless CI) belong in About and the case
@@ -259,7 +212,7 @@ img { max-width: 100%; display: block; }
 }
 .btn-quiet:hover { color: var(--accent); }
 
-/* ---------- case cards ---------- */
+/* ---------- project index ---------- */
 
 .section { padding-block: 48px; }
 .section-head {
@@ -278,6 +231,43 @@ img { max-width: 100%; display: block; }
   letter-spacing: -0.015em;
 }
 
+.project-list { margin-top: 16px; border-top: 1px solid var(--hairline); }
+.project-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  margin-inline: clamp(-24px, -2vw, -12px);
+  padding: clamp(24px, 3vw, 36px) clamp(12px, 2vw, 24px);
+  border-bottom: 1px solid var(--hairline);
+  border-radius: 12px;
+  color: inherit;
+  transition: background var(--dur) var(--ease);
+}
+.project-row:hover { background: var(--surface); color: inherit; }
+.project-row-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px 24px;
+}
+.project-row h2 { margin: 0; font-size: clamp(21px, 2.2vw, 27px); font-weight: 500; }
+.project-row p { max-width: 74ch; margin: 10px 0 0; color: var(--muted); }
+.project-stack {
+  display: block;
+  margin-top: 12px;
+  color: var(--muted);
+  font: 400 12px/1.6 var(--mono);
+  letter-spacing: 0.02em;
+}
+.project-arrow { color: var(--accent); font-size: 17px; transition: transform var(--dur) var(--ease); }
+.project-row:hover .project-arrow { transform: translateX(4px); }
+@media (max-width: 600px) {
+  .project-row { align-items: start; }
+  .project-row-title { align-items: flex-start; flex-direction: column; gap: 6px; }
+}
+
+/* legacy card component retained for future image-led contexts */
 .cards {
   display: grid;
   gap: 16px;
@@ -347,7 +337,6 @@ img { max-width: 100%; display: block; }
   letter-spacing: 0.02em;
   color: var(--muted);
 }
-.card-foot b { color: var(--accent); font-weight: 500; }
 .card .go { color: var(--muted); transition: transform 200ms var(--ease), color 200ms var(--ease); }
 .card:hover .go { color: var(--accent); transform: translateX(3px); }
 
@@ -378,15 +367,29 @@ img { max-width: 100%; display: block; }
 .block p { margin: 12px 0 0; max-width: 74ch; }
 .block p + p { margin-top: 16px; }
 
-figure.arch { margin: 24px 0 0; }
-figure.arch img {
-  width: 100%;
+figure.arch {
+  width: min(100%, 960px);
+  margin: 24px 0 0;
+  padding: clamp(12px, 2vw, 20px);
+  overflow: hidden;
   border: 1px solid var(--hairline);
   border-radius: 12px;
+  background: rgba(15, 18, 24, 0.78);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(18px) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+}
+figure.arch img {
+  width: 100%;
+  max-height: 620px;
+  object-fit: contain;
+  border-radius: 8px;
   background: #08080b;
 }
 figure.arch figcaption {
+  max-width: 74ch;
   margin-top: 12px;
+  overflow-wrap: anywhere;
   font: 400 13px/1.5 var(--mono);
   letter-spacing: 0.02em;
   color: var(--muted);
@@ -430,21 +433,49 @@ figure.arch figcaption {
 /* ---------- footer ---------- */
 
 .foot {
-  margin-top: 48px;
-  padding-block: 32px 48px;
-  border-top: 1px solid var(--hairline);
-  font: 400 13px/1.8 var(--mono);
-  letter-spacing: 0.02em;
+  margin-top: 72px;
+  padding-bottom: 48px;
   color: var(--muted);
 }
-.foot .wrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 32px;
-  justify-content: space-between;
+.footer-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 32px clamp(32px, 4vw, 64px);
+  padding: clamp(32px, 4vw, 48px);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: rgba(15, 18, 24, 0.82);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
-.foot a { color: var(--muted); }
-.foot a:hover { color: var(--accent); }
+.footer-col > .label { display: block; }
+.footer-col p { margin: 14px 0 0; color: var(--muted); }
+.footer-col > a { display: flex; width: fit-content; margin-top: 14px; }
+.footer-col a,
+.footer-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 15px;
+}
+.footer-links {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+.footer-col a:hover { color: var(--accent); }
+.footer-col svg { width: 16px; height: 16px; flex: none; }
+.footer-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 24px;
+  font: 400 12px/1.8 var(--mono);
+  letter-spacing: 0.02em;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -500,7 +531,43 @@ div.card:hover {
 }
 .points li { margin-top: var(--s-2); }
 
-/* certification and contact lockups — one uniform treatment, no vendor badges */
+/* certifications use consistent sizing even though issuer artwork differs */
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px 48px;
+  margin-top: var(--s-5);
+}
+.cert {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 20px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: inherit;
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.cert:hover {
+  background: var(--surface);
+  border-color: var(--hairline);
+  color: inherit;
+}
+.cert img { width: 104px; height: 104px; object-fit: contain; flex: none; }
+.cert strong { display: block; font-size: var(--t-17); font-weight: 500; }
+.cert small {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font: 400 12px/1.5 var(--mono);
+  letter-spacing: 0.02em;
+}
+@media (max-width: 480px) {
+  .cert { align-items: flex-start; padding-inline: 0; }
+  .cert img { width: 80px; height: 80px; }
+}
+
+/* contact lockups */
 .lockups {
   margin: var(--s-5) 0 0;
   padding: 0;

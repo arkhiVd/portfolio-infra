@@ -1,9 +1,8 @@
 /**
  * The project set. Single source for both the home page (featured) and /projects.
  *
- * Copy is carried over from the v2 site, which was written from the repos themselves.
- * Every `metric` states something checkable — a count, a property of the architecture —
- * never a rounded-up or aspirational number (DESIGN.md § Content rules).
+ * Copy is sourced from the public repositories and project notes. Cards stay concise;
+ * detailed evidence and numbers belong in each case study.
  *
  * `caseStudy` points at a deep dive; projects without one are listed with their repo and
  * are never linked to a page that does not exist.
@@ -14,12 +13,11 @@ export interface Project {
   status: "live" | "completed" | "in progress";
   summary: string;
   stack: string[];
-  /** one checkable fact, shown on the card */
-  metric: string;
   /** architecture diagram at the site root, or null when there is none */
   image: string | null;
   imageAlt: string;
   repo: string | null;
+  secondaryRepo?: { label: string; url: string };
   /** path under the site base once the deep dive exists (Phases 5-6) */
   caseStudy: string | null;
   featured: boolean;
@@ -28,12 +26,11 @@ export interface Project {
 export const projects: Project[] = [
   {
     slug: "clearsky",
-    name: "ClearSky — multi-account AWS posture & cost platform",
+    name: "ClearSky — AWS posture and cost platform",
     status: "completed",
     summary:
-      "Deterministic, read-only detectors scan every enabled region daily; findings live a full lifecycle in DynamoDB behind a Cognito dashboard. An agentic AI investigator queries the live account through a read-only tool-use loop, and member accounts onboard by cross-account assume-role.",
+      "Scans multiple AWS accounts for security, cost and inventory findings. Deterministic detectors create the findings; a read-only AI investigator explains them without changing resources.",
     stack: ["Lambda", "DynamoDB", "Cognito", "CloudFront", "Terraform"],
-    metric: "113 unit tests",
     image: "/assets/img/clearsky-architecture.png",
     imageAlt:
       "ClearSky architecture: CloudFront and Cognito in front of Lambda function URLs, DynamoDB, EventBridge and cross-account IAM roles",
@@ -42,32 +39,17 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    slug: "cloud-detective",
-    name: "Cloud Detective — cost, inventory and posture scanner",
-    status: "completed",
-    summary:
-      "The system ClearSky grew out of: a serverless scanner for AWS cost, inventory and security posture, with an agentic AI layer and a generator that draws a data-flow architecture diagram from what it finds in the account. Multi-account onboarding is driven from the dashboard through an SSM registry.",
-    stack: ["Lambda", "DynamoDB", "CloudFront", "Terraform", "GitHub Actions"],
-    metric: "106 tests",
-    image: null,
-    imageAlt: "",
-    repo: "https://github.com/arkhiVd/cloud-detective",
-    caseStudy: "/projects/cloud-detective",
-    featured: false,
-  },
-  {
     slug: "appstack",
     name: "Microservices platform infrastructure",
-    status: "completed",
+    status: "in progress",
     summary:
-      "Modular Terraform for a .NET product platform. Eight services plus PDF-ingest and search-sync workers run on ECS-on-EC2 behind an ALB, split into a synchronous request path and an async S3 → SQS event path, every queue with a dead-letter queue.",
+      "Terraform infrastructure for eight .NET services and two background workers on ECS. The design separates request traffic from S3 and SQS event processing and avoids a NAT gateway.",
     stack: ["ECS on EC2", "RDS", "OpenSearch", "SQS", "Terraform"],
-    metric: "no NAT gateway",
     image: "/assets/img/appstack-architecture.png",
     imageAlt:
       "AppStack architecture: ALB in front of ECS on EC2, with RDS Postgres, Redis, OpenSearch and SQS workers inside one VPC",
     repo: "https://github.com/arkhiVd/appstack-infra",
-    caseStudy: null,
+    caseStudy: "/projects/appstack",
     featured: true,
   },
   {
@@ -75,28 +57,26 @@ export const projects: Project[] = [
     name: "Change data capture pipeline",
     status: "in progress",
     summary:
-      "Every INSERT, UPDATE and DELETE on RDS PostgreSQL is streamed into Amazon MSK by a Debezium connector on MSK Connect — read straight from the write-ahead log, no polling. An S3 gateway endpoint pulls the connector plugin, so the VPC needs no NAT gateway.",
+      "Streams PostgreSQL changes from the write-ahead log into Amazon MSK with Debezium on MSK Connect. An S3 gateway endpoint supplies the connector plugin without a NAT gateway.",
     stack: ["RDS PostgreSQL", "Amazon MSK", "Debezium", "Terraform"],
-    metric: "log-based, not polled",
     image: "/assets/img/cdc-architecture.png",
     imageAlt:
       "CDC pipeline architecture: RDS PostgreSQL write-ahead log streamed by Debezium on MSK Connect into Amazon MSK topics",
     repo: "https://github.com/arkhiVd/cdc-infra",
-    caseStudy: null,
+    caseStudy: "/projects/cdc",
     featured: true,
   },
   {
     slug: "portfolio",
-    name: "This site",
+    name: "Cloud portfolio infrastructure",
     status: "live",
     summary:
-      "A single Terraform stack: private S3 behind CloudFront with origin access control and a custom domain, plus a Python Lambda and DynamoDB behind a function URL powering the visitor counter. Shipped by keyless OIDC pipelines with remote state and a branch-protected plan/apply split.",
+      "Runs this site from private S3 behind CloudFront and counts visitors with Lambda and DynamoDB. Terraform and separate OIDC plan and apply workflows manage the stack.",
     stack: ["CloudFront", "S3", "Lambda", "DynamoDB", "Terraform", "Astro"],
-    metric: "keyless OIDC deploys",
-    image: null,
-    imageAlt: "",
+    image: "/assets/img/architecture-diagram.png",
+    imageAlt: "Portfolio architecture: CloudFront serves private S3 content and routes visitor requests to Lambda and DynamoDB",
     repo: "https://github.com/arkhiVd/portfolio-infra",
-    caseStudy: null,
+    caseStudy: "/projects/portfolio",
     featured: false,
   },
   {
@@ -104,13 +84,29 @@ export const projects: Project[] = [
     name: "CI/CD for AWS container services",
     status: "live",
     summary:
-      "Two pipelines deploying the same containerized Python app onto different architectures: a production-shaped ECS Fargate environment behind an Application Load Balancer with networking in Terraform, and a serverless App Runner pipeline with automated deploys and SSL. Both authenticate to AWS by keyless OIDC.",
+      "Deploys the same containerized Python application to ECS Fargate and App Runner. Both pipelines use Terraform for infrastructure and OIDC instead of stored AWS credentials.",
     stack: ["ECS Fargate", "App Runner", "Docker", "Terraform"],
-    metric: "two architectures, one app",
+    image: "/assets/img/containers-architecture.png",
+    imageAlt: "Container application architecture: an Application Load Balancer routes traffic to ECS Fargate tasks in private subnets",
+    repo: "https://github.com/arkhiVd/aws-ecs-containerized-webapp",
+    secondaryRepo: {
+      label: "App Runner source",
+      url: "https://github.com/arkhiVd/aws-apprunner-containerized-webapp",
+    },
+    caseStudy: "/projects/cicd-containers",
+    featured: false,
+  },
+  {
+    slug: "cloud-detective",
+    name: "Cloud Detective — AWS account scanner",
+    status: "completed",
+    summary:
+      "The project that preceded ClearSky. It scans AWS cost, inventory and security posture, tracks findings over time, and generates architecture diagrams from discovered resources.",
+    stack: ["Lambda", "DynamoDB", "CloudFront", "Terraform", "GitHub Actions"],
     image: null,
     imageAlt: "",
-    repo: "https://github.com/arkhiVd/aws-ecs-containerized-webapp",
-    caseStudy: null,
+    repo: "https://github.com/arkhiVd/cloud-detective",
+    caseStudy: "/projects/cloud-detective",
     featured: false,
   },
   {
@@ -118,9 +114,8 @@ export const projects: Project[] = [
     name: "Self-hosted encrypted sync service",
     status: "live",
     summary:
-      "A private, end-to-end encrypted, real-time sync service on a headless Arch Linux server — a containerized CouchDB orchestrated with Docker Compose, hardened at the network layer with iptables rules written against Docker's own chains rather than around them.",
+      "Runs an encrypted note-sync service on a headless Arch Linux server. CouchDB is deployed with Docker Compose and restricted with rules applied through Docker's iptables chains.",
     stack: ["Arch Linux", "Docker Compose", "CouchDB", "iptables"],
-    metric: "end-to-end encrypted",
     image: null,
     imageAlt: "",
     repo: null,
@@ -132,9 +127,8 @@ export const projects: Project[] = [
     name: "Network automation scripts",
     status: "in progress",
     summary:
-      "Python and Netmiko automating configuration backups for network devices in a simulated GNS3 environment, with every change versioned in Git — a practical bridge between the CCNA side and infrastructure automation.",
+      "Uses Python and Netmiko to back up network-device configurations in a GNS3 lab. Each backup is stored in Git so configuration changes can be reviewed over time.",
     stack: ["Python", "Netmiko", "GNS3", "Git"],
-    metric: "every change versioned",
     image: null,
     imageAlt: "",
     repo: null,

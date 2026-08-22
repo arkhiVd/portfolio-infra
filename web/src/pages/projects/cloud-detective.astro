@@ -9,9 +9,9 @@ const project = projects.find((p) => p.slug === "cloud-detective")!;
 <CaseStudy
   project={project}
   kicker="serverless · 2026"
-  lede="A scanner that answers what is running, what it costs, and what is exposed — and draws the account's architecture from what it finds. Built under a hard rule: rules detect, AI explains."
+  lede="A serverless AWS scanner for cost, inventory and security posture. It tracks findings, generates diagrams from discovered resources and uses AI only to explain deterministic results."
 >
-  <Block label="problem" heading="An account nobody can describe is an account nobody can secure">
+  <Block label="problem" heading="One view of AWS cost, inventory and exposure">
     <p>
       Cloud accounts drift. Resources outlive the reason they were created, cost appears in
       places nobody looks, and the only complete picture of what exists is whatever the
@@ -20,13 +20,12 @@ const project = projects.find((p) => p.slug === "cloud-detective")!;
       could then explain any single answer without me going back to the console.
     </p>
     <p>
-      The design rule that fell out of that: <strong>detection and diagram generation are
-      deterministic, fixture-tested and read-only; the AI layer is additive, never required,
-      and off by default.</strong> A finding must be reproducible before it is explainable.
+      Detection and diagram generation are deterministic, fixture-tested and read-only. The AI
+      layer is optional and disabled by default. It explains findings but does not create them.
     </p>
   </Block>
 
-  <Block label="architecture" heading="Detect deterministically, explain optionally">
+  <Block label="architecture" heading="Scheduled scans, finding history and generated diagrams">
     <p>
       Daily detectors scan the account and write findings into DynamoDB with a real
       lifecycle — new, open, resolved — so a finding that comes back is not indistinguishable
@@ -41,22 +40,22 @@ const project = projects.find((p) => p.slug === "cloud-detective")!;
     </p>
   </Block>
 
-  <Block label="decisions and tradeoffs" heading="What the constraints forced">
+  <Block label="decisions and tradeoffs" heading="Constraints that shaped the design">
     <dl class="rows">
       <div class="row">
         <dt>Provider-agnostic LLM client instead of Bedrock</dt>
         <dd>
-          Not a preference — Bedrock was blocked account-wide (see below). The result is
-          better than what I set out to build: the platform depends on no single model
-          provider, and the only thing that ever leaves the account is the model call itself.
+          Bedrock was blocked account-wide, so the AI client was separated from any single
+          provider. Model requests are the only part of the workflow sent outside the AWS
+          account.
         </dd>
       </div>
       <div class="row">
         <dt>Serve the dashboard from the API Lambda</dt>
         <dd>
           CloudFront was unavailable in this account, so one function serves both the static
-          app and the API. It works and it costs nothing, but it is the wrong shape — which
-          is precisely why the successor was rebuilt on a real CDN.
+          application and the API. This simplified deployment but coupled content delivery to
+          the application backend. ClearSky replaced it with a CDN.
         </dd>
       </div>
       <div class="row">
@@ -77,15 +76,12 @@ const project = projects.find((p) => p.slug === "cloud-detective")!;
     </dl>
   </Block>
 
-  <Block label="what broke" heading="Findings that resolved themselves, and a diagram that drew over itself">
+  <Block label="what broke" heading="Partial scans resolved findings from the wrong accounts">
     <p>
-      <strong>Partial scans silently resolved other accounts' findings.</strong> The
-      reconcile step assumed every scan saw the whole world: anything not seen this run must
-      have been fixed. Once multi-account scanning arrived, a scan of one account would mark
-      another account's open findings as resolved — the worst kind of bug in a security tool,
-      because it fails quietly and in the reassuring direction. The fix was to thread the set
-      of actually-scanned accounts through reconcile so it can only resolve findings from
-      accounts it truly looked at.
+      <strong>Partial scans silently resolved other accounts' findings.</strong> The reconcile
+      step assumed each run scanned every account, so any unseen finding was marked resolved.
+      Multi-account scans broke that assumption. The fix passes the set of scanned accounts into
+      reconciliation and limits resolution to those accounts.
     </p>
     <p>
       <strong>Bedrock was blocked account-wide</strong> — every model, every API. It read
@@ -102,17 +98,16 @@ const project = projects.find((p) => p.slug === "cloud-detective")!;
     </p>
   </Block>
 
-  <Block label="numbers" heading="Where it ended up">
+  <Block label="numbers" heading="Scope and outcome">
     <ul class="metrics">
       <li><b>106</b><span>tests, detectors covered by fixtures</span></li>
       <li><b>daily</b><span>scheduled scans with an emailed digest</span></li>
       <li><b>read-only</b><span>IAM everywhere the AI can reach</span></li>
     </ul>
     <p>
-      Cloud Detective is the reason ClearSky exists: the constraints it ran into — no
-      CloudFront, no Bedrock, an SPA served from a Lambda — are exactly what the successor
-      was built to escape. It stays public because the engine, the detectors and the
-      generator are the parts worth reading.
+      Cloud Detective became the foundation for ClearSky. The successor retained the detector
+      and diagram concepts while replacing the Lambda-served frontend and account-specific AI
+      integration.
     </p>
   </Block>
 </CaseStudy>

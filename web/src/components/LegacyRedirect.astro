@@ -1,0 +1,21 @@
+---
+interface Props { target: string; }
+const { target } = Astro.props;
+const absolute = new URL(target, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <link rel="canonical" href={absolute} />
+    <meta name="robots" content="noindex, follow" />
+    <title>Page moved</title>
+    <style>html{color-scheme:dark;background:#050507;color:#ededf0;font:16px system-ui}body{margin:3rem}a{color:#4fc1d4}</style>
+  </head>
+  <body>
+    <p>This page moved to <a href={target}>{absolute}</a>.</p>
+  </body>
+</html>

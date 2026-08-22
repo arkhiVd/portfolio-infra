@@ -13,6 +13,7 @@ export const site = {
   // Taken from Aravind's own resume.tex, not guessed.
   linkedin: "https://linkedin.com/in/aravindakrishnan-v-2b0651218",
   openToWork: true,
+  availability: "open to work",
   /**
    * Committed at web/public/resume.pdf — public and permanent, so it is a redacted build:
    * the personal phone number is removed from the header and nothing else is changed.
@@ -21,7 +22,7 @@ export const site = {
    */
   resume: "/resume.pdf",
   description:
-    "Cloud engineer working across AWS, Terraform, containers and CI/CD. Selected infrastructure work, with the decisions and failures behind it.",
+    "Cloud engineer with experience in AWS operations, Linux, networking, Terraform, containers and CI/CD.",
 } as const;
 
 /**
@@ -32,5 +33,12 @@ export const site = {
 export function url(path: string): string {
   const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   const clean = path.startsWith("/") ? path : `/${path}`;
-  return `${base}${clean}` || "/";
+
+  // CloudFront serves a private S3 origin, not S3 website hosting. It resolves only the
+  // distribution root to index.html; extensionless subpaths have no rewrite and return 403.
+  if (clean === "/") return base ? `${base}/index.html` : "/";
+
+  const segment = clean.slice(clean.lastIndexOf("/") + 1);
+  const objectPath = segment.includes(".") ? clean : `${clean}.html`;
+  return `${base}${objectPath}`;
 }

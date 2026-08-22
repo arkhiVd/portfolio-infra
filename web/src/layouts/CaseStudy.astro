@@ -27,6 +27,11 @@ const { project, kicker, lede } = Astro.props;
           <a class="btn-quiet" href={project.repo} rel="noopener">
             read the source ↗
           </a>
+          {project.secondaryRepo && (
+            <a class="btn-quiet" href={project.secondaryRepo.url} rel="noopener">
+              {project.secondaryRepo.label} ↗
+            </a>
+          )}
         </div>
       )
     }

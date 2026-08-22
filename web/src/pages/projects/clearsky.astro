@@ -2,6 +2,7 @@
 import CaseStudy from "../../layouts/CaseStudy.astro";
 import Block from "../../components/Block.astro";
 import { projects } from "../../lib/projects";
+import { url } from "../../lib/site";
 
 const project = projects.find((p) => p.slug === "clearsky")!;
 ---
@@ -9,9 +10,9 @@ const project = projects.find((p) => p.slug === "clearsky")!;
 <CaseStudy
   project={project}
   kicker="serverless · 2026"
-  lede="Answer two questions for any AWS account, continuously: what is running, and is it safe? Serverless end to end — it stands up or tears down in a single pipeline run."
+  lede="A serverless platform that scans AWS accounts for security, cost and inventory findings. Deterministic rules detect problems; a read-only AI investigator explains them."
 >
-  <Block label="problem" heading="Posture tools tell you what is wrong, then ask you to trust them">
+  <Block label="problem" heading="Reproducible findings without giving AI control">
     <p>
       Security scanners are usually opaque: a score appears and the reasoning behind it
       belongs to someone else. I wanted findings that were reproducible — the same account
@@ -19,16 +20,16 @@ const project = projects.find((p) => p.slug === "clearsky")!;
       explain and investigate but never to decide what counts as a finding.
     </p>
     <p>
-      The second constraint was cost. This runs in a personal AWS account, so nothing may
-      idle: no always-on compute, no NAT gateway, no managed scanner service, and the whole
-      platform tears down when it is not in use.
+      The second constraint was running cost. The platform uses no always-on compute, NAT
+      gateway or managed scanner. Its deployment pipeline can also remove the complete stack
+      when it is not needed.
     </p>
   </Block>
 
-  <Block label="architecture" heading="Serverless, and read-only by construction">
+  <Block label="architecture" heading="Serverless scanning with read-only account access">
     <figure class="arch">
       <img
-        src={project.image}
+        src={url(project.image!)}
         alt={project.imageAlt}
         loading="lazy"
         decoding="async"
@@ -53,7 +54,7 @@ const project = projects.find((p) => p.slug === "clearsky")!;
     </p>
   </Block>
 
-  <Block label="decisions and tradeoffs" heading="What I chose, and what it cost">
+  <Block label="decisions and tradeoffs" heading="Key design decisions">
     <dl class="rows">
       <div class="row">
         <dt>A Lambda function URL instead of API Gateway</dt>
@@ -72,9 +73,8 @@ const project = projects.find((p) => p.slug === "clearsky")!;
       <div class="row">
         <dt>Read-only IAM as the AI's hard boundary</dt>
         <dd>
-          The agent's tool loop is allowlisted to describe, list and get calls. It cannot
-          mutate the account, so a prompt injection cannot become an incident — the boundary
-          is IAM, not a system prompt.
+          The agent's tool loop is limited to describe, list and get calls. It cannot change
+          account resources. IAM enforces that boundary independently of the model prompt.
         </dd>
       </div>
       <div class="row">
@@ -94,37 +94,16 @@ const project = projects.find((p) => p.slug === "clearsky")!;
     </dl>
   </Block>
 
-  <Block label="what broke" heading="A login loop, and an origin that refused to be verified">
+  <Block label="what broke" heading="Terraform dependency ordering blocked cleanup">
     <p>
-      <strong>CloudFront OAC to a Lambda function URL never worked.</strong> With SigV4
-      signing configured, the origin returned 403 and the function was never invoked —
-      correct OAC config, correct permissions, correct origin request policy. I could not
-      find a root cause and stopped trying to. The replacement is a secret header injected by
-      CloudFront and checked as the first thing the handler does, with the JWT still gating
-      every route. Two weaker mechanisms composed, instead of one that would not work.
-    </p>
-    <p>
-      Two related traps showed up on the way: the browser reserves the
-      <code>Authorization</code> header for origin auth when OAC is enabled, so the token
-      moved to <code>x-authorization</code>; and <code>x-amz-content-sha256</code> cannot be
-      whitelisted in an origin request policy at all, because it is reserved.
-    </p>
-    <p>
-      <strong>Then production ate itself.</strong> The API client signed the user out on
-      <em>any</em> 401 or 403. The origin-verify path — the newly added, least-tested path —
-      returned 403, so every request bounced the user to the login page, which made a
-      request, which returned 403. An infinite loop out of two individually reasonable
-      decisions.
-    </p>
-    <p>
-      The fix was to stop treating authentication and authorisation failures as the same
-      thing: only a 401 ends the session, and only after one silent refresh has been tried; a
-      403 raises a message and leaves the session alone. That distinction is now the first
-      thing I check in any client I write.
+      Terraform attempted to delete the origin access control before detaching it from the
+      CloudFront distribution, and AWS returned a dependency conflict. Applying the
+      distribution change first, then running the complete apply, allowed Terraform to remove
+      the detached resource cleanly.
     </p>
   </Block>
 
-  <Block label="numbers" heading="What it covered, and what it left behind">
+  <Block label="numbers" heading="Scope and test coverage">
     <ul class="metrics">
       <li><b>24+</b><span>read-only detectors, every enabled region</span></li>
       <li><b>113</b><span>unit tests against fixtures</span></li>
@@ -132,9 +111,9 @@ const project = projects.find((p) => p.slug === "clearsky")!;
       <li><b>none</b><span>left running — destroyed from its own pipeline</span></li>
     </ul>
     <p>
-      It redeploys from an empty account by pushing to <code>main</code>. That is the part I
-      care about most: the platform is not a thing that exists on a server somewhere, it is a
-      description that can be re-created on demand.
+      A push to <code>main</code> can recreate the platform after the stack has been removed.
+      Terraform, the application source and the deployment workflows contain everything needed
+      to rebuild it.
     </p>
   </Block>
 </CaseStudy>

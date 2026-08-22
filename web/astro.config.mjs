@@ -1,12 +1,11 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 
-// The rebuild is served under the preview/ key prefix until the Phase 8 cutover, so `base`
-// is /preview here and becomes / at cutover. Nothing may hardcode a leading-slash URL —
-// use BASE_URL (see src/lib/url.ts) or the link will 404 under the prefix.
+// Production emits file-style routes because CloudFront's private S3 origin has no
+// extensionless-path rewrite. Shared templates use BASE_URL through src/lib/site.ts.
 export default defineConfig({
   site: "https://www.aravindakrishnan.cloud",
-  base: "/preview",
+  base: "/",
   trailingSlash: "ignore",
   build: {
     // Emit page.html instead of page/index.html: CloudFront has no index-document rewrite

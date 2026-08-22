@@ -1,9 +1,7 @@
 ---
 import { site, url } from "../lib/site";
-import VisitorCount from "./VisitorCount.astro";
 
 interface Props {
-  /** which primary link is the current page */
   current?: "home" | "projects" | "about";
 }
 const { current } = Astro.props;
@@ -11,20 +9,25 @@ const { current } = Astro.props;
 
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href={url("/")}>{site.name}</a>
-    <nav class="nav-right" aria-label="Primary">
-      <a href={url("/")} aria-current={current === "home" ? "page" : undefined}>home</a>
-      <a href={url("/projects")} aria-current={current === "projects" ? "page" : undefined}>projects</a>
-      <a href={url("/about")} aria-current={current === "about" ? "page" : undefined}>about</a>
+    <a class="brand" href={url("/")} aria-label={`${site.name} — home`}>
+      <svg viewBox="0 0 64 40" aria-hidden="true">
+        <path d="M16 33h32a10 10 0 0 0 1-20 15 15 0 0 0-28-3A12 12 0 0 0 16 33Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+      </svg>
+    </a>
+    <div class="nav-actions">
       {
         site.openToWork && (
           <span class="status">
             <span class="dot" aria-hidden="true" />
-            open to work
+            {site.availability}
           </span>
         )
       }
-      <VisitorCount />
-    </nav>
+      <nav class="nav-links" aria-label="Primary">
+        <a href={url("/")} aria-current={current === "home" ? "page" : undefined}>home</a>
+        <a href={url("/projects")} aria-current={current === "projects" ? "page" : undefined}>projects</a>
+        <a href={url("/about")} aria-current={current === "about" ? "page" : undefined}>about</a>
+      </nav>
+    </div>
   </div>
 </header>

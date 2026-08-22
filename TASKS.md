@@ -1,16 +1,18 @@
 # portfolio-infra — tasks
 
-## Current phase: 5 — case-study template and first deep dives
+## Current phase: 8 — production cutover prepared, not applied
 
-- [ ] Prove engineering judgment, twice
-  - Scope: `CaseStudy.astro` + `Block.astro` (problem → architecture → decisions and
-    tradeoffs → what broke → numbers); ClearSky and Cloud Detective deep dives; cards now
-    link to them.
-  - Acceptance criteria: each page carries at least one real failure and its fix; diagrams
-    are captioned figures legible at 375 px; every number traceable to the vault or a repo.
-  - Automated validation: `astro check`, `npm run build`, `terraform plan`.
-  - Manual validation: read end to end at 1440 and 375.
-  - Blockers: none.
+- [x] Astro base moved to `/`; production links match emitted `.html` object keys.
+- [x] Six project deep dives, five legacy redirect pages, sitemap, robots and Person JSON-LD.
+- [x] `web/dist` replaces frozen `site/` at the root; old source removed.
+- [x] CloudFront security response headers prepared; visitor API allowed by CSP.
+- [x] Local gates: Astro check/build, 1280+375 browser matrix, no-JS render, axe (zero
+  violations), Lighthouse 100/100/96/100, actionlint, gitleaks, Terraform validate.
+- [x] Read-only plan: **19 add, 14 change, 7 destroy**; only old site objects are destroyed,
+  CloudFront updates in place, and one response-header policy is added.
+- [ ] Independent reviewer result (two fresh Pi reviewers timed out without output).
+- [ ] Human review and merge; apply remains workflow-only from `main`.
+- [ ] Live cache-busted click-through, visitor count, headers, resume MIME and empty post-apply plan.
 
 ## Completed phase: 4 — about, resume, contact
 

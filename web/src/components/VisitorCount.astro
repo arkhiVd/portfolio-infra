@@ -34,7 +34,7 @@
         .then(function (d) {
           // Only render a real, finite count. Anything else leaves the placeholder.
           if (typeof d.count === "number" && isFinite(d.count)) {
-            el.textContent = String(d.count);
+            el.textContent = Number(d.count).toLocaleString();
           }
         })
         .catch(function () {
