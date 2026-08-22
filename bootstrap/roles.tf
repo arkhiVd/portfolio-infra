@@ -83,6 +83,8 @@ data "aws_iam_policy_document" "apply_deploy" {
       "cloudfront:DeleteDistribution", "cloudfront:TagResource", "cloudfront:UntagResource",
       "cloudfront:CreateOriginAccessControl", "cloudfront:UpdateOriginAccessControl",
       "cloudfront:DeleteOriginAccessControl", "cloudfront:CreateInvalidation",
+      "cloudfront:CreateResponseHeadersPolicy", "cloudfront:UpdateResponseHeadersPolicy",
+      "cloudfront:DeleteResponseHeadersPolicy",
       "cloudfront:Get*", "cloudfront:List*"
     ]
     resources = ["*"]
