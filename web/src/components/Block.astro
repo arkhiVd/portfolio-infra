@@ -1,0 +1,14 @@
+---
+/** One case-study section: a mono label, a heading, then whatever the slot holds. */
+interface Props {
+  label: string;
+  heading: string;
+}
+const { label, heading } = Astro.props;
+---
+
+<section class="block wrap">
+  <p class="label">{label}</p>
+  <h2>{heading}</h2>
+  <slot />
+</section>

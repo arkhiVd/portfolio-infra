@@ -1,0 +1,81 @@
+/**
+ * About-page content, sourced from ~/Documents/resume/resume.tex (the canonical resume).
+ *
+ * The employer is Zarthi — confirmed by Aravind 2026-08-01.
+ */
+
+export const employer = "Zarthi";
+
+export interface Role {
+  title: string;
+  org: string;
+  period: string;
+  location: string;
+  points: string[];
+}
+
+export const experience: Role[] = [
+  {
+    title: "Cloud Engineer",
+    org: employer,
+    period: "Oct 2025 — Aug 2026",
+    location: "Remote, India",
+    points: [
+      "Operated AWS infrastructure for 10+ enterprise customers across healthcare, automotive and SaaS, keeping production and development environments available.",
+      "Provisioned and administered Linux and Windows EC2 fleets across prod, dev and test — AMIs, key pairs, EBS snapshots, right-sizing — and resolved incidents through log analysis and request tracing.",
+      "Strengthened security posture across 10+ AWS accounts with least-privilege IAM and org-wide MFA.",
+      "Designed VPC networking for 10+ customer environments: subnets, route tables, Internet and NAT gateways, NACLs, security groups, peering, and site-to-site VPN to on-prem data centres.",
+      "Automated backups with AWS Backup plus Lambda-driven snapshot cleanup, replacing a recurring manual snapshot-hygiene task and cutting storage spend.",
+      "Instrumented 30+ CloudWatch alarms and Grafana dashboards, so incidents surface from alerts rather than from customer reports.",
+      "Reduced monthly spend through Savings Plans and Reserved Instance analysis, storage-class tuning and right-sizing.",
+    ],
+  },
+];
+
+export interface Certification {
+  name: string;
+  issuer: string;
+  verify: string;
+  image: string;
+  imageAlt: string;
+}
+
+/** Verified credentials shown with their issuer badges and a direct verification link. */
+export const certifications: Certification[] = [
+  {
+    name: "AWS Certified Solutions Architect – Associate",
+    issuer: "Amazon Web Services",
+    verify:
+      "https://www.credly.com/badges/f80f390f-8aaa-4828-9f45-fa34bd2fb81b/public_url",
+    image: "/assets/certs/aws-saa.png",
+    imageAlt: "AWS Certified Solutions Architect – Associate badge",
+  },
+  {
+    name: "Cisco Certified Network Associate (CCNA)",
+    issuer: "Cisco",
+    verify:
+      "https://www.credly.com/badges/5aaa037e-bf4c-4eb4-8f24-64ccbf8e3b04/public_url",
+    image: "/assets/certs/ccna.png",
+    imageAlt: "Cisco Certified Network Associate badge",
+  },
+];
+
+export const skills: { label: string; items: string }[] = [
+  {
+    label: "cloud",
+    items:
+      "EC2 · VPC · S3 · IAM · Lambda · DynamoDB · RDS · CloudFront · ECS/Fargate · App Runner · Route 53 · CloudWatch · WAF · SQS · OpenSearch · ELB · Auto Scaling",
+  },
+  { label: "iac & ci/cd", items: "Terraform · GitHub Actions · OIDC · Ansible" },
+  { label: "containers", items: "Docker · Kubernetes · ECS · Fargate" },
+  { label: "languages", items: "Python · Bash · SQL · JavaScript" },
+  { label: "os & networking", items: "Linux · Nginx · VPC · VPN · GNS3" },
+  { label: "monitoring", items: "CloudWatch · Grafana" },
+];
+
+export const education = {
+  school: "Govt. Model Engineering College",
+  place: "Kochi, Kerala",
+  finished: "June 2025",
+  degree: "B.Tech, Electronics & Communication Engineering",
+};

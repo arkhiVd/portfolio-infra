@@ -1,0 +1,43 @@
+---
+import Base from "../layouts/Base.astro";
+import ProjectRow from "../components/ProjectRow.astro";
+import { site, url } from "../lib/site";
+import { featured } from "../lib/projects";
+---
+
+<Base title={`${site.name} — ${site.role}`} current="home">
+  <section class="hero wrap">
+    <h1>{site.name}</h1>
+    <p class="hero-role">Cloud Engineer</p>
+    <p>
+      I build and operate cloud infrastructure across AWS, Linux, networking, Terraform,
+      containers and CI/CD. AWS Solutions Architect – Associate and CCNA certified.
+    </p>
+    <div class="cta">
+      <a class="btn" href={url("/projects")}>View projects</a>
+      <a class="btn-quiet" href={url(site.resume)}>download resume →</a>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <h2>Selected work</h2>
+      <a class="label" href={url("/projects")}>all projects →</a>
+    </div>
+    <div class="project-list">
+      {featured.map((project) => <ProjectRow project={project} compact />)}
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <h2>About</h2>
+      <a class="label" href={url("/about")}>more →</a>
+    </div>
+    <p class="prose">
+      I worked on AWS operations, networking, security, monitoring and cost management for
+      enterprise customers at Zarthi. My public projects extend that work into infrastructure as
+      code, container platforms and serverless systems. I am also preparing for the CKA.
+    </p>
+  </section>
+</Base>

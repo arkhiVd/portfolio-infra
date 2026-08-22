@@ -1,0 +1,32 @@
+---
+import CaseStudy from "../../layouts/CaseStudy.astro";
+import Block from "../../components/Block.astro";
+import { projects } from "../../lib/projects";
+import { url } from "../../lib/site";
+const project = projects.find((p) => p.slug === "cicd-containers")!;
+---
+
+<CaseStudy project={project} kicker="containers · CI/CD" lede="A push-to-deploy pipeline for a Dockerized Python application on ECS Fargate, with Terraform infrastructure and short-lived AWS credentials from GitHub OIDC.">
+  <Block label="problem" heading="Deploy containers without stored AWS keys or manual server work">
+    <p>The project needed a repeatable path from a source commit to a running container. Infrastructure, image version and deployment state had to remain reviewable rather than being assembled manually in the AWS console.</p>
+  </Block>
+  <Block label="architecture" heading="Public load balancer, private application tasks">
+    <figure class="arch"><img src={url(project.image!)} alt={project.imageAlt} loading="lazy" decoding="async" /><figcaption>The public Application Load Balancer is the only internet-facing application component. It forwards requests to Flask containers running as ECS Fargate tasks in private subnets; CloudWatch receives task logs.</figcaption></figure>
+    <p>Security-group ingress ties the ECS service directly to the load balancer security group instead of allowing a broad network range. Terraform defines the VPC, subnets, ECR repository, load balancer, ECS cluster, task definition and service.</p>
+    <figure class="arch"><img src={url("/assets/img/containers-cicd.png")} alt="CI/CD pipeline from a GitHub push through OIDC authentication, Docker build, ECR and Terraform deployment to ECS" loading="lazy" decoding="async" /><figcaption>GitHub Actions assumes an AWS role with OIDC, builds a commit-addressed image, pushes it to ECR and passes that image URL into Terraform.</figcaption></figure>
+  </Block>
+  <Block label="decisions and tradeoffs" heading="Key design decisions">
+    <dl class="rows">
+      <div class="row"><dt>OIDC instead of repository access keys</dt><dd>GitHub receives temporary AWS credentials for each run. IAM trust configuration is more involved, but there is no long-lived secret to rotate or leak.</dd></div>
+      <div class="row"><dt>Commit SHA image tags</dt><dd>Each task definition points to an immutable, traceable build rather than an ambiguous <code>latest</code> tag.</dd></div>
+      <div class="row"><dt>Fargate instead of managed EC2 hosts</dt><dd>The deployment avoids patching container hosts. Per-task pricing can cost more than well-utilized EC2 capacity.</dd></div>
+      <div class="row"><dt>Terraform receives the image URL</dt><dd>Application versions and infrastructure changes share one plan, while the infrastructure remains independent of a hardcoded build.</dd></div>
+    </dl>
+  </Block>
+  <Block label="what broke" heading="The deployment needs an explicit image handoff">
+    <p>Building and pushing an image does not update a running ECS service by itself. The workflow must pass the commit-tagged ECR URL into Terraform so a new task-definition revision is created and ECS can perform the rolling replacement.</p>
+  </Block>
+  <Block label="pipeline" heading="From push to healthy task">
+    <ul class="metrics"><li><b>1</b><span>public entry point</span></li><li><b>0</b><span>stored AWS access keys</span></li><li><b>3</b><span>pipeline stages: build, plan, apply</span></li><li><b>SHA</b><span>identifies every deployed image</span></li></ul>
+  </Block>
+</CaseStudy>

@@ -1,0 +1,27 @@
+---
+import Base from "../layouts/Base.astro";
+import ProjectRow from "../components/ProjectRow.astro";
+import { site } from "../lib/site";
+import { projects } from "../lib/projects";
+
+---
+
+<Base
+  title={`Projects — ${site.name}`}
+  description="Cloud infrastructure, automation and self-hosted systems with source code and architecture notes."
+  current="projects"
+>
+  <section class="hero wrap">
+    <h1>Projects</h1>
+    <p>
+      Cloud infrastructure, automation and self-hosted systems built in AWS accounts and on my
+      own hardware. The diagrams describe the deployed designs, not reference architectures.
+    </p>
+  </section>
+
+  <section class="section wrap" aria-label="Project list">
+    <div class="project-list">
+      {projects.map((project) => <ProjectRow project={project} />)}
+    </div>
+  </section>
+</Base>

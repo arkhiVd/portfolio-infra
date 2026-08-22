@@ -1,0 +1,41 @@
+---
+import Base from "../layouts/Base.astro";
+import type { Project } from "../lib/projects";
+
+/**
+ * Case-study shell. Section order is fixed by DESIGN.md:
+ * problem → architecture → decisions and tradeoffs → what broke → numbers.
+ * "What broke" is not optional; a case study without a failure is a brochure.
+ */
+interface Props {
+  project: Project;
+  /** short kicker above the title, e.g. "serverless · 2026" */
+  kicker: string;
+  lede: string;
+}
+const { project, kicker, lede } = Astro.props;
+---
+
+<Base title={`${project.name} — case study`} description={lede} current="projects">
+  <section class="study wrap">
+    <p class="label">case study · {kicker}</p>
+    <h1>{project.name}</h1>
+    <p class="lede">{lede}</p>
+    {
+      project.repo && (
+        <div class="cta">
+          <a class="btn-quiet" href={project.repo} rel="noopener">
+            read the source ↗
+          </a>
+          {project.secondaryRepo && (
+            <a class="btn-quiet" href={project.secondaryRepo.url} rel="noopener">
+              {project.secondaryRepo.label} ↗
+            </a>
+          )}
+        </div>
+      )
+    }
+  </section>
+
+  <slot />
+</Base>

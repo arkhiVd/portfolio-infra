@@ -1,13 +1,24 @@
 locals {
+  # Every uploaded object is typed from this map. An extension missing here ships as
+  # binary/octet-stream, and browsers refuse to use that for fonts, SVG or XML — the
+  # failure is silent. Add the extension in the same phase that first emits it.
   mime_types = {
-    "html" = "text/html",
-    "css"  = "text/css",
-    "js"   = "application/javascript",
-    "jpeg" = "image/jpeg",
-    "jpg"  = "image/jpeg",
-    "png"  = "image/png",
-    "ico"  = "image/vnd.microsoft.icon",
-    "txt"  = "text/plain"
+    "html"  = "text/html",
+    "css"   = "text/css",
+    "js"    = "application/javascript",
+    "jpeg"  = "image/jpeg",
+    "jpg"   = "image/jpeg",
+    "png"   = "image/png",
+    "ico"   = "image/vnd.microsoft.icon",
+    "txt"   = "text/plain",
+    "svg"   = "image/svg+xml",
+    "webp"  = "image/webp",
+    "avif"  = "image/avif",
+    "woff2" = "font/woff2",
+    "json"  = "application/json",
+    "xml"   = "application/xml",
+    "pdf"   = "application/pdf",
+    "map"   = "application/json"
   }
 }
 
@@ -44,14 +55,20 @@ resource "aws_s3_bucket_public_access_block" "portfolio_public_access_block" {
   restrict_public_buckets = true
 }
 
+# web/dist is GENERATED — `cd web && npm ci && npm run build` must run before any
+# terraform plan/apply, locally and in CI, or this plans against stale or absent output.
 resource "aws_s3_object" "portfolio_files" {
-  for_each = fileset("${path.module}/site/", "**")
+  for_each = fileset("${path.module}/web/dist/", "**")
 
   bucket       = aws_s3_bucket.portfolio_bucket.id
   key          = each.value
-  source       = "${path.module}/site/${each.value}"
+  source       = "${path.module}/web/dist/${each.value}"
   content_type = lookup(local.mime_types, regex("\\.(\\w+)$", each.value)[0], "binary/octet-stream")
-  etag         = filemd5("${path.module}/site/${each.value}")
+  etag         = filemd5("${path.module}/web/dist/${each.value}")
+
+  # Hashed assets are immutable; HTML and public files stay short-lived so a deploy is
+  # visible even before the explicit CloudFront invalidation finishes propagating.
+  cache_control = can(regex("^_astro/", each.value)) ? "public, max-age=31536000, immutable" : "public, max-age=300"
 }
 
 # Rendered separately so Terraform can inject the Lambda Function URL.
@@ -74,6 +91,46 @@ resource "aws_cloudfront_origin_access_control" "portfolio_oac" {
 
 # tfsec:ignore:aws-cloudfront-enable-waf
 # tfsec:ignore:aws-cloudfront-enable-logging
+resource "aws_cloudfront_response_headers_policy" "security" {
+  name = "portfolio-security-headers"
+
+  security_headers_config {
+    content_security_policy {
+      content_security_policy = "default-src 'self'; base-uri 'self'; connect-src 'self' ${trimsuffix(aws_lambda_function_url.counter_url.function_url, "/")}; font-src 'self'; form-action 'none'; frame-ancestors 'none'; img-src 'self' data:; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'"
+      override                = true
+    }
+
+    content_type_options {
+      override = true
+    }
+
+    frame_options {
+      frame_option = "DENY"
+      override     = true
+    }
+
+    referrer_policy {
+      referrer_policy = "strict-origin-when-cross-origin"
+      override        = true
+    }
+
+    strict_transport_security {
+      access_control_max_age_sec = 63072000
+      include_subdomains         = true
+      preload                    = true
+      override                   = true
+    }
+  }
+
+  custom_headers_config {
+    items {
+      header   = "Permissions-Policy"
+      value    = "camera=(), geolocation=(), microphone=()"
+      override = true
+    }
+  }
+}
+
 resource "aws_cloudfront_distribution" "portfolio_cdn" {
   origin {
     domain_name              = aws_s3_bucket.portfolio_bucket.bucket_regional_domain_name
@@ -89,11 +146,12 @@ resource "aws_cloudfront_distribution" "portfolio_cdn" {
   aliases = var.domain_name == "" ? [] : [var.domain_name, "www.${var.domain_name}"]
 
   default_cache_behavior {
-    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
-    cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "S3-${var.bucket_name}"
-    viewer_protocol_policy = "redirect-to-https"
-    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6" # CachingOptimized
+    allowed_methods            = ["GET", "HEAD", "OPTIONS"]
+    cached_methods             = ["GET", "HEAD"]
+    target_origin_id           = "S3-${var.bucket_name}"
+    viewer_protocol_policy     = "redirect-to-https"
+    cache_policy_id            = "658327ea-f89d-4fab-a63d-7e88639e58f6" # CachingOptimized
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.security.id
   }
 
   restrictions {

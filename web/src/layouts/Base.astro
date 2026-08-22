@@ -1,0 +1,96 @@
+---
+import "../styles/tokens.css";
+import "../styles/global.css";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import Ocean from "../components/Ocean.astro";
+import { site, url } from "../lib/site";
+
+interface Props {
+  title: string;
+  description?: string;
+  current?: "home" | "projects" | "about";
+}
+
+const { title, description = site.description, current } = Astro.props;
+const canonicalPath = Astro.url.pathname.endsWith("/index.html")
+  ? Astro.url.pathname.slice(0, -"index.html".length)
+  : Astro.url.pathname;
+const canonical = new URL(canonicalPath, Astro.site).href;
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  url: `https://${site.domain}/`,
+  jobTitle: site.role,
+  email: `mailto:${site.email}`,
+  sameAs: [site.github, site.linkedin],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style is:inline>
+      html, body { margin: 0; background: #050507; }
+      html:not(.is-ready) .nav,
+      html:not(.is-ready) main,
+      html:not(.is-ready) .foot { visibility: hidden; }
+      .loader { position: fixed; inset: 0; z-index: 100; background: #050507; }
+      html.is-ready .loader { display: none; }
+    </style>
+    <noscript><style>.loader{display:none}.nav,main,.foot{visibility:visible!important}</style></noscript>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href={url("/favicon.svg")} type="image/svg+xml" />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+
+    {/* Self-hosted — no Google Fonts round-trip, no third-party origin sees a visitor. */}
+    <link
+      rel="preload"
+      href={url("/fonts/instrument-sans-var.woff2")}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href={url("/fonts/jetbrains-mono-var.woff2")}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+  </head>
+
+  <body>
+    <Ocean />
+    <div class="loader" aria-hidden="true"></div>
+    <script is:inline>
+      (() => {
+        const reveal = () => {
+          document.fonts.ready.then(() => document.documentElement.classList.add("is-ready"));
+        };
+        if (document.readyState === "complete") reveal();
+        else window.addEventListener("load", reveal, { once: true });
+        setTimeout(() => document.documentElement.classList.add("is-ready"), 2000);
+      })();
+    </script>
+    <a class="skip" href="#main">Skip to content</a>
+    <Nav current={current} />
+    <main id="main"><slot /></main>
+    <Footer />
+
+    {/* Rendered by Terraform with the Lambda Function URL injected; served from the site
+        root in both preview and production, so it is referenced absolutely on purpose. */}
+    <script is:inline src="/assets/js/visitorscript.js" defer></script>
+  </body>
+</html>

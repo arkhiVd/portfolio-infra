@@ -1,0 +1,113 @@
+---
+import CaseStudy from "../../layouts/CaseStudy.astro";
+import Block from "../../components/Block.astro";
+import { projects } from "../../lib/projects";
+
+const project = projects.find((p) => p.slug === "cloud-detective")!;
+---
+
+<CaseStudy
+  project={project}
+  kicker="serverless · 2026"
+  lede="A serverless AWS scanner for cost, inventory and security posture. It tracks findings, generates diagrams from discovered resources and uses AI only to explain deterministic results."
+>
+  <Block label="problem" heading="One view of AWS cost, inventory and exposure">
+    <p>
+      Cloud accounts drift. Resources outlive the reason they were created, cost appears in
+      places nobody looks, and the only complete picture of what exists is whatever the
+      console will show you one page at a time. I wanted a system that answered three
+      questions on a schedule — what is running, what is it costing, what is exposed — and
+      could then explain any single answer without me going back to the console.
+    </p>
+    <p>
+      Detection and diagram generation are deterministic, fixture-tested and read-only. The AI
+      layer is optional and disabled by default. It explains findings but does not create them.
+    </p>
+  </Block>
+
+  <Block label="architecture" heading="Scheduled scans, finding history and generated diagrams">
+    <p>
+      Daily detectors scan the account and write findings into DynamoDB with a real
+      lifecycle — new, open, resolved — so a finding that comes back is not indistinguishable
+      from one that never left. A plain-text digest goes out by SNS. On top of that sits a
+      Cognito-authenticated dashboard, an LLM chat that investigates the live account through
+      read-only tools, and an on-demand architecture generator that emits draw.io XML and SVG
+      with real AWS icons.
+    </p>
+    <p>
+      Multi-account scanning fans out over cross-account read-only roles, tracked in an SSM
+      registry that the dashboard writes to when an account is onboarded.
+    </p>
+  </Block>
+
+  <Block label="decisions and tradeoffs" heading="Constraints that shaped the design">
+    <dl class="rows">
+      <div class="row">
+        <dt>Provider-agnostic LLM client instead of Bedrock</dt>
+        <dd>
+          Bedrock was blocked account-wide, so the AI client was separated from any single
+          provider. Model requests are the only part of the workflow sent outside the AWS
+          account.
+        </dd>
+      </div>
+      <div class="row">
+        <dt>Serve the dashboard from the API Lambda</dt>
+        <dd>
+          CloudFront was unavailable in this account, so one function serves both the static
+          application and the API. This simplified deployment but coupled content delivery to
+          the application backend. ClearSky replaced it with a CDN.
+        </dd>
+      </div>
+      <div class="row">
+        <dt>Diagram generation as code, not as an AI feature</dt>
+        <dd>
+          The generator is deterministic: same account state, same diagram. An LLM drawing
+          architecture would be plausible and occasionally wrong, which is the worst possible
+          property for a diagram someone is about to trust.
+        </dd>
+      </div>
+      <div class="row">
+        <dt>Create Cognito users with a permanent password</dt>
+        <dd>
+          Invite emails were unreliable in practice. Skipping the invite flow removes a
+          dependency on email delivery from the critical path of getting in at all.
+        </dd>
+      </div>
+    </dl>
+  </Block>
+
+  <Block label="what broke" heading="Partial scans resolved findings from the wrong accounts">
+    <p>
+      <strong>Partial scans silently resolved other accounts' findings.</strong> The reconcile
+      step assumed each run scanned every account, so any unseen finding was marked resolved.
+      Multi-account scans broke that assumption. The fix passes the set of scanned accounts into
+      reconciliation and limits resolution to those accounts.
+    </p>
+    <p>
+      <strong>Bedrock was blocked account-wide</strong> — every model, every API. It read
+      like an IAM problem and was not; it was a plan-level restriction, confirmed through a
+      support ticket. That is what forced the provider-agnostic client above.
+    </p>
+    <p>
+      <strong>The first architecture generator drew arrows through its own boxes.</strong>
+      An orthogonal corridor router produced overlapping edges as soon as the graph had any
+      depth. It was rewritten into tiered columns with barycenter ordering and per-gap
+      channels, later curved beziers. A separate bug had same-named resources in different
+      services colliding into one diagram node, fixed by keying every node on
+      <code>type:id</code> rather than on its name.
+    </p>
+  </Block>
+
+  <Block label="numbers" heading="Scope and outcome">
+    <ul class="metrics">
+      <li><b>106</b><span>tests, detectors covered by fixtures</span></li>
+      <li><b>daily</b><span>scheduled scans with an emailed digest</span></li>
+      <li><b>read-only</b><span>IAM everywhere the AI can reach</span></li>
+    </ul>
+    <p>
+      Cloud Detective became the foundation for ClearSky. The successor retained the detector
+      and diagram concepts while replacing the Lambda-served frontend and account-specific AI
+      integration.
+    </p>
+  </Block>
+</CaseStudy>

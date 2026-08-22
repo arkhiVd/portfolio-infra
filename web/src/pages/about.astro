@@ -1,0 +1,131 @@
+---
+import Base from "../layouts/Base.astro";
+import { site, url } from "../lib/site";
+import { certifications, education, employer, experience, skills } from "../lib/about";
+---
+
+<Base
+  title={`About — ${site.name}`}
+  description="Cloud engineering experience, certifications, technical skills and contact details."
+  current="about"
+>
+  <section class="hero wrap">
+    <h1>About</h1>
+    <p>
+      I am a cloud engineer based in Kerala with professional experience in AWS operations,
+      Linux administration, networking, security and monitoring. I use Terraform and automation
+      to make infrastructure changes repeatable and reviewable.
+    </p>
+    <div class="cta">
+      {site.resume && <a class="btn" href={url(site.resume)}>Download resume (PDF)</a>}
+      <a class={site.resume ? "btn-quiet" : "btn"} href={`mailto:${site.email}`}>
+        {site.resume ? "get in touch →" : "Get in touch"}
+      </a>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <h2>Experience</h2>
+      <span class="label">{employer}</span>
+    </div>
+    {
+      experience.map((role) => (
+        <article class="role">
+          <div class="role-head">
+            <h3>
+              {role.title}, {role.org}
+            </h3>
+            <span class="label">
+              {role.period} · {role.location}
+            </span>
+          </div>
+          <ul class="points">
+            {role.points.map((point) => (
+              <li>{point}</li>
+            ))}
+          </ul>
+        </article>
+      ))
+    }
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <h2>Certifications</h2>
+      <span class="label">{certifications.length} credentials</span>
+    </div>
+    <div class="cert-grid">
+      {
+        certifications.map((cert) => (
+          <a class="cert" href={cert.verify} rel="noopener">
+            <img src={url(cert.image)} alt={cert.imageAlt} width="120" height="120" loading="lazy" />
+            <span>
+              <strong>{cert.name}</strong>
+              <small>{cert.issuer} · verify ↗</small>
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <h2>Skills</h2>
+      <span class="label">tools and platforms</span>
+    </div>
+    <dl class="skills">
+      {
+        skills.map((group) => (
+          <div class="skill-row">
+            <dt class="label">{group.label}</dt>
+            <dd>{group.items}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <h2>Education</h2>
+      <span class="label">{education.finished}</span>
+    </div>
+    <p class="prose">
+      <strong>{education.school}</strong>, {education.place} — {education.degree}
+    </p>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <h2>Get in touch</h2>
+      <span class="label">{site.openToWork ? site.availability : "say hello"}</span>
+    </div>
+    <p class="prose">
+      I am looking for cloud and DevOps roles. Email is the best way to reach me.
+    </p>
+    <ul class="lockups">
+      <li>
+        <span class="lockup-name"><a href={`mailto:${site.email}`}>{site.email}</a></span>
+        <span class="label">email</span>
+      </li>
+      <li>
+        <span class="lockup-name"><a href={site.github} rel="me noopener">github.com/arkhiVd</a></span>
+        <span class="label">code</span>
+      </li>
+      {
+        site.linkedin && (
+          <li>
+            <span class="lockup-name">
+              <a href={site.linkedin} rel="me noopener">
+                linkedin
+              </a>
+            </span>
+            <span class="label">profile</span>
+          </li>
+        )
+      }
+    </ul>
+  </section>
+</Base>
