@@ -1,202 +1,141 @@
-# portfolio-infra — roadmap
+# Portfolio roadmap
 
-Site rebuild v3. Status: **Phases 0-3 built and in review (PRs #15-#18).**
+## Current direction
 
-Nothing merges to `main` until the whole site has been verified locally — Aravind's call.
+The Astro rebuild is deployed. PR #18 merged on 2026-08-22, followed by the
+response-header IAM fix in #24 and dependency updates in #25. Historical phases 0–8
+can be read in Git history; their unchecked boxes were not evidence of missing code.
+Outstanding verification remains in `TASKS.md`.
 
-One phase = one PR = one review. The live site keeps serving from `site/` at the root
-until Phase 8; everything before that lands under the `preview/` key prefix, so no phase
-can degrade the published site.
+The author approved the expansion on 2026-09-08. Preserve the recruiter-first home
+and existing projects. Add Blog, curated public Homelab and one How I work section.
+Its overview, AI workflow, setup/tools and reusable skills share one entry point.
 
-## Phase 0 — guardrails and design draft
+One phase = one PR and a fresh review. No site changes in the planning PR. No merge,
+apply or infrastructure redesign is authorized by approval of this roadmap.
+There is no active hosted preview. Use local built-site previews and screenshots.
 
-**Outcome:** the repo carries its own contract, and the design direction is written down
-before any pixel is built.
+## Phase 9: reconcile state and plan the content expansion
 
-**Included:** `AGENTS.md`, `CLAUDE.md`, `SPEC.md`, `ROADMAP.md`, `TASKS.md`,
-`DESIGN.md` (DRAFT), `.github/pull_request_template.md`. No code, no Terraform changes.
+**Class:** Standard. **Current phase.**
 
-**Dependencies and risks:** none — docs only. Risk is writing requirements nobody
-approved, so the exit gate is human approval, not a green check.
+Scope:
+- Start from fetched `main`, preserving existing working-tree edits and the design skill.
+- Reconcile README, AGENTS, SPEC, ROADMAP, TASKS and conflicting design guidance.
+- Record the content hierarchy, Git source model and public/private publication boundary.
+- Inventory candidate source material and outstanding author decisions in TASKS.
+- Use one small read-only audit and one fresh reviewer. Coordinator owns document edits;
+  no competing writers, nested delegation or repeated full-context planning sessions.
 
-**Exit criteria:**
-- [ ] Pinned versions in `SPEC.md` verified against upstream on the day of writing
-- [ ] Human approves `SPEC.md` and the `DESIGN.md` draft
+Exit criteria:
+- [x] Docs distinguish deployed code, historical evidence and unverified claims.
+- [x] The approved hierarchy and Git/publication rules agree across the documents.
+- [x] No application, infrastructure or dependency changes enter this phase.
+- [x] Fresh-context review has no unresolved actionable findings.
+- [x] Validation results and any blocked gates are recorded honestly.
 
-**Validation:**
-- Automated: `terraform fmt -check -recursive` (unchanged), `git diff --check`
-- Manual: Aravind reads `SPEC.md` and `DESIGN.md` and says yes
+Validation: `git diff --check`, source/config comparison, focused upstream/live checks,
+full available local gate per AGENTS. Review Markdown links and skill provenance.
+Rollback: revert this docs/skill PR; production assets are unchanged.
 
-## Phase 1 — mockup spike: choose the design for real
+## Phase 10: content layouts and navigation review
 
-**Outcome:** the design is chosen by looking at it on a real screen and a real phone, not
-by approving hex values in a document.
+**Class:** Standard. Depends on Phase 9.
 
-**Included:** two plain static HTML variants (no Astro yet) of *home + one case study*,
-both evidence-first dark, deployed under `preview/a/` and `preview/b/`; the
-`local.mime_types` extension needed to serve them; `DESIGN.md` frozen from the winner.
+Scope: local wireframes/mockups for homepage additions, blog index/article, Homelab
+and How I work. Use actual candidate content rather than filler. Keep the current
+fonts, ocean treatment and recruiter-first introduction. Compare compact navigation
+options; do not squeeze every future destination into the current mobile pill.
 
-- **A — Console:** denser grid, mono labels, 2-up case cards with architecture thumbnails,
-  cyan accent, tighter spacing scale.
-- **B — Editorial dark:** larger type, numbered index instead of a card grid, full-bleed
-  architecture figure, off-white/amber accent, more air.
+Exit criteria:
+- [ ] Author approves 1280 and 375 px layouts, navigation and reading measure.
+- [ ] Projects/resume remain prominent; new material follows selected work.
+- [ ] How I work uses internal section links, not separate Uses/Skills primary links.
+- [ ] Decisions are recorded in DESIGN before production UI implementation.
 
-**Dependencies and risks:** adds S3 objects under a new prefix — additive, no destroys.
-Both variants may be rejected; a second spike is far cheaper than rebuilding eight pages.
+Validation: screenshots, keyboard/no-JS navigation review, layout checks at 320 px.
+No mockup is uploaded by Terraform. Any spike files stay outside `web/public/` and
+production routes. Rollback: discard the mockup change; no production effect.
 
-**Exit criteria:**
-- [ ] Both variants reachable at `https://www.aravindakrishnan.cloud/preview/{a,b}/`
-- [ ] Reviewed on desktop **and** phone
-- [ ] One variant chosen (or both rejected and re-spiked); `DESIGN.md` frozen from the winner
-- [ ] Losing variant deleted in the same PR
+## Phase 11: blog foundation and one real post
 
-**Validation:**
-- Automated: `terraform fmt -check -recursive`, `terraform validate`, `terraform plan`
-  (creates only, zero destroys, stated in the PR)
-- Manual: both URLs opened at 1280 and 375 px, screenshots attached
+**Class:** Standard. Depends on the layout decision.
 
-## Phase 2 — Astro scaffold, design system, build pipeline
+Scope: Markdown collection/schema, blog index, article template, one author-approved
+post, RSS, sitemap inclusion and links from home/navigation. Start without tag pages,
+search, comments, newsletter service or client framework. Use `.html` routes compatible
+with the current private S3 origin.
 
-**Outcome:** a styled shell of the chosen design is live under `preview/`, built by CI.
+Candidate first post: the portfolio's two-CDN caching incident. The existing portfolio
+case study and vault project note provide sources. The author must confirm the draft,
+chronology and any first-person claims before publication; do not invent results.
 
-**Included:** `web/` Astro project pinned per `SPEC.md`; `tokens.css` implementing the
-frozen `DESIGN.md`; `Base.astro` (nav, footer, `<head>`, skip link); self-hosted
-Instrument Sans + JetBrains Mono woff2; project icons from local SVG path data (replacing
-the devicon CDN); `frontend.tf` uploading `web/dist` to `preview/`; `setup-node` +
-`npm ci` + `npm run build` added to `plan.yml` and `apply.yml` **before** `terraform init`;
-`.nvmrc`; `.gitignore` for `web/node_modules` and `web/dist`.
+Exit criteria:
+- [ ] Article and metadata approved; links and factual claims trace to sources.
+- [ ] Draft and invalid-metadata fixtures prove exclusion and schema enforcement.
+- [ ] Feed validates and contains only published posts, with correct canonical links.
+- [ ] New routes, sitemap and feed work from the built output without JavaScript.
+- [ ] MIME map covers every new emitted extension; avoid `.md` downloads unless typed.
+- [ ] Full local gate, independent review and UI acceptance evidence recorded.
 
-**Dependencies and risks:** Phase 1 frozen `DESIGN.md`. The real risk is the build/plan
-ordering — if Terraform runs before the build, the plan is computed against absent output.
-Second risk is `local.mime_types`: anything unmapped ships as `binary/octet-stream` and
-fonts or `sitemap.xml` break silently.
+Validation: clean install/lint/build, automated content/link/draft tests, feed XML check,
+1280/375 screenshots, axe/no-JS/keyboard and Lighthouse checks, Terraform plan with
+explicit add/change/destroy/replace counts. After human merge, verify live URLs and MIME.
+Rollback: revert the phase PR; previous pages remain. Review expected object removals.
 
-**Exit criteria:**
-- [ ] `/preview/` serves the styled shell over CloudFront
-- [ ] `terraform plan` pasted in the PR with creates/changes/destroys counted and stated
-- [ ] Zero change to objects served at the site root
-- [ ] Fonts load from the site's own origin (verified in the network panel)
+## Phase 12: curated public homelab overview and diagrams
 
-**Validation:**
-- Automated: `npm ci`, `npm run build`, `terraform fmt/validate/plan`, `actionlint`
-- Manual: `/preview/?z=$RANDOM` at 1280 and 375 px; network panel shows no third-party origin
+**Class:** Standard unless access/IAM/networking changes are proposed, which are out of scope.
+Depends on the content/layout foundation.
 
-## Phase 3 — home and projects index
+Scope: overview plus a small set of diagram views chosen after source review. Start
+with system context and networking; add storage/backups or AI tooling only with verified
+material. Version sanitized Mermaid sources and reviewed local SVGs or a pinned renderer.
+Do not embed the raw private atlas HTML or expose live homelab endpoints.
 
-**Outcome:** the two pages a recruiter actually lands on are done.
+Exit criteria:
+- [ ] Inspect live topology and reconcile relevant private atlas drift without changing
+      services or overwriting existing atlas work. Record source revision/review date privately.
+- [ ] Author approves the public service list and publication boundary before export.
+- [ ] Review source AND output for private identifiers, secrets and access details.
+- [ ] Diagrams have captions, text equivalents and full-size local links; readable at 375 px.
+- [ ] Site builds from a clean clone without the private atlas, SSH or local vault.
+- [ ] Full local gate, fresh review and screenshots pass before human merge.
 
-**Included:** hero, proof chips, `CaseCard` component, projects index (all featured
-projects), visitor counter ported against `window.VISITOR_API`.
+Validation: privacy checklist, source/export comparison or reproducible render check,
+link/no-JS/accessibility tests, MIME check and full build/Terraform plan. A secret scan
+alone is not privacy review. Rollback: revert and invalidate affected objects. Since Git
+history is public, rollback cannot undo disclosure; stop before committing sensitive content.
 
-**Dependencies and risks:** Phase 2. Risk: unsourced numbers — every claim needs a source.
+## Phase 13: How I work
 
-**Exit criteria:**
-- [ ] Both pages live under `preview/`
-- [ ] Visitor count increments on the preview URL
-- [ ] Every number on the pages listed in the PR with its source
-- [ ] Pages render with JavaScript disabled
+**Class:** Standard. Depends on the previous content phases.
 
-**Validation:**
-- Automated: build + plan
-- Manual: screenshots at 1280 and 375 px; JS-disabled check; counter observed incrementing
+Scope: one Markdown-backed page with overview, AI workflow, setup/tools and a small
+selection of reusable skills. Link a source-controlled, sanitized process diagram.
+Separate current reference material from dated blog accounts of changes.
 
-## Phase 4 — about, resume, contact
+Cover the real sequence: idea, context, planning, implementation, validation, independent
+review and human deployment approval. Explain tool choices and failure modes. Avoid a
+model-ranking scoreboard or undocumented claims about subscription savings.
 
-**Outcome:** a recruiter can leave with the resume.
+Exit criteria:
+- [ ] Author verifies current tools, hardware and workflow; page carries a reviewed date.
+- [ ] No private configs, logs, sessions or personal paths are copied into public examples.
+- [ ] Every selected skill has a purpose, example, source/license and adaptation notes;
+      distribution/install commands are tested in a disposable directory where offered.
+- [ ] Download MIME types and source references are correct. No fabricated skill ownership.
+- [ ] One How I work entry point, with internal links and no empty subsections.
+- [ ] Full local gate, fresh review and desktop/mobile acceptance checks pass.
 
-**Included:** about page (experience, certifications as uniform mono-line lockups, skills),
-`resume.pdf` served from the site with a visible download CTA, contact block
-(mailto + GitHub + LinkedIn, subject to the open question in `SPEC.md`).
+Rollback: revert the phase PR and invalidate affected objects; disclosure has the same
+public-history caveat as the atlas. Add child pages later only when content justifies them.
 
-**Dependencies and risks:** the LaTeX source lives outside this repo — the compiled
-`web/public/resume.pdf` is committed here, so it is public and permanent in git history;
-check its contents before committing. Needs the LinkedIn URL from Aravind (still open in
-`SPEC.md`); `.pdf` must be added to `local.mime_types`.
+## Delegation budget
 
-**Exit criteria:**
-- [ ] `curl -sI` on the resume URL returns `content-type: application/pdf`
-- [ ] Download works from a phone browser
-- [ ] Certification marks are drawn from one consistent visual system, not vendor PNGs
-
-**Validation:**
-- Automated: build + plan; mime map covers `.pdf`
-- Manual: download on desktop and phone; screenshots
-
-## Phase 5 — case-study template and first two deep dives
-
-**Outcome:** the format that proves engineering judgment exists and is used twice.
-
-**Included:** `CaseStudy.astro` — problem → architecture → decisions and tradeoffs → what
-broke and how it was fixed → numbers; architecture diagrams as captioned figures.
-First two: **ClearSky** and **Cloud Detective**.
-
-**Dependencies and risks:** source material is in the vault (`Projects/*.md`) — link to
-the repos, do not duplicate the vault into the site.
-
-**Exit criteria:**
-- [ ] Both pages live under `preview/`, each with at least one real failure-and-fix section
-- [ ] Diagram figures legible at 375 px
-- [ ] Numbers sourced in the PR
-
-**Validation:**
-- Automated: build + plan
-- Manual: read end to end on a phone; screenshots
-
-## Phase 6 — remaining deep dives
-
-**Outcome:** the featured project set is complete.
-
-**Included:** this portfolio rebuild (two-CDN cache trap, least-privilege IAM breaking
-`terraform refresh`, the OIDC `sub`-format trap), AppStack, CDC pipeline. Split into two
-PRs if the diff outgrows a ten-minute review.
-
-**Exit criteria:**
-- [ ] Each featured project either has a deep dive or is deliberately listed without one
-- [ ] No placeholder or "coming soon" content ships
-
-**Validation:** build + plan; read-through; screenshots.
-
-## Phase 7 — performance, accessibility, SEO gates
-
-**Outcome:** the quality bar is enforced by checks, not hope.
-
-**Included:** per-page OG and Twitter meta, `sitemap.xml`, `robots.txt`, JSON-LD `Person`,
-and a CloudFront `aws_cloudfront_response_headers_policy` (HSTS, CSP,
-X-Content-Type-Options, Referrer-Policy). `gitleaks` and Dependabot added to CI.
-
-**Dependencies and risks:** **Risky — a wrong CSP silently breaks the site.** Write the
-policy against the actual asset inventory, verify on `preview/` with a clean console
-*before* attaching it to the default cache behavior. Rollback: detach the policy, re-apply.
-
-**Exit criteria:**
-- [ ] Lighthouse ≥95 mobile on all four categories, raw output pasted in the PR
-- [ ] Zero console errors on every page with the policy attached
-- [ ] `axe` scan clean; keyboard walk-through recorded
-- [ ] Social preview verified by rendering the OG image and tags
-
-**Validation:**
-- Automated: `npx lighthouse`, `axe`, build + plan, `actionlint`
-- Manual: console check per page on the real domain, social-card preview
-
-## Phase 8 — cutover
-
-**Outcome:** the new site serves the root; the old one is gone.
-
-**Included:** Astro `base` → `/`; `frontend.tf` uploads `web/dist` at the root and drops
-the `site/` upload; legacy `site/` deleted; full `/*` CloudFront invalidation.
-
-**Dependencies and risks:** **Risky — this deletes S3 objects and changes what the domain
-serves.** Rollback: revert the PR; the old `site/` returns from git history and re-applies.
-
-**Exit criteria:**
-- [ ] `terraform plan` read line by line; destroy count expected and stated in the PR
-- [ ] Live domain verified cache-busted (`?z=$RANDOM`) at 1280 and 375 px
-- [ ] `terraform plan` empty after apply
-- [ ] `preview/` prefix removed or clearly stale-marked
-- [ ] Vault `Projects/portfolio.md`, `Tracker/log/`, and resume bullets updated
-
-**Validation:**
-- Automated: `terraform plan -detailed-exitcode`, Lighthouse re-run on the root domain
-- Manual: full click-through of every page and link on the live domain, from a phone and a
-  desktop, with cache busting; `curl -sI` confirms `server: AmazonS3` (Cloudflare stays out
-  of the `www` path)
+Use Pi through Herdr with the `openai-codex` subscription provider. Luna at low thinking
+handles bounded inventory checks. Terra can handle normal implementation/review. Use Sol
+or Astra only for a demonstrated blocker requiring deeper reasoning, not by default.
+No automatic retries, nested delegation or idle polling loops. Each agent gets a narrow
+file list, explicit read/write ownership and a concise result limit. One coordinator
+maintains the phase record; a fresh reviewer checks the final diff.
