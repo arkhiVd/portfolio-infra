@@ -44,8 +44,9 @@ the complete page run then met the same threshold.
 
 A fresh Sol-medium review identified missing RSS discovery, missing committed Lighthouse
 evidence and stale acceptance-status wording. RSS autodiscovery and a visible feed link,
-content tests, Lighthouse evidence and SPEC status were added. Reviewer confirmation and
-latest CI are required before final human approval.
+content tests, Lighthouse evidence and SPEC status were added. The reviewer confirmed all
+three findings resolved with no new actionable blocker. Latest CI is still required before
+final human approval.
 
 Live URLs, headers, MIME behavior, visitor API behavior, CDN Lighthouse and empty
 post-deploy plan cannot be checked until the human approves merge and CI deploys. Monthly

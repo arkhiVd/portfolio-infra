@@ -97,7 +97,8 @@ recaptured. `docs/evidence/browser-results.json` records the final page matrix.
 
 ## Remaining approval gates
 
-- [ ] Run final fresh-context independent review against `origin/main..HEAD` and fix findings.
+- [x] Fresh-context Sol-medium review against `origin/main..HEAD`: three findings fixed;
+      reviewer confirmed no unresolved actionable blocker.
 - [ ] Commit/push Phase 14 and open its draft PR.
 - [ ] Confirm CI green on the latest commit of every stacked PR.
 - [ ] Human reviews screenshots, article, Homelab boundary, How I work and plan counts.

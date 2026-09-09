@@ -147,7 +147,7 @@ Exit criteria:
 - [x] `npm audit` reports zero known vulnerabilities.
 - [x] Terraform plan is read line by line with expected counts and no replacements.
 - [x] Checkov findings are triaged without blanket suppression.
-- [ ] Fresh independent review has no unresolved actionable findings.
+- [x] Fresh independent review has no unresolved actionable findings.
 - [ ] CI is green on every stacked PR at its latest commit.
 - [ ] Human gives final visual and merge approval.
 
