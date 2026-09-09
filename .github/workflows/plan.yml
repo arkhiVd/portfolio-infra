@@ -5,7 +5,7 @@ name: terraform-plan
 # plan back to the PR. It CANNOT mutate infrastructure.
 on:
   pull_request:
-    branches: [main]
+    branches: [main, feat/content-*]
 
 # OIDC needs id-token: write. Everything else least-privilege.
 permissions:
@@ -54,7 +54,7 @@ jobs:
         run: |
           npm ci
           npm run lint
-          npm run build
+          npm run test
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1

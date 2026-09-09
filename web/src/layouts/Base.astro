@@ -9,10 +9,11 @@ import { site, url } from "../lib/site";
 interface Props {
   title: string;
   description?: string;
-  current?: "home" | "projects" | "about";
+  current?: "home" | "projects" | "about" | "blog";
+  article?: { published: string; updated?: string };
 }
 
-const { title, description = site.description, current } = Astro.props;
+const { title, description = site.description, current, article } = Astro.props;
 const canonicalPath = Astro.url.pathname.endsWith("/index.html")
   ? Astro.url.pathname.slice(0, -"index.html".length)
   : Astro.url.pathname;
@@ -25,6 +26,16 @@ const personSchema = {
   jobTitle: site.role,
   email: `mailto:${site.email}`,
   sameAs: [site.github, site.linkedin],
+};
+const articleSchema = article && {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  datePublished: article.published,
+  ...(article.updated && { dateModified: article.updated }),
+  mainEntityOfPage: canonical,
+  author: { "@type": "Person", name: site.name },
 };
 ---
 
@@ -47,12 +58,15 @@ const personSchema = {
     <link rel="icon" href={url("/favicon.svg")} type="image/svg+xml" />
     <link rel="canonical" href={canonical} />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={article ? "article" : "website"} />
+    {article && <meta property="article:published_time" content={article.published} />}
+    {article?.updated && <meta property="article:modified_time" content={article.updated} />}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary" />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    {articleSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(articleSchema)} />}
 
     {/* Self-hosted — no Google Fonts round-trip, no third-party origin sees a visitor. */}
     <link

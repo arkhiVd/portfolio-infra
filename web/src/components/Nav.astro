@@ -2,7 +2,7 @@
 import { site, url } from "../lib/site";
 
 interface Props {
-  current?: "home" | "projects" | "about";
+  current?: "home" | "projects" | "about" | "blog";
 }
 const { current } = Astro.props;
 ---
@@ -27,6 +27,7 @@ const { current } = Astro.props;
         <a href={url("/")} aria-current={current === "home" ? "page" : undefined}>home</a>
         <a href={url("/projects")} aria-current={current === "projects" ? "page" : undefined}>projects</a>
         <a href={url("/about")} aria-current={current === "about" ? "page" : undefined}>about</a>
+        <a href={url("/blog")} aria-current={current === "blog" ? "page" : undefined}>blog</a>
       </nav>
     </div>
   </div>

@@ -1,0 +1,27 @@
+---
+import Base from "../layouts/Base.astro";
+import { getPublishedBlogPosts } from "../lib/content";
+import { site, url } from "../lib/site";
+
+const posts = await getPublishedBlogPosts();
+---
+
+<Base title={`Blog — ${site.name}`} description="Notes on operating cloud infrastructure." current="blog">
+  <section class="blog-index wrap">
+    <p class="label">blog</p>
+    <h1>Notes from the work</h1>
+    <p class="lede">Dated notes on decisions and the maintenance that follows.</p>
+    <div class="project-list" aria-label="Blog posts">
+      {posts.map((post) => (
+        <a class="blog-row" href={url(`/blog/${post.id}`)}>
+          <time datetime={post.data.published}>{post.data.published}</time>
+          <span>
+            <h2>{post.data.title}</h2>
+            <p>{post.data.description}</p>
+          </span>
+          <span class="project-arrow" aria-hidden="true">→</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>
