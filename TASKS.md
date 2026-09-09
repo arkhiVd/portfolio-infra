@@ -11,8 +11,8 @@ The homepage remains recruiter-focused; Blog, Homelab and How I work follow sele
 | 10, layout decision | `feat/content-layout` | #28 | CI passed before later screenshot refresh |
 | 11, Markdown blog and RSS | `feat/content-blog` | #29 | CI passed before later shared changes |
 | 12, curated Homelab | `feat/content-homelab` | #30 | CI passed |
-| 13, How I work and public skill | `feat/content-workflow` | #31 | CI pending/latest status to confirm |
-| 14, performance/security validation | `feat/content-validation` | not opened yet | local gate and review in progress |
+| 13, How I work and public skill | `feat/content-workflow` | #31 | CI passed |
+| 14, performance/security validation | `feat/content-validation` | #32 | CI and fresh review passed |
 
 Final merge order is #27, #28, #29, #30, #31, then Phase 14. Each PR base must be moved
 to `main` after its parent merges, or the phases may be combined only with explicit human
@@ -99,8 +99,8 @@ recaptured. `docs/evidence/browser-results.json` records the final page matrix.
 
 - [x] Fresh-context Sol-medium review against `origin/main..HEAD`: three findings fixed;
       reviewer confirmed no unresolved actionable blocker.
-- [ ] Commit/push Phase 14 and open its draft PR.
-- [ ] Confirm CI green on the latest commit of every stacked PR.
+- [x] Phase 14 committed, pushed and opened as draft PR #32.
+- [x] CI plan passed on PRs #27 and #29–#32; docs-only #28 has no reported check.
 - [ ] Human reviews screenshots, article, Homelab boundary, How I work and plan counts.
 - [ ] Human explicitly approves merge order. Agent still does not merge.
 - [ ] After human merge/deployment: cache-busted live click-through, real visitor success

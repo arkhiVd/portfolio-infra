@@ -148,7 +148,7 @@ Exit criteria:
 - [x] Terraform plan is read line by line with expected counts and no replacements.
 - [x] Checkov findings are triaged without blanket suppression.
 - [x] Fresh independent review has no unresolved actionable findings.
-- [ ] CI is green on every stacked PR at its latest commit.
+- [x] CI plan passed on PRs #27 and #29–#32; docs-only PR #28 reports no checks.
 - [ ] Human gives final visual and merge approval.
 
 Rollback: revert the final validation commit to restore the previous shader and dependency
