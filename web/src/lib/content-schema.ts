@@ -17,7 +17,7 @@ export const referenceSchema = z.object({
 });
 
 export const referenceId = (entry: string) => {
-  const id = entry.replace(/\.md$/, "").split("/").at(-1)!;
+  const id = /^([a-z0-9]+(?:-[a-z0-9]+)*)\.md$/.exec(entry)?.[1];
   if (id !== "homelab" && id !== "how-i-work") {
     throw new Error(`Reference filename must be homelab or how-i-work: ${entry}`);
   }
@@ -25,8 +25,8 @@ export const referenceId = (entry: string) => {
 };
 
 export const blogId = (entry: string) => {
-  const id = entry.replace(/\.md$/, "").split("/").at(-1)!;
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)) {
+  const id = /^([a-z0-9]+(?:-[a-z0-9]+)*)\.md$/.exec(entry)?.[1];
+  if (!id) {
     throw new Error(`Blog filename must be a lowercase, dash-separated ID: ${entry}`);
   }
   return id;

@@ -12,7 +12,7 @@
     const vertex = `attribute vec2 p; void main(){ gl_Position = vec4(p,0.,1.); }`;
     const fragment = `
 precision highp float;
-uniform vec2 res; uniform float t1; uniform float t2;
+uniform vec2 res; uniform float t1; uniform float t2; uniform float pixelScale;
 float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453123); }
 float vnoise(vec2 p){
   vec2 i=floor(p), f=fract(p); vec2 u=f*f*(3.-2.*f);
@@ -22,7 +22,7 @@ float fbm(vec2 p){ return vnoise(p)*0.55 + vnoise(p*2.3+7.7)*0.3 + vnoise(p*4.9+
 void main(){
   vec2 uv = gl_FragCoord.xy / res;
   float asp = res.x / res.y;
-  float amp = 26.0 / res.y;
+  float amp = 26.0 * pixelScale / res.y;
   float breathe1 = 0.78 + 0.22 * sin(t1*1.7 + 1.2);
   float breathe2 = 0.78 + 0.22 * sin(t1*1.3 + 4.0);
   float swell = fbm(uv*1.4 + vec2(t1*0.25, -t1*0.18));
@@ -74,28 +74,48 @@ void main(){
     const resolution = gl.getUniformLocation(program, "res");
     const timeOne = gl.getUniformLocation(program, "t1");
     const timeTwo = gl.getUniformLocation(program, "t2");
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      gl.uniform2f(resolution, canvas.width, canvas.height);
-    };
-    resize();
-    window.addEventListener("resize", resize);
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const scaleUniform = gl.getUniformLocation(program, "pixelScale");
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
-    const draw = (now: number) => {
+    let lastPaint = -Infinity;
+    let pageHidden = false;
+    const paint = (now: number) => {
       const seconds = now / 1000;
       gl.uniform1f(timeOne, seconds * (Math.PI * 2 / 40));
       gl.uniform1f(timeTwo, seconds * (Math.PI * 2 / 12));
       gl.drawArrays(gl.TRIANGLES, 0, 3);
-      if (!reduced) frame = requestAnimationFrame(draw);
     };
-    if (reduced) draw(10000);
-    else frame = requestAnimationFrame(draw);
-    window.addEventListener("pagehide", () => {
+    const tick = (now: number) => {
+      if (document.hidden || pageHidden || motion.matches) return;
+      // Slow ambient motion does not need a full-resolution frame at display refresh rate.
+      if (now - lastPaint >= 1000 / 12) {
+        paint(now);
+        lastPaint = now;
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    const resume = () => {
       cancelAnimationFrame(frame);
-      window.removeEventListener("resize", resize);
-    }, { once: true });
+      if (document.hidden || pageHidden) return;
+      lastPaint = -Infinity;
+      if (motion.matches) paint(10000);
+      else frame = requestAnimationFrame(tick);
+    };
+    const resize = () => {
+      const scale = Math.min(0.5, 640 / window.innerWidth);
+      canvas.width = Math.max(1, Math.round(window.innerWidth * scale));
+      canvas.height = Math.max(1, Math.round(window.innerHeight * scale));
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.uniform2f(resolution, canvas.width, canvas.height);
+      // Keep the shader's warp distance in CSS pixels despite the smaller drawing buffer.
+      gl.uniform1f(scaleUniform, canvas.height / window.innerHeight);
+      resume();
+    };
+    window.addEventListener("resize", resize);
+    motion.addEventListener("change", resume);
+    document.addEventListener("visibilitychange", resume);
+    window.addEventListener("pagehide", () => { pageHidden = true; cancelAnimationFrame(frame); });
+    window.addEventListener("pageshow", () => { pageHidden = false; resume(); });
+    resize();
   }
 </script>

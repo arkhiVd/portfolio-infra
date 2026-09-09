@@ -131,6 +131,29 @@ Exit criteria:
 Rollback: revert the phase PR and invalidate affected objects; disclosure has the same
 public-history caveat as the atlas. Add child pages later only when content justifies them.
 
+## Phase 14: final validation and merge preparation
+
+**Class:** Standard. Depends on Phases 9–13. No production apply.
+
+Scope: fix validation failures found by the complete built-site gate, update vulnerable
+locked dependencies, preserve the approved ocean design at lower rendering cost, record
+Checkov disposition and prepare the stacked PRs for final human approval.
+
+Exit criteria:
+- [x] Clean pinned-Node install, lint, content tests and production build pass.
+- [x] Every non-redirect page passes local links, no-JS content, visible keyboard focus,
+      axe, third-party-request and 320–2560 px overflow checks.
+- [x] Every non-redirect page scores at least 95 in all four Lighthouse categories.
+- [x] `npm audit` reports zero known vulnerabilities.
+- [x] Terraform plan is read line by line with expected counts and no replacements.
+- [x] Checkov findings are triaged without blanket suppression.
+- [ ] Fresh independent review has no unresolved actionable findings.
+- [ ] CI is green on every stacked PR at its latest commit.
+- [ ] Human gives final visual and merge approval.
+
+Rollback: revert the final validation commit to restore the previous shader and dependency
+lock. Content PR rollback is phase-by-phase in reverse order. No agent merges or applies.
+
 ## Delegation budget
 
 Use Pi through Herdr with the `openai-codex` subscription provider. Luna at low thinking

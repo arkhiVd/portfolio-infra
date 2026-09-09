@@ -1,0 +1,340 @@
+[
+  {
+    "route": "/about.html",
+    "lighthouseVersion": "13.4.1",
+    "fetchTime": "2026-09-09T15:15:36.291Z",
+    "formFactor": "mobile",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    },
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "first-contentful-paint": 1029.92895,
+      "largest-contentful-paint": 1728.8579,
+      "total-blocking-time": 15,
+      "cumulative-layout-shift": 0,
+      "speed-index": 1029.92895
+    }
+  },
+  {
+    "route": "/blog/two-cdn-cache-trap.html",
+    "lighthouseVersion": "13.4.1",
+    "fetchTime": "2026-09-09T15:16:12.175Z",
+    "formFactor": "mobile",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    },
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "first-contentful-paint": 902.5105000000001,
+      "largest-contentful-paint": 1502.5105,
+      "total-blocking-time": 0,
+      "cumulative-layout-shift": 0,
+      "speed-index": 902.5105000000001
+    }
+  },
+  {
+    "route": "/blog.html",
+    "lighthouseVersion": "13.4.1",
+    "fetchTime": "2026-09-09T15:16:00.333Z",
+    "formFactor": "mobile",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    },
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "first-contentful-paint": 902.7145,
+      "largest-contentful-paint": 1427.7145,
+      "total-blocking-time": 0,
+      "cumulative-layout-shift": 0,
+      "speed-index": 902.7145
+    }
+  },
+  {
+    "route": "/homelab.html",
+    "lighthouseVersion": "13.4.1",
+    "fetchTime": "2026-09-09T15:16:24.387Z",
+    "formFactor": "mobile",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    },
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "first-contentful-paint": 903.6302000000001,
+      "largest-contentful-paint": 1653.6302,
+      "total-blocking-time": 0,
+      "cumulative-layout-shift": 0,
+      "speed-index": 903.6302000000001
+    }
+  },
+  {
+    "route": "/how-i-work.html",
+    "lighthouseVersion": "13.4.1",
+    "fetchTime": "2026-09-09T15:16:36.440Z",
+    "formFactor": "mobile",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    },
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "first-contentful-paint": 1025.7910000000002,
+      "largest-contentful-paint": 1653.5820000000003,
+      "total-blocking-time": 4,
+      "cumulative-layout-shift": 0,
+      "speed-index": 2402.1062968317674
+    }
+  },
+  {
+    "route": "/index.html",
+    "lighthouseVersion": "13.4.1",
+    "fetchTime": "2026-09-09T15:15:24.185Z",
+    "formFactor": "mobile",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    },
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "first-contentful-paint": 905.2195999999999,
+      "largest-contentful-paint": 1505.2196,
+      "total-blocking-time": 0,
+      "cumulative-layout-shift": 0,
+      "speed-index": 905.2195999999999
+    }
+  },
+  {
+    "route": "/projects/appstack.html",
+    "lighthouseVersion": "13.4.1",
+    "fetchTime": "2026-09-09T15:17:14.506Z",
+    "formFactor": "mobile",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    },
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "first-contentful-paint": 1118.3018499999998,
+      "largest-contentful-paint": 1652.6037,
+      "total-blocking-time": 0,
+      "cumulative-layout-shift": 0,
+      "speed-index": 1118.3018499999998
+    }
+  },
+  {
+    "route": "/projects/cdc.html",
+    "lighthouseVersion": "13.4.1",
+    "fetchTime": "2026-09-09T15:17:26.776Z",
+    "formFactor": "mobile",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    },
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "first-contentful-paint": 902.7204999999999,
+      "largest-contentful-paint": 1502.7205,
+      "total-blocking-time": 0,
+      "cumulative-layout-shift": 0,
+      "speed-index": 902.7204999999999
+    }
+  },
+  {
+    "route": "/projects/cicd-containers.html",
+    "lighthouseVersion": "13.4.1",
+    "fetchTime": "2026-09-09T15:17:51.589Z",
+    "formFactor": "mobile",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    },
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "first-contentful-paint": 901.8955000000001,
+      "largest-contentful-paint": 1501.8955,
+      "total-blocking-time": 0,
+      "cumulative-layout-shift": 0,
+      "speed-index": 901.8955000000001
+    }
+  },
+  {
+    "route": "/projects/clearsky.html",
+    "lighthouseVersion": "13.4.1",
+    "fetchTime": "2026-09-09T15:16:49.706Z",
+    "formFactor": "mobile",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    },
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "first-contentful-paint": 1113.15885,
+      "largest-contentful-paint": 1577.3177,
+      "total-blocking-time": 0,
+      "cumulative-layout-shift": 0,
+      "speed-index": 1113.15885
+    }
+  },
+  {
+    "route": "/projects/cloud-detective.html",
+    "lighthouseVersion": "13.4.1",
+    "fetchTime": "2026-09-09T15:17:02.107Z",
+    "formFactor": "mobile",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    },
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "first-contentful-paint": 1019.5505,
+      "largest-contentful-paint": 1653.101,
+      "total-blocking-time": 13,
+      "cumulative-layout-shift": 0,
+      "speed-index": 1019.5505
+    }
+  },
+  {
+    "route": "/projects/portfolio.html",
+    "lighthouseVersion": "13.4.1",
+    "fetchTime": "2026-09-09T15:17:39.254Z",
+    "formFactor": "mobile",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    },
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "first-contentful-paint": 937.19025,
+      "largest-contentful-paint": 1502.3805,
+      "total-blocking-time": 5,
+      "cumulative-layout-shift": 0,
+      "speed-index": 958.3173212711861
+    }
+  },
+  {
+    "route": "/projects.html",
+    "lighthouseVersion": "13.4.1",
+    "fetchTime": "2026-09-09T15:15:48.388Z",
+    "formFactor": "mobile",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    },
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "first-contentful-paint": 965.2911,
+      "largest-contentful-paint": 1577.5822000000003,
+      "total-blocking-time": 0,
+      "cumulative-layout-shift": 0,
+      "speed-index": 965.2911
+    }
+  }
+]

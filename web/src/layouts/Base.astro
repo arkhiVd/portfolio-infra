@@ -57,6 +57,7 @@ const articleSchema = article && {
     <meta name="description" content={description} />
     <link rel="icon" href={url("/favicon.svg")} type="image/svg+xml" />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title={`${site.name} blog`} href={url("/feed.xml")} />
 
     <meta property="og:type" content={article ? "article" : "website"} />
     {article && <meta property="article:published_time" content={article.published} />}
