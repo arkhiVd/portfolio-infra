@@ -11,6 +11,7 @@ locals {
     "png"   = "image/png",
     "ico"   = "image/vnd.microsoft.icon",
     "txt"   = "text/plain",
+    "md"    = "text/markdown; charset=utf-8",
     "svg"   = "image/svg+xml",
     "webp"  = "image/webp",
     "avif"  = "image/avif",

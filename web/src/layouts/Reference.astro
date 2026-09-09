@@ -9,6 +9,17 @@ const { id, title, description, reviewed } = Astro.props;
     <h1>{title}</h1>
     <time datetime={reviewed}>Reviewed {reviewed}</time>
     <p class="reading-summary">{description}</p>
+    {id === "how-i-work" && <nav class="reference-nav" aria-label="On this page">
+      <a href="#overview">overview</a>
+      <a href="#ai-workflow">ai workflow</a>
+      <a href="#setup-and-tools">setup and tools</a>
+      <a href="#reusable-skills">reusable skills</a>
+    </nav>}
     <slot />
   </article>
 </Base>
+
+<style>
+  .reference-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+  .reference-nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 12px; border: 1px solid var(--hairline); border-radius: 8px; font: 13px/1.2 var(--mono); }
+</style>

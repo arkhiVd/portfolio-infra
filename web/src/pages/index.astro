@@ -47,6 +47,11 @@ const hasHomelab = references.some((entry) => entry.id === "homelab");
         <span><strong>Homelab</strong><small>A bounded view of private systems and file paths.</small></span>
         <span class="project-arrow" aria-hidden="true">→</span>
       </a>}
+      {references.some((entry) => entry.id === "how-i-work") && <a href={url("/how-i-work")}>
+        <span class="label">reference</span>
+        <span><strong>How I work</strong><small>Workflow, setup and a reusable review checklist.</small></span>
+        <span class="project-arrow" aria-hidden="true">→</span>
+      </a>}
     </div>
   </section>
 
