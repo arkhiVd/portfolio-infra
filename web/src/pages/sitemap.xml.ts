@@ -1,10 +1,11 @@
 import type { APIRoute } from "astro";
-import { getPublishedBlogPosts } from "../lib/content";
+import { getPublishedBlogPosts, getPublishedReferences } from "../lib/content";
 import { projects } from "../lib/projects";
 
 const origin = "https://www.aravindakrishnan.cloud";
 export const GET: APIRoute = async () => {
   const posts = await getPublishedBlogPosts();
+  const references = await getPublishedReferences();
   const paths = [
     "/",
     "/projects.html",
@@ -14,6 +15,7 @@ export const GET: APIRoute = async () => {
       .filter((project) => project.caseStudy)
       .map((project) => `${project.caseStudy}.html`),
     ...posts.map((post) => `/blog/${post.id}.html`),
+    ...references.map((entry) => `/${entry.id}.html`),
   ];
   const urls = paths
     .map((path) => `  <url><loc>${origin}${path}</loc></url>`)

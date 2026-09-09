@@ -1,0 +1,13 @@
+---
+import { render } from "astro:content";
+import Reference from "../layouts/Reference.astro";
+import { getPublishedReferences } from "../lib/content";
+
+export async function getStaticPaths() {
+  const references = await getPublishedReferences();
+  return references.map((entry) => ({ params: { reference: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+<Reference id={entry.id} {...entry.data}><Content /></Reference>

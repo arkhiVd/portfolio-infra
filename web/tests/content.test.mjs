@@ -3,10 +3,11 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
-import { blogId, blogSchema } from "../src/lib/content-schema.ts";
+import { blogId, blogSchema, referenceId, referenceSchema } from "../src/lib/content-schema.ts";
 
 const root = process.cwd();
 const blog = join(root, "src/content/blog");
+const referenceFile = join(root, "src/content/reference/homelab.md");
 const dist = join(root, "dist");
 const today = new Date().toISOString().slice(0, 10);
 const fixtures = ["test-draft.md", "test-future.md", "test-escaped.md", "test-draft-asset.svg"];
@@ -20,10 +21,32 @@ const outputContains = (value, directory = dist) =>
       : readFileSync(join(directory, entry.name)).toString().includes(value),
   );
 
+test("reference schema restricts IDs and dates", () => {
+  assert.equal(referenceSchema.safeParse({ title: "X", description: "Y", reviewed: "2026-09-09", draft: false }).success, true);
+  assert.equal(referenceSchema.safeParse({ title: "X", description: "Y", reviewed: "not-a-date", draft: false }).success, false);
+  assert.equal(referenceId("homelab.md"), "homelab");
+  assert.throws(() => referenceId("inventory.md"));
+});
+
 test("blog schema rejects malformed dates and IDs", () => {
   assert.equal(blogSchema.safeParse({ title: "Invalid", description: "Invalid date", published: "2026-99-99", tags: ["test"], draft: false }).success, false);
   assert.equal(blogId("stable-post.md"), "stable-post");
   assert.throws(() => blogId("Unsafe ID!.md"));
+});
+
+test("draft references have no route or discovery links", () => {
+  const original = readFileSync(referenceFile, "utf8");
+  try {
+    writeFileSync(referenceFile, original.replace("draft: false", "draft: true"));
+    build();
+    assert.equal(existsSync(join(dist, "homelab.html")), false);
+    for (const file of ["index.html", "sitemap.xml"]) {
+      assert.equal(readFileSync(join(dist, file), "utf8").includes("homelab"), false);
+    }
+  } finally {
+    writeFileSync(referenceFile, original);
+    build();
+  }
 });
 
 test("published output excludes drafts, future posts and their assets", (t) => {

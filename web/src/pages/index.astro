@@ -3,6 +3,9 @@ import Base from "../layouts/Base.astro";
 import ProjectRow from "../components/ProjectRow.astro";
 import { site, url } from "../lib/site";
 import { featured } from "../lib/projects";
+import { getPublishedReferences } from "../lib/content";
+const references = await getPublishedReferences();
+const hasHomelab = references.some((entry) => entry.id === "homelab");
 ---
 
 <Base title={`${site.name} — ${site.role}`} current="home">
@@ -39,6 +42,11 @@ import { featured } from "../lib/projects";
         <span><strong>Notes from the work</strong><small>Decisions and maintenance from this portfolio.</small></span>
         <span class="project-arrow" aria-hidden="true">→</span>
       </a>
+      {hasHomelab && <a href={url("/homelab")}>
+        <span class="label">reference</span>
+        <span><strong>Homelab</strong><small>A bounded view of private systems and file paths.</small></span>
+        <span class="project-arrow" aria-hidden="true">→</span>
+      </a>}
     </div>
   </section>
 

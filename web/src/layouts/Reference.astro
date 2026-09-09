@@ -1,0 +1,14 @@
+---
+import Base from "./Base.astro";
+interface Props { id: "homelab" | "how-i-work"; title: string; description: string; reviewed: string; }
+const { id, title, description, reviewed } = Astro.props;
+---
+<Base title={`${title} — Aravindakrishnan V`} description={description} current={id}>
+  <article class="reading wrap reference">
+    <p class="label">reference</p>
+    <h1>{title}</h1>
+    <time datetime={reviewed}>Reviewed {reviewed}</time>
+    <p class="reading-summary">{description}</p>
+    <slot />
+  </article>
+</Base>

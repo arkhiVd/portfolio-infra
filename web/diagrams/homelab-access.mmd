@@ -1,0 +1,4 @@
+flowchart TB
+  device["selected private device"] --> tail["Tailscale"]
+  tail --> services["selected container services"]
+  services --> data["persistent service data"]

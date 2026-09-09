@@ -1,8 +1,10 @@
 ---
 import { site, url } from "../lib/site";
+import { getPublishedReferences } from "../lib/content";
+const references = await getPublishedReferences();
 
 interface Props {
-  current?: "home" | "projects" | "about" | "blog";
+  current?: "home" | "projects" | "about" | "blog" | "homelab" | "how-i-work";
 }
 const { current } = Astro.props;
 ---
@@ -28,6 +30,8 @@ const { current } = Astro.props;
         <a href={url("/projects")} aria-current={current === "projects" ? "page" : undefined}>projects</a>
         <a href={url("/about")} aria-current={current === "about" ? "page" : undefined}>about</a>
         <a href={url("/blog")} aria-current={current === "blog" ? "page" : undefined}>blog</a>
+        {references.some((entry) => entry.id === "homelab") && <a href={url("/homelab")} aria-current={current === "homelab" ? "page" : undefined}>homelab</a>}
+        {references.some((entry) => entry.id === "how-i-work") && <a href={url("/how-i-work")} aria-current={current === "how-i-work" ? "page" : undefined}>how i work</a>}
       </nav>
     </div>
   </div>
