@@ -78,7 +78,8 @@ Publication requirements:
   tags and draft status. Reference content includes title, description, reviewed date
   and draft status. Stable filenames/slugs prevent URLs changing with title edits.
 - Add a blog index, individual posts and an RSS feed. Keep articles readable without JS.
-  No CMS, accounts, comments, email service or hosted search is needed.
+  The original expansion required no CMS. Phase 15 supersedes that authoring decision with
+  a Git-backed editor; comments, reader accounts, email services and hosted search remain out.
 - Version editable public diagram sources under `web/diagrams/`. Render them at build
   time using a pinned tool, or commit reviewed SVG exports alongside their source until
   that renderer exists. Never hand-edit `web/dist/`. Do not add a client-side Mermaid CDN.
@@ -105,6 +106,23 @@ Publication requirements:
   No bulk repository export, Git submodule or symlink into private files.
 - Add links only when their destination is complete. No empty catalogue, placeholder
   article, fabricated first-person experience or "coming soon" page ships.
+
+## Git-backed content editing
+
+Approved 2026-09-10. Sveltia CMS provides a browser form over public content files. Git
+remains canonical. The editor never receives AWS credentials, writes `web/dist/`, uploads to
+S3, applies Terraform, invalidates CloudFront or bypasses pull-request review.
+
+Publication remains `editor → content branch → PR → CI → human merge → apply.yml → Astro →
+Terraform → S3/CloudFront`. The static public site does not become SSR and receives no CMS
+runtime dependency. Blog and reference Markdown come first; Home, About and Projects move
+from code only in separate reviewable migrations. Layouts, styles, infrastructure, resume,
+diagram sources and downloadable skill files stay code/review controlled.
+
+The Sveltia browser bundle is pinned, self-hosted and licensed in the repository. Normal
+pages never download it. Remote authentication is a separate Risky phase. No PAT, OAuth
+secret or GitHub App private key may enter public files, Terraform or Git history. Draft
+content in a public Git branch is public on GitHub even when Astro excludes it from the site.
 
 ## Architecture and data flow
 
@@ -158,6 +176,7 @@ web/ (Astro, source)  --npm run build-->  web/dist/  --aws_s3_object-->  S3 (pri
 | AWS provider | ~> 6.0 | 2026-07-31 |
 | archive provider | ~> 2.0 | 2026-07-31 |
 | Astro | 7.2.9 resolved; package range `^7.2.9` | 2026-09-09, clean `npm ci`, audit, lint, tests and build |
+| Sveltia CMS | 0.209.0, vendored browser bundle | 2026-09-10, npm metadata, release and SHA-256 |
 | Node | 24.18.1 LTS (Krypton) — `.nvmrc` + CI | 2026-07-31 (nodejs.org/dist/index.json) |
 | Fonts | Instrument Sans, JetBrains Mono — self-hosted woff2, SIL OFL 1.1 | 2026-07-31 |
 
@@ -184,8 +203,8 @@ critical advisory. The refreshed lockfile resolves the audited transitive depend
 
 ## Non-goals
 
-- No CMS, comments, newsletter service, accounts or third-party search. A static blog
-  and RSS feed are explicitly in scope.
+- No custom CMS, CMS database, reader accounts, comments, newsletter service or third-party
+  search. Phase 15 may add a static Git-backed Sveltia editor without changing site hosting.
 - No React, Vue, or client-side router. JavaScript is limited to the visitor counter, the
   approved nebula background and its brief loading concealment; all content works without it.
 - No analytics SaaS, no tag manager, no third-party embeds.

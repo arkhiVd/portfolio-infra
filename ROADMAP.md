@@ -154,6 +154,54 @@ Exit criteria:
 Rollback: revert the final validation commit to restore the previous shader and dependency
 lock. Content PR rollback is phase-by-phase in reverse order. No agent merges or applies.
 
+## Phase 15a: local CMS foundation
+
+**Class:** Standard. Stacked on Phase 14. No remote authentication or CloudFront policy.
+
+Scope: vendor a pinned Sveltia bundle, add an inert production `/admin/` shell and a local
+editor for existing Blog, Homelab and How I work Markdown. Preserve source schemas and the
+Git/PR deployment boundary. Add YAML MIME handling, tests, provenance and authoring docs.
+
+Exit criteria:
+- [x] Local editor loads the repository config and all three existing content areas.
+- [x] A disposable draft round-trip preserves frontmatter, Markdown, code fences and HTML.
+- [x] Production admin shell makes no external request and states remote editing is disabled.
+- [x] Normal pages load no CMS asset and retain existing browser/performance behavior.
+- [x] Clean build, tests, security scans, Terraform plan and fresh review pass.
+
+Rollback: remove `web/public/admin/`, its content test and YAML MIME entries. Content source
+and all public routes remain unchanged.
+
+## Phase 15b: content-source migration
+
+**Class:** Standard. Depends on 15a.
+
+Scope: move ordinary Home, About and Projects copy from TypeScript/Astro into validated
+content files while retaining routes, ordering, facts, design and rendering. CMS forms edit
+the resulting records. Do not migrate layout, operational settings, resume, diagram sources
+or executable skill files.
+
+Exit criteria: stable URLs and output inventory, one authoritative source per fact, schema
+failure and ordering tests, visual equivalence, full local gate and fresh review.
+
+Rollback: revert the migration commit to restore existing code-owned records.
+
+## Phase 15c: remote CMS authentication and PR workflow
+
+**Class:** Risky. Depends on 15a and 15b.
+
+Scope: choose and verify the narrowest supported GitHub authentication design; prove Save
+creates a content branch/PR rather than writing to `main`; isolate observed admin network
+origins in an admin-only CSP. No AWS credentials, new AWS service, weakened branch
+protection, automatic merge or public-site CSP expansion.
+
+Exit criteria: permissions and secret storage documented, real draft PR round-trip tested,
+admin network origins observed, Terraform has no unexpected replacement, full Risky gate
+and fresh review pass. External OAuth infrastructure or cost needs separate human approval.
+
+Rollback: remove remote bootstrap and admin CloudFront behavior/policy; local content files
+and public rendering continue to work.
+
 ## Delegation budget
 
 Use Pi through Herdr with the `openai-codex` subscription provider. Luna at low thinking

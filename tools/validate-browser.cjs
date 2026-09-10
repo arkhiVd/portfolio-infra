@@ -11,7 +11,8 @@ const evidence = path.resolve('docs/evidence');
 const origin = 'http://127.0.0.1:8766';
 const types = { '.html': 'text/html', '.css': 'text/css', '.js': 'application/javascript',
   '.svg': 'image/svg+xml', '.png': 'image/png', '.woff2': 'font/woff2',
-  '.pdf': 'application/pdf', '.xml': 'application/xml', '.txt': 'text/plain', '.md': 'text/markdown' };
+  '.pdf': 'application/pdf', '.xml': 'application/xml', '.txt': 'text/plain', '.md': 'text/markdown',
+  '.yml': 'application/yaml', '.yaml': 'application/yaml' };
 const server = http.createServer((req, res) => {
   let pathname;
   try { pathname = decodeURIComponent(new URL(req.url, origin).pathname); }
@@ -39,10 +40,10 @@ const captures = new Set(['/index.html', '/blog.html', '/blog/two-cdn-cache-trap
   if (process.argv.includes('--serve')) { console.log(`Local built-site preview: ${origin}`); return; }
   fs.mkdirSync(evidence, { recursive: true });
   const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH, headless: true,
-    args: ['--enable-unsafe-swiftshader'] });
+    args: ['--enable-unsafe-swiftshader', '--host-resolver-rules=MAP portfolio.test 127.0.0.1'] });
   const results = [];
   try {
-    for (const file of files(root).filter(file => file.endsWith('.html') && !/-detail\.html$/.test(file))) {
+    for (const file of files(root).filter(file => file.endsWith('.html') && !/-detail\.html$/.test(file) && !file.includes('/admin/'))) {
       const route = '/' + path.relative(root, file);
       const external = [], errors = [];
       const page = await browser.newPage({ viewport: { width: 375, height: 900 }, reducedMotion: 'reduce' });
@@ -99,6 +100,23 @@ const captures = new Set(['/index.html', '/blog.html', '/blog/two-cdn-cache-trap
         noJS: 'PASS', keyboardFocus: 'PASS', links: 'PASS', externalRequests: 0, consoleErrors: 0 };
       results.push(result); console.log(JSON.stringify(result));
     }
+    const localAdmin = await browser.newPage({ viewport: { width: 375, height: 900 } });
+    await localAdmin.route('**/*', route => route.request().url().startsWith(origin) ? route.continue() : route.abort());
+    await localAdmin.goto(origin + '/admin/index.html');
+    await localAdmin.getByText('Work with Local Repository').waitFor();
+    assert.equal(await localAdmin.getByText('There is an error in the CMS configuration.').count(), 0);
+    await localAdmin.close();
+
+    const remoteAdmin = await browser.newPage();
+    const remoteRequests = [];
+    remoteAdmin.on('request', request => remoteRequests.push(request.url()));
+    await remoteAdmin.goto('http://portfolio.test:8766/admin/index.html');
+    assert.match(await remoteAdmin.locator('main').innerText(), /remote editor is not enabled yet/);
+    assert.ok(remoteRequests.every(url => url.startsWith('http://portfolio.test:8766/')));
+    assert.equal(remoteRequests.some(url => /sveltia-cms|config\.yml/.test(url)), false);
+    await remoteAdmin.close();
+    console.log('Admin local config and inert remote shell: PASS');
+
     const page = await browser.newPage();
     await page.route('**/__visitor', route => route.abort());
     await page.goto(origin + '/'); await page.waitForTimeout(300);

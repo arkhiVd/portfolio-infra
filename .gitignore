@@ -22,4 +22,5 @@ screenshots/
 web/node_modules/
 web/dist/
 web/.astro/
+web/.cms-unpublished-media/
 .claude/settings.local.json

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
@@ -32,6 +33,9 @@ test("reference schema restricts IDs and dates", () => {
 
 test("blog schema rejects malformed dates and IDs", () => {
   assert.equal(blogSchema.safeParse({ title: "Invalid", description: "Invalid date", published: "2026-99-99", tags: ["test"], draft: false }).success, false);
+  const cmsDate = blogSchema.safeParse({ title: "CMS", description: "Cleared optional date", published: "2026-09-10", updated: "", tags: ["test"], draft: true });
+  assert.equal(cmsDate.success, true);
+  assert.equal(cmsDate.data?.updated, undefined);
   assert.equal(blogId("stable-post.md"), "stable-post");
   assert.throws(() => blogId("Unsafe ID!.md"));
   assert.throws(() => blogId("nested/stable-post.md"));
@@ -64,6 +68,29 @@ test("public review skill has source, license and source-edit safeguards", () =>
   assert.match(skill, /verify identity and account/i);
   assert.match(readme, /github\.com\/arkhiVd\/portfolio-infra/);
   assert.match(readFileSync(join(root, "public/skills/static-site-review/LICENSE.txt"), "utf8"), /MIT License/);
+});
+
+test("CMS config matches content schemas and uses a pinned same-origin bundle", () => {
+  const admin = join(root, "public/admin");
+  const config = readFileSync(join(admin, "config.yml"), "utf8");
+  const shell = readFileSync(join(admin, "index.html"), "utf8");
+  const bundle = readFileSync(join(admin, "sveltia-cms-0.209.0.js"));
+  const terraform = readFileSync(join(root, "../frontend.tf"), "utf8");
+
+  assert.match(config, /publish_mode: editorial_workflow/);
+  assert.match(config, /folder: web\/src\/content\/blog/);
+  assert.match(config, /media_folder: web\/\.cms-unpublished-media/);
+  assert.doesNotMatch(config, /media_folder: web\/public/);
+  for (const field of ["title", "description", "published", "updated", "tags", "draft", "body"]) {
+    assert.match(config, new RegExp(`name: ${field}(?:,|\\n)`));
+  }
+  for (const file of ["homelab.md", "how-i-work.md"]) assert.match(config, new RegExp(file.replace(".", "\\.")));
+  assert.doesNotMatch(shell, /src=["']https?:/);
+  assert.match(shell, /noindex,nofollow,noarchive/);
+  assert.match(shell, /localHosts\.has/);
+  assert.match(terraform, /"yml"\s+= "application\/yaml"/);
+  assert.match(terraform, /"yaml"\s+= "application\/yaml"/);
+  assert.equal(createHash("sha256").update(bundle).digest("hex"), "a2bc0e080e0eb1599ae0ae82026619e64442c363ee36882e965892c1acc61d85");
 });
 
 test("published output excludes drafts, future posts and their assets", (t) => {
