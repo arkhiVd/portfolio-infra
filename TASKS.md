@@ -17,9 +17,9 @@ project metadata, routes or layouts. Remote GitHub auth remains a separate Risky
 | 14, performance/security validation | `feat/content-validation` | #32 | CI and fresh review passed |
 | 15a, local CMS foundation | `feat/cms-foundation` | #33 | CI and fresh review passed |
 | 15b, page/project content model | `feat/cms-content-model` | #34 | local gate and fresh review passed |
-| 15b2, case-study prose | `feat/cms-case-studies` | — | local gate and fresh review passed |
+| 15b2, case-study prose | `feat/cms-case-studies` | #35 | CI and fresh review passed |
 
-Final merge order is #27, #28, #29, #30, #31, #32, #33, then #34. Each PR base must be moved
+Final merge order is #27, #28, #29, #30, #31, #32, #33, #34, then #35. Each PR base must be moved
 to `main` after its parent merges, or the phases may be combined only with explicit human
 approval. Agents do not merge or apply.
 
@@ -144,7 +144,7 @@ recaptured. `docs/evidence/browser-results.json` records the final page matrix.
 - [x] Parent/current text, DOM structure and main-region pixels match for all six routes at 375 and 1280 px.
 - [x] Browser, audit, Gitleaks, actionlint, Terraform validation/plan and unchanged Checkov baseline passed.
 - [x] Fresh Terra review found two parser-structure gaps; both were fixed and re-review found no findings.
-- [ ] Commit, push and open the stacked draft PR.
+- [x] Commit, push and open stacked draft PR #35; CI plan passed.
 
 ## Phase 14 approval gates
 
