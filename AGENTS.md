@@ -71,14 +71,15 @@ Every Terraform command in this repo must run with `AWS_PROFILE=second`, e.g.
 
 ## Working boundaries
 
-- Branch first (`feat/<phase>`); **never commit to `main`**, never push to `main`.
+- Branch first (`feat/<phase>`); **never commit directly to `main` or push to `main`**. An agent may merge a pull request through GitHub only after the human explicitly approves that specific PR for merge in the current session.
 - One phase = one PR. If the diff cannot be reviewed in ten minutes, it was scoped wrong —
   split it before pushing, not after.
 - Touch only what the phase requires. No drive-by refactors or reformats. Preserve
   unrelated working-tree changes.
 - Local Terraform is verification-only: `fmt`, `validate`, and read-only `plan`. Never run
   local `apply`, targeted apply, import, state mutation, invalidation, or `destroy`. Every real
-  site/infrastructure change runs through GitHub Actions after the human merges to `main`.
+  site/infrastructure change runs through GitHub Actions after an explicitly approved pull request
+  merges to `main`.
 - Never commit secrets, `*.tfvars`, `.env`, state files, `web/node_modules`, or `web/dist`.
 - Ask before anything destructive, cost-bearing, or account-wide.
 - Keep public content in Git. Review Markdown, diagram sources and skill examples before
