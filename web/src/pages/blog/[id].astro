@@ -1,0 +1,17 @@
+---
+import { render } from "astro:content";
+import Reading from "../../layouts/Reading.astro";
+import { getPublishedBlogPosts } from "../../lib/content";
+
+export async function getStaticPaths() {
+  const posts = await getPublishedBlogPosts();
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Reading {...post.data}>
+  <Content />
+</Reading>

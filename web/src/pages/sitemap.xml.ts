@@ -1,17 +1,20 @@
 import type { APIRoute } from "astro";
+import { getPublishedBlogPosts } from "../lib/content";
 import { projects } from "../lib/projects";
 
 const origin = "https://www.aravindakrishnan.cloud";
-const paths = [
-  "/",
-  "/projects.html",
-  "/about.html",
-  ...projects
-    .filter((project) => project.caseStudy)
-    .map((project) => `${project.caseStudy}.html`),
-];
-
-export const GET: APIRoute = () => {
+export const GET: APIRoute = async () => {
+  const posts = await getPublishedBlogPosts();
+  const paths = [
+    "/",
+    "/projects.html",
+    "/about.html",
+    "/blog.html",
+    ...projects
+      .filter((project) => project.caseStudy)
+      .map((project) => `${project.caseStudy}.html`),
+    ...posts.map((post) => `/blog/${post.id}.html`),
+  ];
   const urls = paths
     .map((path) => `  <url><loc>${origin}${path}</loc></url>`)
     .join("\n");

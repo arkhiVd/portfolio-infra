@@ -5,7 +5,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "lint": "astro check"
+    "lint": "astro check",
+    "test": "node --test tests/content.test.mjs"
   },
   "type": "module",
   "dependencies": {
