@@ -1,0 +1,15 @@
+{
+  "deterministicIds": true,
+  "deterministicIDSeed": "portfolio-homelab",
+  "htmlLabels": false,
+  "theme": "base",
+  "themeVariables": {
+    "background": "#0F1218",
+    "primaryColor": "#0F1218",
+    "primaryTextColor": "#EDEDF0",
+    "primaryBorderColor": "#4FC1D4",
+    "lineColor": "#4FC1D4",
+    "fontFamily": "ui-monospace, monospace",
+    "fontSize": "16px"
+  }
+}
