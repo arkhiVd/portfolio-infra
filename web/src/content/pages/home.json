@@ -1,0 +1,22 @@
+{
+  "id": "home",
+  "hero": {
+    "role": "Cloud Engineer",
+    "introduction": "I build and operate cloud infrastructure across AWS, Linux, networking, Terraform, containers and CI/CD. AWS Solutions Architect – Associate and CCNA certified."
+  },
+  "discover": {
+    "blog": {
+      "title": "Notes from the work",
+      "description": "Decisions and maintenance from this portfolio."
+    },
+    "homelab": {
+      "title": "Homelab",
+      "description": "A bounded view of private systems and file paths."
+    },
+    "workflow": {
+      "title": "How I work",
+      "description": "Workflow, setup and a reusable review checklist."
+    }
+  },
+  "about": "I worked on AWS operations, networking, security, monitoring and cost management for enterprise customers at Zarthi. My public projects extend that work into infrastructure as code, container platforms and serverless systems. I am also preparing for the CKA."
+}

@@ -4,12 +4,14 @@ The browser editor changes source files in Git. It never uploads to S3 and has n
 credentials. A production change still needs a pull request, passing checks and a human
 merge. The existing `apply.yml` then builds Astro and lets Terraform upload `web/dist/`.
 
-## Current Phase 15a boundary
+## Current Phase 15b boundary
 
-The local editor manages Blog, Homelab and How I work. Home, About and Projects remain in
-Astro/TypeScript until their separate migration phase. The deployed `/admin/` route is
-intentionally inert until the remote GitHub authentication design passes its own security
-review.
+The local editor manages Blog, Homelab, How I work, Home, About and the metadata for all eight
+projects. Project metadata drives the home list and `/projects`, including order, featured order,
+status, summary, stack, images and repository links. The six existing case-study bodies remain in
+Astro for Phase 15b2. Do not use the optional kicker or lede fields to imply that the body moved.
+The deployed `/admin/` route is intentionally inert until the remote GitHub authentication design
+passes its own security review.
 
 Run local authoring from the repository root:
 
@@ -29,6 +31,14 @@ inline HTML, switch the Article/Body field to Markdown source mode before editin
 editor normalizes markup; the source editor preserved those constructs in the Phase 15a
 round-trip. Inspect `git diff` after every save. Firefox and Safari do not currently expose
 the required directory picker, so use Chromium for local authoring.
+
+## Home, About and Projects
+
+Home and About are singleton JSON files. Edit ordinary page copy and the existing structured
+experience, certification, skills and education data there. Keep IDs unchanged. Project filenames
+are stable route IDs and cannot be created, deleted or renamed in the editor. Edit their metadata
+only. An empty image or repository field means there is no image or repository link. Preserve the
+numeric project order and unique featured order values unless the visible list order is changing.
 
 ## Blog
 

@@ -1,12 +1,12 @@
 ---
 import CaseStudy from "../../layouts/CaseStudy.astro";
 import Block from "../../components/Block.astro";
-import { projects } from "../../lib/projects";
+import { getProject } from "../../lib/projects";
 import { url } from "../../lib/site";
-const project = projects.find((p) => p.slug === "portfolio")!;
+const project = await getProject("portfolio");
 ---
 
-<CaseStudy project={project} kicker="serverless delivery · live" lede="The infrastructure behind this portfolio: private static content through CloudFront, a serverless visitor API, and separate OIDC workflows for reviewing and applying Terraform changes.">
+<CaseStudy project={project} kicker={project.kicker!} lede={project.lede!}>
   <Block label="problem" heading="Make the portfolio itself verifiable infrastructure work">
     <p>The site needed global HTTPS delivery, no public storage bucket, a small dynamic visitor counter and a deployment path that did not rely on console changes or permanent AWS credentials.</p>
     <p>Astro is used only as a static build system. The deployed output is HTML, CSS and minimal JavaScript served from S3 through CloudFront.</p>

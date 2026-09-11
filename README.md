@@ -49,10 +49,11 @@ unfinished work locally. Publishing a preview would require a separately reviewe
 
 ## Content editing
 
-Blog, Homelab and How I work are Git-backed Markdown. Phase 15a adds a local browser editor
-at `http://localhost:4321/admin/index.html`; setup and publishing steps are in
-[`docs/content-editing.md`](docs/content-editing.md). Home, About and Projects remain
-code-owned until their separate migration.
+Blog, Homelab, How I work and project metadata are Git-backed content. Home and About use
+validated singleton JSON. The local browser editor is at
+`http://localhost:4321/admin/index.html`; setup and publishing steps are in
+[`docs/content-editing.md`](docs/content-editing.md). The six custom project case-study
+bodies remain code-owned until their separate prose migration.
 
 The editor changes source in the working tree. It never uploads to S3 and has no AWS
 credentials. Commit edits on a feature branch, review the pull request, and merge only after

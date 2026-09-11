@@ -1,16 +1,16 @@
 ---
 import CaseStudy from "../../layouts/CaseStudy.astro";
 import Block from "../../components/Block.astro";
-import { projects } from "../../lib/projects";
+import { getProject } from "../../lib/projects";
 import { url } from "../../lib/site";
 
-const project = projects.find((p) => p.slug === "appstack")!;
+const project = await getProject("appstack");
 ---
 
 <CaseStudy
   project={project}
-  kicker="AWS platform · 2026"
-  lede="Terraform infrastructure and a working local environment for a .NET microservices platform. Eight services and two workers share a synchronous API path and an asynchronous S3 and SQS path."
+  kicker={project.kicker!}
+  lede={project.lede!}
 >
   <Block label="problem" heading="Run a complete product platform within a strict cost limit">
     <p>

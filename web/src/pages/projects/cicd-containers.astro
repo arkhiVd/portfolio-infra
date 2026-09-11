@@ -1,12 +1,12 @@
 ---
 import CaseStudy from "../../layouts/CaseStudy.astro";
 import Block from "../../components/Block.astro";
-import { projects } from "../../lib/projects";
+import { getProject } from "../../lib/projects";
 import { url } from "../../lib/site";
-const project = projects.find((p) => p.slug === "cicd-containers")!;
+const project = await getProject("cicd-containers");
 ---
 
-<CaseStudy project={project} kicker="containers · CI/CD" lede="A push-to-deploy pipeline for a Dockerized Python application on ECS Fargate, with Terraform infrastructure and short-lived AWS credentials from GitHub OIDC.">
+<CaseStudy project={project} kicker={project.kicker!} lede={project.lede!}>
   <Block label="problem" heading="Deploy containers without stored AWS keys or manual server work">
     <p>The project needed a repeatable path from a source commit to a running container. Infrastructure, image version and deployment state had to remain reviewable rather than being assembled manually in the AWS console.</p>
   </Block>

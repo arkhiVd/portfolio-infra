@@ -1,4 +1,4 @@
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection, getEntry, type CollectionEntry } from "astro:content";
 
 type BlogPost = CollectionEntry<"blog">;
 export type Reference = CollectionEntry<"reference">;
@@ -18,3 +18,11 @@ export const getPublishedReferences = async (): Promise<Reference[]> =>
   (await getCollection("reference", isPublishedReference)).sort((a, b) =>
     b.data.reviewed.localeCompare(a.data.reviewed),
   );
+
+export type HomePage = Extract<CollectionEntry<"page">["data"], { id: "home" }>;
+export type AboutPage = Extract<CollectionEntry<"page">["data"], { id: "about" }>;
+
+export const getHomePage = async (): Promise<HomePage> =>
+  (await getEntry("page", "home"))!.data as HomePage;
+export const getAboutPage = async (): Promise<AboutPage> =>
+  (await getEntry("page", "about"))!.data as AboutPage;

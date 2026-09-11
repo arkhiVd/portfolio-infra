@@ -1,16 +1,16 @@
 ---
 import CaseStudy from "../../layouts/CaseStudy.astro";
 import Block from "../../components/Block.astro";
-import { projects } from "../../lib/projects";
+import { getProject } from "../../lib/projects";
 import { url } from "../../lib/site";
 
-const project = projects.find((p) => p.slug === "clearsky")!;
+const project = await getProject("clearsky");
 ---
 
 <CaseStudy
   project={project}
-  kicker="serverless · 2026"
-  lede="A serverless platform that scans AWS accounts for security, cost and inventory findings. Deterministic rules detect problems; a read-only AI investigator explains them."
+  kicker={project.kicker!}
+  lede={project.lede!}
 >
   <Block label="problem" heading="Reproducible findings without giving AI control">
     <p>

@@ -181,10 +181,27 @@ content files while retaining routes, ordering, facts, design and rendering. CMS
 the resulting records. Do not migrate layout, operational settings, resume, diagram sources
 or executable skill files.
 
-Exit criteria: stable URLs and output inventory, one authoritative source per fact, schema
-failure and ordering tests, visual equivalence, full local gate and fresh review.
+Exit criteria:
+- [x] Home/About ordinary copy and all eight project metadata records have one source.
+- [x] Stable project IDs, routes, list order and featured order are preserved.
+- [x] Schema, ID, CMS-empty-value and build tests pass.
+- [x] Visual equivalence, full local gate and fresh review pass.
 
 Rollback: revert the migration commit to restore existing code-owned records.
+
+## Phase 15b2: project case-study prose migration
+
+**Class:** Standard. Depends on 15b.
+
+Scope: move the six custom case-study bodies into CMS-editable Markdown or structured
+sections without losing figures, captions, links or the required section order. Keep the
+Astro layouts and special rendering components in code.
+
+Exit criteria: all ordinary case-study prose is editable without Astro changes, Markdown
+round-trip preserves figures and code, output remains visually equivalent, and the full
+local/review gate passes.
+
+Rollback: revert the prose adapters and content files; metadata remains content-managed.
 
 ## Phase 15c: remote CMS authentication and PR workflow
 
