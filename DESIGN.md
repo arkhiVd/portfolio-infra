@@ -1,9 +1,11 @@
 # DESIGN.md — visual contract
 
-**Status: REVISED BY AUTHOR 2026-08-22.** The design-tool exports in
-`../Portfolio redesign plan/*.dc.html` are the visual reference; the Astro site remains the
-production implementation. Preserve their spacious deep-ocean layout, contained glass nav,
-credential artwork and simple contact panel without copying the design runtime or WebGL.
+**Status: production design retained; content hierarchy approved 2026-09-08.**
+The author-approved 2026-08-22 exports informed the current Astro implementation.
+`web/src/styles/tokens.css` and the shipped components are the available reference;
+external design-tool files are not a clean-clone dependency. Preserve the spacious
+deep-ocean layout, contained glass nav, credential artwork and simple contact panel.
+The approved nebula WebGL layer is the single ambient-motion exception below.
 
 ## Thesis
 
@@ -13,7 +15,7 @@ seconds go to: what this person does → proof it is real → the work itself.
 
 Two things this replaces, named so they do not come back:
 
-- The **live site** spends the first screen on a typewriter animation and a `cd ~` nav.
+- The **legacy site, replaced in August 2026,** spent the first screen on a typewriter animation and a `cd ~` nav.
   It reads as a hobby terminal theme, and the fold carries no evidence.
 - The **design-tool exports** spend it on a slogan. Typography improved, but the hero
   proves nothing, gutters eat 1440 px of width, the About page's first screen carries
@@ -71,7 +73,7 @@ Rules that make it safe to ship:
 - `prefers-reduced-motion: reduce` **freezes** the layer at a fixed opacity rather than
   hiding it — same picture, no movement.
 
-Reference implementation: the nebula canvas and shader in `Base.dc.html`.
+Reference implementation: `web/src/components/Ocean.astro`, derived from the approved export.
 
 ## Type
 
@@ -101,7 +103,7 @@ Reference implementation: the nebula canvas and shader in `Base.dc.html`.
 - Glass, reserved for the sticky nav only: `backdrop-filter: blur(22px) saturate(150%)`,
   `background: rgba(255,255,255,.045)`, 1 px hairline, inset top highlight
   `rgba(255,255,255,.09)`.
-- No gradients on text. One static radial background wash on the page, no animation.
+- No gradients on text. No additional background animation beyond the approved ocean layer.
 
 ## Motion
 
@@ -162,18 +164,16 @@ icons, followed by copyright and visitor count. No implementation tagline and no
 contact paragraph. The panel may echo the glass composition but does not add another
 backdrop-filter layer.
 
-**Visitor counter** — mono readout in the nav. Shows `····` until resolved, and keeps
+**Visitor counter** — mono readout in the footer. Shows `····` until resolved, and keeps
 showing `····` if the API fails. **Never renders a fabricated number.**
 
 ## Content rules
 
 - The fold answers, in order: what he does → how to act on it → the work. No slogans above
   the fold, and no personality claims about 3am or boredom.
-- **The headline names the discipline, not a vendor.** "I build and run cloud
-  infrastructure." — not AWS, not any product name. The work is broader than one provider,
-  and pinning the headline to a vendor narrows the roles it speaks to. Vendors, services and
-  versions belong in the lede, the cards and the case studies, where they are evidence
-  rather than identity.
+- The hero heading is the person's name, followed by the role. The introductory sentence
+  names the discipline, not a vendor: "I build and operate cloud infrastructure."
+  Vendors, services and versions belong in the supporting copy and case studies.
 - **Cost language:** never publish "₹0", "zero cost", or "free" — it invites an argument
   about what is really free and reads as a gimmick. Say **"minimal running cost"**, or
   describe the engineering: no NAT gateway, no idle compute, torn down when not in use.
@@ -183,7 +183,30 @@ showing `····` if the API fails. **Never renders a fabricated number.**
 - Project copy is written for an engineer on a panel: decisions, tradeoffs, failures, fixes.
 - No sales language, no "passionate about", no buzzword lists posing as skills.
 
-## Phase 1 outcome — why A won
+## Approved content hierarchy
+
+Home remains recruiter-focused: identity, introduction, projects and resume come first.
+Add links to real writing, the public homelab and How I work after selected work. Do not
+replace the introduction with a personal dashboard or push the resume behind a menu.
+
+Keep Projects and About. Add Blog, Homelab and **How I work** as content destinations.
+How I work contains overview, AI workflow, setup/tools and reusable skills, initially
+on one page with section anchors. Uses and Skills are not separate primary navigation links.
+The current home/projects/about pill describes production, not the final expanded nav.
+Approve desktop/mobile navigation mockups in Phase 10 before changing components.
+
+Blog uses a reading layout with date, title, summary and restrained article typography.
+Homelab uses captioned diagrams and explanations rather than an embedded dashboard.
+How I work explains a real process and tool choices, with a reviewed date and source links.
+No empty cards or future-page links. Preserve the existing palette and fonts unless the
+author approves a change after seeing a mockup.
+
+References inform different decisions: Davis for maintained personal reference pages,
+DHH for dated writing, AI Hero for task-oriented skill explanations. Kannan's Vim
+interaction is a personality reference, not permission to require commands for navigation.
+The Anthropic frontend-design skill guides critique within this contract.
+
+## Historical Phase 1 outcome
 
 Both variants were built as real pages (home + the ClearSky case study) and rendered at
 1440 and 375 px before the choice was made.

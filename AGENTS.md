@@ -5,7 +5,7 @@
 Single Terraform stack behind **https://www.aravindakrishnan.cloud** — a static site on
 CloudFront + S3 with a serverless visitor counter, shipped through OIDC-authenticated
 GitHub Actions. This is a public, hiring-visible repo: the git history is part of the
-portfolio. It is currently being rebuilt (site layer only) per `SPEC.md` and `ROADMAP.md`.
+portfolio. The Astro rebuild is live. Content expansion follows `SPEC.md` and `ROADMAP.md`.
 
 ## Architecture
 
@@ -19,11 +19,10 @@ portfolio. It is currently being rebuilt (site layer only) per `SPEC.md` and `RO
   GitHub OIDC provider, and the two scoped CI roles. Do not touch during site work.
 - `templates/visitorscript.js.tftpl` → uploaded as `assets/js/visitorscript.js`; injects
   the Lambda Function URL so it is never hand-copied. The site reads `window.VISITOR_API`.
-- `site/` — the **current live** hand-written site. Frozen: no edits until Phase 8 replaces it.
-- `web/` — the Astro rebuild (arrives in Phase 2). `web/dist/` is **generated — never
-  hand-edit, never commit**.
-- Environments: one. Production, AWS account `486539985928`, `us-east-1`. No staging —
-  in-progress work is served under the `preview/` S3 key prefix instead.
+- `web/` contains the live Astro source; legacy `site/` was removed in PR #18.
+  `web/dist/` is **generated: never hand-edit or commit it**. Terraform uploads it at root.
+- Environments: one. Production, AWS account `486539985928`, `us-east-1`. No staging or
+  active preview-prefix deployment. Review unfinished content locally; do not invent a preview URL.
 - DNS at Cloudflare: apex proxied with a 301 page rule, `www` **DNS-only (grey cloud)** so
   CloudFront is the only cache. Do not proxy `www`; that reintroduces a second cache layer
   nobody invalidates.
@@ -32,14 +31,14 @@ portfolio. It is currently being rebuilt (site layer only) per `SPEC.md` and `RO
 ## Commands
 
 ```bash
-# setup (from Phase 2)
+# setup
 cd web && npm ci
 
 # build the site — MUST run before any terraform plan/apply, locally and in CI
 cd web && npm run build            # emits web/dist/
 
 # format / lint
-terraform fmt -recursive
+AWS_PROFILE=second terraform fmt -recursive
 cd web && npm run lint
 
 # local preview of the built site
@@ -47,7 +46,7 @@ cd web && npm run preview
 
 # plan (repo root, after the build) — always with the second profile
 AWS_PROFILE=second terraform init -input=false
-terraform validate
+AWS_PROFILE=second terraform validate
 AWS_PROFILE=second terraform plan -input=false
 
 # security scan
@@ -81,7 +80,8 @@ Every Terraform command in this repo must run with `AWS_PROFILE=second`, e.g.
   `apply.yml`; merging requires explicit human approval for that specific PR in the current session.
 - Never commit secrets, `*.tfvars`, `.env`, state files, `web/node_modules`, or `web/dist`.
 - Ask before anything destructive, cost-bearing, or account-wide.
-- Do not edit `site/` before Phase 8 — it is what the public currently sees.
+- Keep public content in Git. Review Markdown, diagram sources and skill examples before
+  publishing; never auto-export the private vault, atlas, machine configs or agent sessions.
 - Commits: conventional style, author `arkhiVd`, **no AI attribution of any kind**.
 - Blast radius: the live public site and its domain; the CloudFront distribution; the
   DynamoDB table holding real accumulated visitor counts (destroying it loses that data);
@@ -109,6 +109,9 @@ Every Terraform command in this repo must run with `AWS_PROFILE=second`, e.g.
 - `ROADMAP.md` — phase order and exit criteria
 - `TASKS.md` — current phase and validation status
 - `DESIGN.md` — the visual contract; every UI diff is graded against it
+- `.claude/skills/frontend-design/` — pinned Anthropic design skill with license and source;
+  load its `SKILL.md` explicitly in clients that do not discover Claude Code skills.
+  It guides design work but does not override the approved contract.
 - Vault knowledge layer: `~/Documents/myvault/Projects/portfolio.md`
 - Workflow contract: `~/Documents/myvault/Systems/workflows/project-dev.md`
 

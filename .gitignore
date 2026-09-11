@@ -22,3 +22,4 @@ screenshots/
 web/node_modules/
 web/dist/
 web/.astro/
+.claude/settings.local.json
