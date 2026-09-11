@@ -193,7 +193,10 @@ Keep Projects and About. Add Blog, Homelab and **How I work** as content destina
 How I work contains overview, AI workflow, setup/tools and reusable skills, initially
 on one page with section anchors. Uses and Skills are not separate primary navigation links.
 The current home/projects/about pill describes production, not the final expanded nav.
-Approve desktop/mobile navigation mockups in Phase 10 before changing components.
+The Phase 10 wrapping-nav and reading-layout decision is recorded in
+`docs/content-layout.md`, with desktop/mobile mockups in `docs/evidence/`. On 2026-09-09
+the author approved proceeding through implementation and validation; final visual
+acceptance remains part of human merge approval.
 
 Blog uses a reading layout with date, title, summary and restrained article typography.
 Homelab uses captioned diagrams and explanations rather than an embedded dashboard.
