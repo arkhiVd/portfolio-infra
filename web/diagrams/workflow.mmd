@@ -1,0 +1,7 @@
+%%{init: {"theme":"base","themeVariables":{"background":"#0F1218","primaryColor":"#0F1218","primaryTextColor":"#EDEDF0","primaryBorderColor":"#4FC1D4","lineColor":"#4FC1D4","fontSize":"16px"},"htmlLabels":false}}%%
+flowchart TB
+  inspect["inspect"] --> plan["plan / spec"]
+  plan --> implement["bounded implementation"]
+  implement --> checks["checks + browser + plan"]
+  checks --> review["fresh review"]
+  review --> approve["human approval → CI deploy"]

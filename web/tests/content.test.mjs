@@ -8,6 +8,7 @@ import { blogId, blogSchema, referenceId, referenceSchema } from "../src/lib/con
 const root = process.cwd();
 const blog = join(root, "src/content/blog");
 const referenceFile = join(root, "src/content/reference/homelab.md");
+const workflowFile = join(root, "src/content/reference/how-i-work.md");
 const dist = join(root, "dist");
 const today = new Date().toISOString().slice(0, 10);
 const fixtures = ["test-draft.md", "test-future.md", "test-escaped.md", "test-draft-asset.svg"];
@@ -35,18 +36,32 @@ test("blog schema rejects malformed dates and IDs", () => {
 });
 
 test("draft references have no route or discovery links", () => {
-  const original = readFileSync(referenceFile, "utf8");
+  const originals = [referenceFile, workflowFile].map((file) => readFileSync(file, "utf8"));
   try {
-    writeFileSync(referenceFile, original.replace("draft: false", "draft: true"));
+    [referenceFile, workflowFile].forEach((file) => writeFileSync(file, readFileSync(file, "utf8").replace("draft: false", "draft: true")));
     build();
-    assert.equal(existsSync(join(dist, "homelab.html")), false);
-    for (const file of ["index.html", "sitemap.xml"]) {
-      assert.equal(readFileSync(join(dist, file), "utf8").includes("homelab"), false);
+    for (const id of ["homelab", "how-i-work"]) {
+      assert.equal(existsSync(join(dist, `${id}.html`)), false);
+      for (const file of ["index.html", "sitemap.xml"]) {
+        assert.equal(readFileSync(join(dist, file), "utf8").includes(id), false);
+      }
     }
   } finally {
-    writeFileSync(referenceFile, original);
+    [referenceFile, workflowFile].forEach((file, index) => writeFileSync(file, originals[index]));
     build();
   }
+});
+
+test("public review skill has source, license and source-edit safeguards", () => {
+  const skill = readFileSync(join(root, "public/skills/static-site-review/SKILL.md"), "utf8");
+  const readme = readFileSync(join(root, "public/skills/static-site-review/README.md"), "utf8");
+  assert.match(skill, /Trigger/);
+  assert.match(skill, /does not edit source files/i);
+  assert.match(skill, /builds may write generated artifacts/i);
+  assert.match(skill, /Do not edit source, merge, deploy/i);
+  assert.match(skill, /verify identity and account/i);
+  assert.match(readme, /github\.com\/arkhiVd\/portfolio-infra/);
+  assert.match(readFileSync(join(root, "public/skills/static-site-review/LICENSE.txt"), "utf8"), /MIT License/);
 });
 
 test("published output excludes drafts, future posts and their assets", (t) => {
