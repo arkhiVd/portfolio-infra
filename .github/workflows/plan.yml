@@ -5,7 +5,7 @@ name: terraform-plan
 # plan back to the PR. It CANNOT mutate infrastructure.
 on:
   pull_request:
-    branches: [main, feat/content-*]
+    branches: [main, feat/content-*, feat/cms-*]
 
 # OIDC needs id-token: write. Everything else least-privilege.
 permissions:
