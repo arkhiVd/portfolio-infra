@@ -14,8 +14,10 @@ case-study bodies stay in Astro for 15b2. Remote GitHub auth remains a separate 
 | 12, curated Homelab | `feat/content-homelab` | #30 | CI passed |
 | 13, How I work and public skill | `feat/content-workflow` | #31 | CI passed |
 | 14, performance/security validation | `feat/content-validation` | #32 | CI and fresh review passed |
+| 15a, local CMS foundation | `feat/cms-foundation` | #33 | CI and fresh review passed |
+| 15b, page/project content model | `feat/cms-content-model` | #34 | local gate and fresh review passed |
 
-Final merge order is #27, #28, #29, #30, #31, then Phase 14. Each PR base must be moved
+Final merge order is #27, #28, #29, #30, #31, #32, #33, then #34. Each PR base must be moved
 to `main` after its parent merges, or the phases may be combined only with explicit human
 approval. Agents do not merge or apply.
 
@@ -128,7 +130,7 @@ recaptured. `docs/evidence/browser-results.json` records the final page matrix.
 - [x] Astro check passed with 0 diagnostics; 8 tests passed; 18 pages built.
 - [x] Public browser matrix and local/inert admin checks passed.
 - [x] Full browser/security/Terraform gate and fresh review passed; rendered copy is unchanged.
-- [ ] Commit, push and open the stacked draft PR.
+- [x] Commit, push and open stacked draft PR #34.
 
 ## Phase 14 approval gates
 
