@@ -27,12 +27,14 @@ test("reference schema restricts IDs and dates", () => {
   assert.equal(referenceSchema.safeParse({ title: "X", description: "Y", reviewed: "not-a-date", draft: false }).success, false);
   assert.equal(referenceId("homelab.md"), "homelab");
   assert.throws(() => referenceId("inventory.md"));
+  assert.throws(() => referenceId("nested/homelab.md"));
 });
 
 test("blog schema rejects malformed dates and IDs", () => {
   assert.equal(blogSchema.safeParse({ title: "Invalid", description: "Invalid date", published: "2026-99-99", tags: ["test"], draft: false }).success, false);
   assert.equal(blogId("stable-post.md"), "stable-post");
   assert.throws(() => blogId("Unsafe ID!.md"));
+  assert.throws(() => blogId("nested/stable-post.md"));
 });
 
 test("draft references have no route or discovery links", () => {
@@ -87,6 +89,8 @@ test("published output excludes drafts, future posts and their assets", (t) => {
   }
   assert.equal(outputContains("DRAFT_ONLY_ASSET_MARKER"), false);
   assert.match(feed, /https:\/\/www\.aravindakrishnan\.cloud\/blog\/two-cdn-cache-trap\.html/);
+  assert.match(index, /rel="alternate"[^>]+type="application\/rss\+xml"[^>]+href="\/feed\.xml"/);
+  assert.match(index, /<a class="label" href="\/feed\.xml">RSS feed<\/a>/);
   assert.match(sitemap, /https:\/\/www\.aravindakrishnan\.cloud\/blog\/two-cdn-cache-trap\.html/);
   assert.ok(feed.includes("Cache &amp; XML"));
 });

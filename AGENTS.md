@@ -76,8 +76,10 @@ Every Terraform command in this repo must run with `AWS_PROFILE=second`, e.g.
   split it before pushing, not after.
 - Touch only what the phase requires. No drive-by refactors or reformats. Preserve
   unrelated working-tree changes.
-- Never run `terraform apply` or `destroy`. Apply happens post-merge from `main` via
-  `apply.yml`; merging requires explicit human approval for that specific PR in the current session.
+- Local Terraform is verification-only: `fmt`, `validate`, and read-only `plan`. Never run
+  local `apply`, targeted apply, import, state mutation, invalidation, or `destroy`. Every real
+  site/infrastructure change runs through GitHub Actions after an explicitly approved pull request
+  merges to `main`.
 - Never commit secrets, `*.tfvars`, `.env`, state files, `web/node_modules`, or `web/dist`.
 - Ask before anything destructive, cost-bearing, or account-wide.
 - Keep public content in Git. Review Markdown, diagram sources and skill examples before

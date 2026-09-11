@@ -157,7 +157,7 @@ web/ (Astro, source)  --npm run build-->  web/dist/  --aws_s3_object-->  S3 (pri
 | Terraform (required_version) | >= 1.10.0 | 2026-07-31 |
 | AWS provider | ~> 6.0 | 2026-07-31 |
 | archive provider | ~> 2.0 | 2026-07-31 |
-| Astro | 7.2.4 resolved; package range `^7.2.4` | 2026-09-08, lockfile and `npm view astro@7.2.4 version` |
+| Astro | 7.2.9 resolved; package range `^7.2.9` | 2026-09-09, clean `npm ci`, audit, lint, tests and build |
 | Node | 24.18.1 LTS (Krypton) — `.nvmrc` + CI | 2026-07-31 (nodejs.org/dist/index.json) |
 | Fonts | Instrument Sans, JetBrains Mono — self-hosted woff2, SIL OFL 1.1 | 2026-07-31 |
 
@@ -167,7 +167,8 @@ configured versions, not a claim that they are the latest. `npm ci` uses the loc
 Node 24.18.1 remains configured in `.nvmrc` and both workflows. On 2026-09-08 its
 Linux x64 archive passed upstream SHA-256 verification and ran the local install,
 lint and build. The laptop's default Node may differ.
-Astro 7.2.9 is proposed separately in PR #26 and is not part of this content phase.
+Astro 7.2.9 is included in the final validation phase because 7.2.4 had a published
+critical advisory. The refreshed lockfile resolves the audited transitive dependencies.
 
 ## Cost and limits
 
@@ -217,19 +218,21 @@ Astro 7.2.9 is proposed separately in PR #26 and is not part of this content pha
 
 ## Expansion acceptance criteria
 
-These are future gates, not completed work:
+Local gates completed on 2026-09-09. Deployment-dependent checks remain open:
 
-- [ ] Clean-clone build needs no private files, SSH connection or live homelab.
-- [ ] New Markdown metadata validates; malformed metadata fails the build.
-- [ ] A draft fixture is absent from emitted pages, RSS, sitemap and navigation.
-- [ ] Blog index and one author-approved, source-backed article ship with a valid feed.
-- [ ] Production `.html` links, canonical URLs, feed links and sitemap resolve correctly.
-- [ ] Public atlas sources and exports pass explicit privacy review; diagrams are legible
-      at 375 px, with captions, text explanations and full-size links.
-- [ ] How I work contains overview, AI workflow, setup/tools and selected skills within
-      one section. Every published factual claim has a source or author confirmation.
-- [ ] Homepage remains recruiter-focused; desktop and mobile layout approved before coding.
-- [ ] Existing build, accessibility, no-JS, MIME, security and Terraform gates still apply.
+- [x] Clean-clone build needs no private files, SSH connection or live homelab.
+- [x] New Markdown metadata validates; malformed metadata fails the build.
+- [x] Draft fixtures and source-only assets are absent from pages, RSS, sitemap and navigation.
+- [x] Blog index and one author-approved, source-backed article build with a valid feed.
+- [ ] Live production `.html` links, canonical URLs, feed links and sitemap resolve correctly.
+      Local built-output checks pass.
+- [x] Public atlas sources and exports passed privacy review; diagrams are legible at
+      375 px, with captions, text explanations and full-size links.
+- [x] How I work contains overview, AI workflow, setup/tools and selected skills within
+      one section. Published factual claims have a source or author confirmation.
+- [x] Homepage remains recruiter-focused; desktop and mobile layout approved before coding.
+- [ ] Live post-deploy accessibility, no-JS, MIME, security headers and empty Terraform
+      plan checks remain. Their local equivalents pass as recorded in `TASKS.md`.
 
 ## Historical rebuild decisions
 

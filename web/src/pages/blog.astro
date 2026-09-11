@@ -11,6 +11,7 @@ const posts = await getPublishedBlogPosts();
     <p class="label">blog</p>
     <h1>Notes from the work</h1>
     <p class="lede">Dated notes on decisions and the maintenance that follows.</p>
+    <p><a class="label" href={url("/feed.xml")}>RSS feed</a></p>
     <div class="project-list" aria-label="Blog posts">
       {posts.map((post) => (
         <a class="blog-row" href={url(`/blog/${post.id}`)}>
