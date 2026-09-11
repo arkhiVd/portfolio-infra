@@ -4,8 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex,nofollow,noarchive" />
-    <link rel="cms-config-url" type="text/yaml" href="/admin/config.yml" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="cms-config-url" type="text/yaml" href="./config.yml" />
     <title>Portfolio content editor</title>
     <style>
       :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #050507; color: #ededf0; }
@@ -17,14 +16,8 @@
   <body>
     <main class="notice" id="editor-status">
       <h1>Portfolio content editor</h1>
-      <p>The remote editor is not enabled yet. Run the local authoring workflow documented in <code>docs/content-editing.md</code>.</p>
+      <p>Remote editing runs at <code>cms-auth.aravindakrishnan.cloud</code>. Local authoring steps are in <code>docs/content-editing.md</code>.</p>
     </main>
-    <script>
-      const localHosts = new Set(["localhost", "127.0.0.1", "::1"]);
-      if (localHosts.has(window.location.hostname)) {
-        document.querySelector("#editor-status")?.remove();
-        document.write('<script src="/admin/sveltia-cms-0.209.0.js" onload="CMS.init()"><\/script>');
-      }
-    </script>
+    <script src="./bootstrap.js"></script>
   </body>
 </html>

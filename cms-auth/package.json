@@ -1,0 +1,17 @@
+{
+  "name": "portfolio-cms-auth",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-assets.mjs",
+    "test": "npm run build && node --test tests/auth.test.mjs",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "4.131.0"
+  },
+  "engines": {
+    "node": ">=24.18.0"
+  }
+}

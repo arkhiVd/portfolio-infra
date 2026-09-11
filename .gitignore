@@ -20,6 +20,8 @@ screenshots/
 
 # Astro site
 web/node_modules/
+cms-auth/node_modules/
+cms-auth/.worker-assets/
 web/dist/
 web/.astro/
 web/.cms-unpublished-media/

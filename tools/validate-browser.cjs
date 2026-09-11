@@ -107,15 +107,41 @@ const captures = new Set(['/index.html', '/blog.html', '/blog/two-cdn-cache-trap
     assert.equal(await localAdmin.getByText('There is an error in the CMS configuration.').count(), 0);
     await localAdmin.close();
 
+    const publicAdmin = await browser.newPage();
+    const publicRequests = [];
+    publicAdmin.on('request', request => publicRequests.push(request.url()));
+    await publicAdmin.route('https://www.aravindakrishnan.cloud/**', route => {
+      const url = new URL(route.request().url());
+      const file = path.resolve(root, '.' + url.pathname);
+      if (file.startsWith(root + '/') && fs.existsSync(file) && fs.statSync(file).isFile()) {
+        route.fulfill({ status: 200, contentType: types[path.extname(file)] || 'application/octet-stream', body: fs.readFileSync(file) });
+      } else route.fulfill({ status: 404, body: '' });
+    });
+    await publicAdmin.goto('https://www.aravindakrishnan.cloud/admin/index.html');
+    await publicAdmin.getByText(/Remote editing runs at/).waitFor();
+    assert.equal(publicRequests.some(url => /sveltia-cms-0\.209\.0\.js|config\.yml/.test(url)), false);
+    await publicAdmin.close();
+
     const remoteAdmin = await browser.newPage();
     const remoteRequests = [];
     remoteAdmin.on('request', request => remoteRequests.push(request.url()));
-    await remoteAdmin.goto('http://portfolio.test:8766/admin/index.html');
-    assert.match(await remoteAdmin.locator('main').innerText(), /remote editor is not enabled yet/);
-    assert.ok(remoteRequests.every(url => url.startsWith('http://portfolio.test:8766/')));
-    assert.equal(remoteRequests.some(url => /sveltia-cms|config\.yml/.test(url)), false);
+    await remoteAdmin.route('**/*', route => {
+      const url = new URL(route.request().url());
+      if (url.origin === 'https://cms-auth.aravindakrishnan.cloud') {
+        const assetPath = url.pathname === '/' ? '/index.html' : url.pathname;
+        const file = path.resolve(root, './admin' + assetPath);
+        if (file.startsWith(path.resolve(root, 'admin') + '/') && fs.existsSync(file) && fs.statSync(file).isFile()) {
+          route.fulfill({ status: 200, contentType: types[path.extname(file)] || 'application/octet-stream', body: fs.readFileSync(file) });
+        } else route.fulfill({ status: 404, body: '' });
+      } else route.abort();
+    });
+    await remoteAdmin.goto('https://cms-auth.aravindakrishnan.cloud/');
+    await remoteAdmin.getByText(/Sign In with.*GitHub/).waitFor();
+    assert.equal(await remoteAdmin.getByText('There is an error in the CMS configuration.').count(), 0);
+    assert.ok(remoteRequests.some(url => /sveltia-cms-0\.209\.0\.js/.test(url)));
+    assert.ok(remoteRequests.some(url => /config\.yml/.test(url)));
     await remoteAdmin.close();
-    console.log('Admin local config and inert remote shell: PASS');
+    console.log('Admin local, public-inert and remote configuration: PASS');
 
     const page = await browser.newPage();
     await page.route('**/__visitor', route => route.abort());

@@ -210,17 +210,20 @@ Rollback: revert the prose adapters and content files; metadata remains content-
 
 **Class:** Risky. Depends on 15a and 15b.
 
-Scope: choose and verify the narrowest supported GitHub authentication design; prove Save
-creates a content branch/PR rather than writing to `main`; isolate observed admin network
-origins in an admin-only CSP. No AWS credentials, new AWS service, weakened branch
-protection, automatic merge or public-site CSP expansion.
+Scope: use GitHub OAuth with the smallest supported scope; prove Save creates a content
+branch/PR rather than writing to `main`; serve the remote editor and callback from a separate
+Cloudflare Worker origin. No AWS credentials, weakened branch protection, automatic merge or
+public-site CSP expansion.
 
-Exit criteria: permissions and secret storage documented, real draft PR round-trip tested,
-admin network origins observed, Terraform has no unexpected replacement, full Risky gate
-and fresh review pass. External OAuth infrastructure or cost needs separate human approval.
+Exit criteria:
+- [x] Worker source, downstream security patches, permissions and secret storage are documented and tested.
+- [x] The public site remains outside the OAuth trust boundary; local editing still works.
+- [x] Terraform has no unexpected replacement and the code-only Risky gate/fresh review pass.
+- [ ] Human configures branch protection, the OAuth app, environment approval and secrets.
+- [ ] Live authenticated network capture and draft-PR round-trip pass; a direct update to `main` is rejected.
 
-Rollback: remove remote bootstrap and admin CloudFront behavior/policy; local content files
-and public rendering continue to work.
+Rollback: disable OAuth grants, delete the Worker/custom domain and secrets, then remove the
+remote backend configuration. Local content files and public rendering continue to work.
 
 ## Delegation budget
 

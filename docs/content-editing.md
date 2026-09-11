@@ -4,13 +4,14 @@ The browser editor changes source files in Git. It never uploads to S3 and has n
 credentials. A production change still needs a pull request, passing checks and a human
 merge. The existing `apply.yml` then builds Astro and lets Terraform upload `web/dist/`.
 
-## Current Phase 15b2 boundary
+## Current Phase 15c boundary
 
 The local editor manages Blog, Homelab, How I work, Home, About and all project records. Project
 metadata drives the home list and `/projects`, including order, featured order, status, summary,
 stack, images and repository links. The six published case studies also keep their ordinary prose
-in the body of their existing project Markdown file. The deployed `/admin/` route is intentionally
-inert until the remote GitHub authentication design passes its own security review.
+in the body of their existing project Markdown file. Local editing stays at `/admin/`. The remote
+editor and OAuth callback share the separate `cms-auth.aravindakrishnan.cloud` origin, but that
+Worker is not live or proven yet. Local mode continues to work without an OAuth app or Worker.
 
 Run local authoring from the repository root:
 
@@ -82,9 +83,43 @@ filesystem paths, machine configuration, logs or credentials. The editor does no
 vault, connect to the homelab or regenerate diagrams. Mermaid sources and downloadable skill
 files stay outside CMS control and require normal source review.
 
+## Remote editing prerequisites and blockers
+
+Remote editing uses `https://cms-auth.aravindakrishnan.cloud/`. The Worker serves the pinned CMS
+assets and handles its OAuth callback on that same origin. The public site's `/admin/` shell stays
+inert on `www`, so ordinary portfolio pages are outside the OAuth trust boundary. The Worker
+exchanges a GitHub authorization code because GitHub does not support the required PKCE flow for
+this CMS. It forces `public_repo`; GitHub OAuth scopes cannot restrict that grant to only
+`portfolio-infra`, so the
+token can write other public repositories available to the signed-in account. Sveltia uses
+`editorial_workflow`, so Save must create a branch and pull request rather than write to `main`.
+
+This code is not live. A human must complete every item below before trying remote Save:
+
+1. Create a GitHub OAuth app with callback URL `https://cms-auth.aravindakrishnan.cloud/callback`.
+2. Protect `main` with required pull requests and the `plan` check. Block force pushes and
+   deletion, enforce the rules for administrators, and give the OAuth identity no bypass.
+   Editorial workflow is not an authorization boundary by itself.
+3. Create the GitHub `cms-auth` environment. Restrict its deployment branch to `main`, require a
+   reviewer, and add `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`,
+   `CMS_GITHUB_CLIENT_ID`, and `CMS_GITHUB_CLIENT_SECRET`. Scope the Cloudflare token to this
+   account and the minimum Worker/custom-domain permissions. Rotate it after suspected exposure
+   and remove it when the Worker is retired.
+4. After this workflow file reaches the default branch, approve and manually run the
+   `deploy CMS authenticator` workflow. The job also refuses to run unless its ref is `main`.
+   GitHub cannot dispatch a workflow that exists only on an unmerged feature branch.
+5. Confirm the Worker serves the editor only at `cms-auth.aravindakrishnan.cloud`; its
+   `workers.dev` endpoint must be disabled. Confirm `www` still shows the inert local-authoring
+   notice at `/admin/index.html`.
+6. Sign in and prove that Save creates an editorial branch and pull request. Also attempt a direct
+   Git API update to `main` and confirm branch protection rejects it.
+
+Do not put OAuth values in repository files, Terraform, local `.env` files, or Git history. No
+remote Save round-trip has been performed for this phase.
+
 ## Validate and publish
 
-```bash
+```
 cd web
 npm run lint
 npm test
@@ -99,6 +134,10 @@ There is no manual "upload to S3" step.
 ## Recovery and removal
 
 Content remains ordinary frontmatter plus Markdown. It can always be edited directly and
-built without Sveltia. Revert an unwanted edit through Git. Removing `web/public/admin/`
-and the YAML MIME entry removes the editor without changing the content model or public
-pages.
+built without Sveltia. Revert an unwanted edit through Git.
+
+To retire remote editing, disable the GitHub OAuth app and revoke issued grants first. Then delete
+the Worker custom domain, remove the `cms-auth` environment secrets and rotate the Cloudflare
+token. Remove the remote `base_url` from the CMS config in the next site change. Removing
+`web/public/admin/` and the YAML MIME entry removes the local editor too without changing the
+content model or public pages.
