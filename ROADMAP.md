@@ -195,11 +195,14 @@ Rollback: revert the migration commit to restore existing code-owned records.
 
 Scope: move the six custom case-study bodies into CMS-editable Markdown or structured
 sections without losing figures, captions, links or the required section order. Keep the
-Astro layouts and special rendering components in code.
+Astro layouts and special rendering components in code. The selected no-dependency adapter
+uses constrained raw HTML in the existing project Markdown bodies. It resolves figure paths
+and alt text from the project record, so the body does not duplicate image or repository
+metadata. MDX is not needed for this adapter.
 
 Exit criteria: all ordinary case-study prose is editable without Astro changes, Markdown
-round-trip preserves figures and code, output remains visually equivalent, and the full
-local/review gate passes.
+source-mode round-trip preserves figures and code, output remains visually equivalent, and
+the full local/review gate passes. The two projects without case studies remain bodyless.
 
 Rollback: revert the prose adapters and content files; metadata remains content-managed.
 

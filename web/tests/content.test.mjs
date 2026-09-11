@@ -15,11 +15,14 @@ import {
   referenceSchema,
   validateProjectSet,
 } from "../src/lib/content-schema.ts";
+import { renderCaseStudyBody } from "../src/lib/case-study.ts";
 
 const root = process.cwd();
 const blog = join(root, "src/content/blog");
 const referenceFile = join(root, "src/content/reference/homelab.md");
 const workflowFile = join(root, "src/content/reference/how-i-work.md");
+const caseStudyIds = ["clearsky", "appstack", "cdc", "portfolio", "cicd-containers", "cloud-detective"];
+const caseStudyFiles = caseStudyIds.map((id) => join(root, "src/content/projects", `${id}.md`));
 const dist = join(root, "dist");
 const today = new Date().toISOString().slice(0, 10);
 const fixtures = ["test-draft.md", "test-future.md", "test-escaped.md", "test-draft-asset.svg"];
@@ -50,11 +53,13 @@ test("page and project schemas restrict singleton IDs and list metadata", () => 
   const cmsProject = projectSchema.safeParse({ name: "Project", status: "live", summary: "Copy", stack: ["Astro"], image: "", imageAlt: "", repo: "", secondaryRepo: { label: "", url: "" }, order: 1, featuredOrder: null, kicker: "", lede: "" });
   assert.equal(cmsProject.success, true);
   assert.equal(cmsProject.data?.secondaryRepo, undefined);
+  assert.deepEqual(cmsProject.data?.additionalFigures, []);
   assert.equal(cmsProject.data?.featuredOrder, undefined);
   assert.equal(cmsProject.data?.kicker, undefined);
   assert.equal(projectSchema.safeParse({ name: "Project", status: "unknown", summary: "Copy", stack: ["Astro"], image: null, imageAlt: "", repo: null, order: 1 }).success, false);
   assert.equal(projectSchema.safeParse({ name: "Project", status: "live", summary: "Copy", stack: ["Astro"], image: "/assets/test.png", imageAlt: "", repo: "javascript:alert(1)", order: 1 }).success, false);
   assert.equal(projectSchema.safeParse({ name: "Project", status: "live", summary: "Copy", stack: ["Astro"], image: "https://example.com/test.png", imageAlt: "Test", repo: "https://example.com", order: 1 }).success, false);
+  assert.equal(projectSchema.safeParse({ name: "Project", status: "live", summary: "Copy", stack: ["Astro"], image: null, imageAlt: "", repo: null, additionalFigures: [{ image: "/assets/test.png", imageAlt: "" }], order: 1 }).success, false);
 });
 
 test("project set validation protects routes and deterministic ordering", () => {
@@ -137,15 +142,46 @@ test("CMS config matches content schemas and uses a pinned same-origin bundle", 
     assert.match(config, new RegExp(`name: ${field}(?:,|\\n)`));
   }
   for (const file of ["homelab.md", "how-i-work.md"]) assert.match(config, new RegExp(file.replace(".", "\\.")));
-  for (const field of ["order", "featuredOrder", "secondaryRepo", "kicker", "lede"]) {
+  for (const field of ["order", "featuredOrder", "secondaryRepo", "additionalFigures", "kicker", "lede", "body"]) {
     assert.match(config, new RegExp(`name: ${field}(?:,|\\n)`));
   }
+  assert.match(config, /label: Case-study body, name: body, widget: markdown, required: false/);
   assert.doesNotMatch(shell, /src=["']https?:/);
   assert.match(shell, /noindex,nofollow,noarchive/);
   assert.match(shell, /localHosts\.has/);
   assert.match(terraform, /"yml"\s+= "application\/yaml"/);
   assert.match(terraform, /"yaml"\s+= "application\/yaml"/);
   assert.equal(createHash("sha256").update(bundle).digest("hex"), "a2bc0e080e0eb1599ae0ae82026619e64442c363ee36882e965892c1acc61d85");
+});
+
+test("case-study bodies are source-owned, route-stable and safe to render", () => {
+  const sourceHashes = new Map(caseStudyFiles.map((file) => [file, createHash("sha256").update(readFileSync(file)).digest("hex")]));
+  for (const id of caseStudyIds) {
+    const source = readFileSync(join(root, "src/content/projects", `${id}.md`), "utf8");
+    const body = source.split(/^---\s*$/m).slice(2).join("---").trim();
+    const route = readFileSync(join(root, "src/pages/projects", `${id}.astro`), "utf8");
+    assert.ok(body.length > 0, `${id} has a CMS-editable body`);
+    assert.doesNotMatch(body, /<(?:img)\b|\s(?:src|alt)=/i, `${id} does not duplicate figure metadata`);
+    assert.match(body, /<p class="label">problem<\/p>[\s\S]*?<p class="label">architecture<\/p>[\s\S]*?<p class="label">decisions and tradeoffs<\/p>[\s\S]*?<p class="label">what broke<\/p>/);
+    assert.match(route, new RegExp(`getProject\\("${id}"\\)`));
+    assert.match(route, new RegExp(`getEntry\\("project", "${id}"\\)`));
+    assert.match(route, /renderCaseStudyBody\(entry!\.body, project\)/);
+    assert.doesNotMatch(route, /<Block\b|<p\b|<figure\b|<dl\b|<ul\b/);
+  }
+  for (const id of ["homelab-sync", "net-automation"]) {
+    const source = readFileSync(join(root, "src/content/projects", `${id}.md`), "utf8");
+    assert.equal(source.split(/^---\s*$/m).slice(2).join("---").trim(), "", `${id} remains bodyless`);
+  }
+  const rendered = renderCaseStudyBody('<section class="block wrap"><p class="label">problem</p><h2>Problem</h2></section><section class="block wrap"><p class="label">architecture</p><h2>Architecture</h2><figure class="arch" data-project-figure="0"><figcaption>Caption</figcaption></figure></section><section class="block wrap"><p class="label">decisions and tradeoffs</p><h2>Decisions</h2></section><section class="block wrap"><p class="label">what broke</p><h2>Failure</h2></section>', { slug: "test", image: "/assets/img/test.png", imageAlt: "Test figure", additionalFigures: [] });
+  assert.match(rendered, /<img src="\/assets\/img\/test\.png" alt="Test figure" loading="lazy" decoding="async">/);
+  assert.throws(() => renderCaseStudyBody('<script>alert(1)<\/script>', { slug: "test", image: null, imageAlt: "", additionalFigures: [] }));
+  assert.throws(() => renderCaseStudyBody('<section class="block wrap"><p class="label">problem<\/section><\/p>', { slug: "test", image: null, imageAlt: "", additionalFigures: [] }));
+  assert.throws(() => renderCaseStudyBody('<section class="block wrap"><p class="label">problem<\/p><h2>Heading<section class="block wrap"><\/section><\/h2><\/section>', { slug: "test", image: null, imageAlt: "", additionalFigures: [] }));
+  assert.throws(() => renderCaseStudyBody('<section class="block wrap"><p class="label">problem<\/p><h2>Problem<\/h2><\/section><section class="block wrap"><p class="label">architecture<\/p><h2>Architecture<\/h2><\/section><section class="block wrap"><p class="label">decisions and tradeoffs<\/p><h2>Decisions<\/h2><\/section><section class="block wrap"><p class="label">what broke<\/p><h2>Failure<\/h2><\/section>', { slug: "test", image: "/assets/img/test.png", imageAlt: "Test", additionalFigures: [] }));
+  build();
+  for (const [file, hash] of sourceHashes) {
+    assert.equal(createHash("sha256").update(readFileSync(file)).digest("hex"), hash, `${file} is unchanged by the build`);
+  }
 });
 
 test("published output excludes drafts, future posts and their assets", (t) => {

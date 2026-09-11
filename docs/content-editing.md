@@ -4,14 +4,13 @@ The browser editor changes source files in Git. It never uploads to S3 and has n
 credentials. A production change still needs a pull request, passing checks and a human
 merge. The existing `apply.yml` then builds Astro and lets Terraform upload `web/dist/`.
 
-## Current Phase 15b boundary
+## Current Phase 15b2 boundary
 
-The local editor manages Blog, Homelab, How I work, Home, About and the metadata for all eight
-projects. Project metadata drives the home list and `/projects`, including order, featured order,
-status, summary, stack, images and repository links. The six existing case-study bodies remain in
-Astro for Phase 15b2. Do not use the optional kicker or lede fields to imply that the body moved.
-The deployed `/admin/` route is intentionally inert until the remote GitHub authentication design
-passes its own security review.
+The local editor manages Blog, Homelab, How I work, Home, About and all project records. Project
+metadata drives the home list and `/projects`, including order, featured order, status, summary,
+stack, images and repository links. The six published case studies also keep their ordinary prose
+in the body of their existing project Markdown file. The deployed `/admin/` route is intentionally
+inert until the remote GitHub authentication design passes its own security review.
 
 Run local authoring from the repository root:
 
@@ -37,8 +36,24 @@ the required directory picker, so use Chromium for local authoring.
 Home and About are singleton JSON files. Edit ordinary page copy and the existing structured
 experience, certification, skills and education data there. Keep IDs unchanged. Project filenames
 are stable route IDs and cannot be created, deleted or renamed in the editor. Edit their metadata
-only. An empty image or repository field means there is no image or repository link. Preserve the
+and, for the six case studies listed below, their source-mode body. An empty image or repository
+field means there is no image or repository link. Preserve the
 numeric project order and unique featured order values unless the visible list order is changing.
+
+ClearSky, AppStack, CDC, the portfolio, CI/CD for AWS container services and Cloud Detective have
+case-study bodies. Their body is deliberately raw HTML inside Markdown, not MDX. Astro's built-in
+Markdown renderer cannot pass the current project record into a figure component, and adding MDX
+would add an integration and dependency just to resolve image metadata. The build adapter accepts
+only the existing section HTML and `data-project-figure` markers, then injects the image path and
+alt text from that project's metadata. Do not add `img`, `src` or `alt` to a body. Add a second
+figure through **Additional case-study figures**, then refer to it by its next marker number.
+
+Use the Markdown source mode for a case-study body. The visual editor can normalize raw HTML and
+break the section structure. Sveltia's source-mode control is required for this field; if the local
+bundle does not expose it, edit the Markdown file directly and do not save that body through the
+visual editor. Network automation and self-hosted encrypted sync stay bodyless. Do not add prose
+to them in the editor. The content test checks both files remain bodyless, and a build never writes
+content source files.
 
 ## Blog
 

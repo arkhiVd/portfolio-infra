@@ -1,10 +1,11 @@
 # Portfolio tasks
 
-## Current phase: 15b, content-source migration
+## Current phase: 15b2, project case-study prose migration
 
-Phase 15a is draft PR #33, stacked on the still-unmerged expansion. Phase 15b moves ordinary
-Home/About copy and all eight project-list records into validated content files. Six custom
-case-study bodies stay in Astro for 15b2. Remote GitHub auth remains a separate Risky phase.
+Phase 15a is draft PR #33, stacked on the still-unmerged expansion. Phase 15b moved ordinary
+Home/About copy and all eight project-list records into validated content files. Phase 15b2 moves
+the six published case-study bodies into those existing project Markdown files without changing
+project metadata, routes or layouts. Remote GitHub auth remains a separate Risky phase.
 
 | Phase | Branch | Draft PR | State |
 |---|---|---|---|
@@ -16,6 +17,7 @@ case-study bodies stay in Astro for 15b2. Remote GitHub auth remains a separate 
 | 14, performance/security validation | `feat/content-validation` | #32 | CI and fresh review passed |
 | 15a, local CMS foundation | `feat/cms-foundation` | #33 | CI and fresh review passed |
 | 15b, page/project content model | `feat/cms-content-model` | #34 | local gate and fresh review passed |
+| 15b2, case-study prose | `feat/cms-case-studies` | — | local gate and fresh review passed |
 
 Final merge order is #27, #28, #29, #30, #31, #32, #33, then #34. Each PR base must be moved
 to `main` after its parent merges, or the phases may be combined only with explicit human
@@ -118,7 +120,7 @@ recaptured. `docs/evidence/browser-results.json` records the final page matrix.
 - [x] Checkov baseline unchanged: 116 passed, 30 failed, 0 skipped.
 - [x] Fresh Terra-medium review found three issues: public media staging, a weak optional-date
       assertion and missing local YAML MIME coverage. All fixed; re-review found no blocker.
-- [ ] Commit/push and open stacked draft PR.
+- [x] Commit/push and open stacked draft PR #33.
 
 ## Phase 15b tasks
 
@@ -131,6 +133,18 @@ recaptured. `docs/evidence/browser-results.json` records the final page matrix.
 - [x] Public browser matrix and local/inert admin checks passed.
 - [x] Full browser/security/Terraform gate and fresh review passed; rendered copy is unchanged.
 - [x] Commit, push and open stacked draft PR #34.
+
+## Phase 15b2 tasks
+
+- [x] Move the six published case-study bodies into their existing project Markdown files.
+- [x] Keep image paths, alt text and repository links in project metadata only; the adapter resolves figure markers at build time.
+- [x] Keep `homelab-sync` and `net-automation` bodyless.
+- [x] Add schema, route, source-safety and CMS-config tests for six stable IDs and routes.
+- [x] `npm run lint` reported 0 diagnostics; `npm test` passed 9 tests; `npm run build` emitted 18 pages; `git diff --check` passed locally on 2026-09-11.
+- [x] Parent/current text, DOM structure and main-region pixels match for all six routes at 375 and 1280 px.
+- [x] Browser, audit, Gitleaks, actionlint, Terraform validation/plan and unchanged Checkov baseline passed.
+- [x] Fresh Terra review found two parser-structure gaps; both were fixed and re-review found no findings.
+- [ ] Commit, push and open the stacked draft PR.
 
 ## Phase 14 approval gates
 

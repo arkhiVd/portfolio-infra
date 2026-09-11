@@ -1,33 +1,14 @@
 ---
+import { getEntry } from "astro:content";
 import CaseStudy from "../../layouts/CaseStudy.astro";
-import Block from "../../components/Block.astro";
+import { renderCaseStudyBody } from "../../lib/case-study";
 import { getProject } from "../../lib/projects";
-import { url } from "../../lib/site";
+
 const project = await getProject("cdc");
+const entry = await getEntry("project", "cdc");
+const body = renderCaseStudyBody(entry!.body, project);
 ---
 
 <CaseStudy project={project} kicker={project.kicker!} lede={project.lede!}>
-  <Block label="problem" heading="Publish database changes without changing application code">
-    <p>Polling adds delay and repeated database work. This pipeline reads PostgreSQL's write-ahead log instead, producing one event for each insert, update or delete while normal SQL remains unchanged.</p>
-    <p>The infrastructure also needed to be reproducible and cost-conscious, with the connector plugin available privately and no fixed NAT gateway charge.</p>
-  </Block>
-  <Block label="architecture" heading="RDS WAL to Debezium to Amazon MSK">
-    <figure class="arch"><img src={url(project.image!)} alt={project.imageAlt} loading="lazy" decoding="async" /><figcaption>RDS PostgreSQL exposes logical replication; Debezium on MSK Connect reads the WAL and publishes table events to Amazon MSK. S3 stores the custom connector plugin and CloudWatch receives worker logs.</figcaption></figure>
-    <p>A dedicated VPC spans two availability zones. One self-referencing security group allows RDS, MSK and MSK Connect to communicate, while an S3 gateway endpoint lets Connect retrieve the plugin without internet egress.</p>
-  </Block>
-  <Block label="decisions and tradeoffs" heading="Key design decisions">
-    <dl class="rows">
-      <div class="row"><dt>Log-based CDC instead of polling</dt><dd>WAL events preserve operation type and before/after values with lower source-database overhead. The tradeoff is managing replication slots and WAL retention.</dd></div>
-      <div class="row"><dt>MSK Connect instead of a self-managed worker</dt><dd>A managed connector removes host maintenance, but gives less runtime control and requires AWS-specific plugin packaging.</dd></div>
-      <div class="row"><dt>S3 gateway endpoint instead of NAT</dt><dd>The connector retrieves its custom plugin privately without the hourly NAT cost. This path only solves S3 access, not arbitrary outbound traffic.</dd></div>
-      <div class="row"><dt>Connector-created topics</dt><dd>Broker auto-creation stays disabled; explicit connector settings create captured-table topics with the intended partitions and replication factor.</dd></div>
-    </dl>
-  </Block>
-  <Block label="what broke" heading="Logical replication is not enabled by default">
-    <p>Debezium cannot create a replication slot against a standard RDS PostgreSQL configuration. A custom parameter group sets <code>rds.logical_replication = 1</code>, and the instance must reboot before the setting takes effect.</p>
-    <p>The plugin also cannot be uploaded as the downloaded tarball. The apply step fetches Debezium, repacks its JARs into the flat ZIP expected by MSK Connect, uploads it to S3 and registers that object as a custom plugin.</p>
-  </Block>
-  <Block label="scope" heading="What the pipeline provisions">
-    <ul class="metrics"><li><b>2</b><span>availability zones and MSK brokers</span></li><li><b>1</b><span>logical replication stream</span></li><li><b>0</b><span>application polling loops</span></li><li><b>0</b><span>NAT gateways</span></li></ul>
-  </Block>
+  <Fragment set:html={body} />
 </CaseStudy>
