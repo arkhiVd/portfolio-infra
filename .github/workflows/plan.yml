@@ -34,7 +34,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # GitHub withholds Actions secrets from Dependabot-authored pull requests. Dependency
+      # updates still run the clean install, lint, tests, and production build below; Terraform
+      # remains unchanged because these PRs are limited to files under web/.
       - name: Configure AWS credentials (OIDC, plan role)
+        if: github.actor != 'dependabot[bot]'
         uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
         with:
           role-to-assume: ${{ secrets.AWS_PLAN_ROLE_ARN }}
@@ -56,32 +60,42 @@ jobs:
           npm run lint
           npm run test
 
+      - name: Record Dependabot validation scope
+        if: github.actor == 'dependabot[bot]'
+        run: echo 'Dependabot PR validated with install, lint, tests, and production build; Terraform plan skipped because Actions secrets are unavailable.'
+
       - name: Setup Terraform
+        if: github.actor != 'dependabot[bot]'
         uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
         with:
           terraform_version: "1.15.2"
 
       - name: Terraform fmt
+        if: github.actor != 'dependabot[bot]'
         run: terraform fmt -check -recursive
 
       - name: Terraform init
+        if: github.actor != 'dependabot[bot]'
         run: terraform init -input=false
 
       - name: Terraform validate
+        if: github.actor != 'dependabot[bot]'
         run: terraform validate
 
       - name: Checkov security scan
+        if: github.actor != 'dependabot[bot]'
         continue-on-error: true
         run: |
           pipx install checkov
           checkov -d . --quiet --compact --framework terraform
 
       - name: Terraform plan
+        if: github.actor != 'dependabot[bot]'
         id: plan
         run: terraform plan -input=false -no-color -out=tfplan | tee plan.txt
 
       - name: Comment plan on PR
-        if: always()
+        if: always() && github.actor != 'dependabot[bot]'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
