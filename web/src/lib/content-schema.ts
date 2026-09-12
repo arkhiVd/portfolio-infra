@@ -1,12 +1,20 @@
 import { z } from "astro/zod";
 
+// YAML parses an unquoted date into a Date object. The browser editor writes
+// datetime fields unquoted, so normalize to YYYY-MM-DD before ISO validation.
+// Date-only timestamps parse as UTC midnight, so the UTC slice round-trips.
+const yamlDate = z.preprocess(
+  (value) => (value instanceof Date ? value.toISOString().slice(0, 10) : value),
+  z.iso.date(),
+);
+
 // Git-backed form editors serialize a cleared optional date as an empty string.
-const optionalDate = z.preprocess((value) => (value === "" ? undefined : value), z.iso.date().optional());
+const optionalDate = z.preprocess((value) => (value === "" ? undefined : value), yamlDate.optional());
 
 export const blogSchema = z.object({
   title: z.string().min(1),
   description: z.string().min(1),
-  published: z.iso.date(),
+  published: yamlDate,
   updated: optionalDate,
   tags: z.array(z.string().min(1)).min(1),
   draft: z.boolean(),
@@ -15,7 +23,7 @@ export const blogSchema = z.object({
 export const referenceSchema = z.object({
   title: z.string().min(1),
   description: z.string().min(1),
-  reviewed: z.iso.date(),
+  reviewed: yamlDate,
   draft: z.boolean(),
 });
 
