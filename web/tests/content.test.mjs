@@ -39,6 +39,9 @@ const outputContains = (value, directory = dist) =>
 test("reference schema restricts IDs and dates", () => {
   assert.equal(referenceSchema.safeParse({ title: "X", description: "Y", reviewed: "2026-09-09", draft: false }).success, true);
   assert.equal(referenceSchema.safeParse({ title: "X", description: "Y", reviewed: "not-a-date", draft: false }).success, false);
+  const yamlDate = referenceSchema.safeParse({ title: "X", description: "Y", reviewed: new Date(Date.UTC(2026, 8, 9)), draft: false });
+  assert.equal(yamlDate.success, true);
+  assert.equal(yamlDate.data?.reviewed, "2026-09-09");
   assert.equal(referenceId("homelab.md"), "homelab");
   assert.throws(() => referenceId("inventory.md"));
   assert.throws(() => referenceId("nested/homelab.md"));
@@ -90,6 +93,9 @@ test("blog schema rejects malformed dates and IDs", () => {
   const cmsDate = blogSchema.safeParse({ title: "CMS", description: "Cleared optional date", published: "2026-09-10", updated: "", tags: ["test"], draft: true });
   assert.equal(cmsDate.success, true);
   assert.equal(cmsDate.data?.updated, undefined);
+  const yamlPublished = blogSchema.safeParse({ title: "CMS", description: "Unquoted editor date", published: new Date(Date.UTC(2026, 8, 10)), tags: ["test"], draft: true });
+  assert.equal(yamlPublished.success, true);
+  assert.equal(yamlPublished.data?.published, "2026-09-10");
   assert.equal(blogId("stable-post.md"), "stable-post");
   assert.throws(() => blogId("Unsafe ID!.md"));
   assert.throws(() => blogId("nested/stable-post.md"));
