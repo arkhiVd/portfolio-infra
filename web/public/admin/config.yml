@@ -126,6 +126,13 @@ collections:
       - { label: Image path, name: image, widget: string, required: false }
       - { label: Image alt text, name: imageAlt, widget: string, required: false }
       - { label: Repository URL, name: repo, widget: string, required: false }
+      - label: Additional case-study figures
+        name: additionalFigures
+        widget: list
+        required: false
+        fields:
+          - { label: Image path, name: image, widget: string }
+          - { label: Image alt text, name: imageAlt, widget: string }
       - label: Secondary repository
         name: secondaryRepo
         widget: object
@@ -137,6 +144,7 @@ collections:
       - { label: Featured order, name: featuredOrder, widget: number, value_type: int, min: 1, required: false }
       - { label: Case study kicker, name: kicker, widget: string, required: false }
       - { label: Case study lede, name: lede, widget: text, required: false }
+      - { label: Case-study body, name: body, widget: markdown, required: false }
 
   - name: reference
     label: Reference pages

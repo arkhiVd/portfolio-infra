@@ -70,6 +70,7 @@ export const projectSchema = z.object({
   imageAlt: z.string(),
   repo: emptyToNull(httpsUrl),
   secondaryRepo: secondaryRepoSchema,
+  additionalFigures: z.array(z.object({ image: publicAsset, imageAlt: nonEmpty })).default([]),
   order: z.number().int().positive(),
   featuredOrder: emptyToUndefined(z.number().int().positive()),
   kicker: emptyToUndefined(nonEmpty),
