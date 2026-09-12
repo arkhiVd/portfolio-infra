@@ -1,7 +1,7 @@
 ---
-title: "A small, private homelab"
-description: "A bounded view of the devices, private access and file paths I use at home."
-reviewed: "2026-09-09"
+title: A small, private homelab
+description: A bounded view of the devices, private access and file paths I use at home.
+reviewed: 2026-09-09
 draft: false
 ---
 
@@ -9,7 +9,7 @@ This is a curated reference reviewed on 2026-09-09. It is not a complete or live
 
 ## Selected service access
 
-An HP EliteDesk 800 G3 DM (65W) runs Linux Mint 22.3. Docker and Tailscale are active. For private services described here, access goes through Tailscale. Service data lives separately from containers, so replacing a container does not erase its persistent data.
+An HP EliteDesk 800 G3 DM (65W) runs Debian Linux. Docker and Tailscale are active. For private services, access goes through Tailscale. Service data lives separately from containers, so replacing a container does not erase its persistent data.
 
 <figure class="reference-figure">
   <img src="/diagrams/homelab-access.svg" alt="A selected private device connects through Tailscale to selected container services and then persistent data." />
