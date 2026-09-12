@@ -2,20 +2,21 @@
 import Base from "../layouts/Base.astro";
 import ProjectRow from "../components/ProjectRow.astro";
 import { site, url } from "../lib/site";
-import { featured } from "../lib/projects";
-import { getPublishedReferences } from "../lib/content";
-const references = await getPublishedReferences();
+import { getFeaturedProjects } from "../lib/projects";
+import { getHomePage, getPublishedReferences } from "../lib/content";
+const [home, featured, references] = await Promise.all([
+  getHomePage(),
+  getFeaturedProjects(),
+  getPublishedReferences(),
+]);
 const hasHomelab = references.some((entry) => entry.id === "homelab");
 ---
 
 <Base title={`${site.name} — ${site.role}`} current="home">
   <section class="hero wrap">
     <h1>{site.name}</h1>
-    <p class="hero-role">Cloud Engineer</p>
-    <p>
-      I build and operate cloud infrastructure across AWS, Linux, networking, Terraform,
-      containers and CI/CD. AWS Solutions Architect – Associate and CCNA certified.
-    </p>
+    <p class="hero-role">{home.hero.role}</p>
+    <p>{home.hero.introduction}</p>
     <div class="cta">
       <a class="btn" href={url("/projects")}>View projects</a>
       <a class="btn-quiet" href={url(site.resume)}>download resume →</a>
@@ -39,17 +40,17 @@ const hasHomelab = references.some((entry) => entry.id === "homelab");
     <div class="discover-list">
       <a href={url("/blog")}>
         <span class="label">writing</span>
-        <span><strong>Notes from the work</strong><small>Decisions and maintenance from this portfolio.</small></span>
+        <span><strong>{home.discover.blog.title}</strong><small>{home.discover.blog.description}</small></span>
         <span class="project-arrow" aria-hidden="true">→</span>
       </a>
       {hasHomelab && <a href={url("/homelab")}>
         <span class="label">reference</span>
-        <span><strong>Homelab</strong><small>A bounded view of private systems and file paths.</small></span>
+        <span><strong>{home.discover.homelab.title}</strong><small>{home.discover.homelab.description}</small></span>
         <span class="project-arrow" aria-hidden="true">→</span>
       </a>}
       {references.some((entry) => entry.id === "how-i-work") && <a href={url("/how-i-work")}>
         <span class="label">reference</span>
-        <span><strong>How I work</strong><small>Workflow, setup and a reusable review checklist.</small></span>
+        <span><strong>{home.discover.workflow.title}</strong><small>{home.discover.workflow.description}</small></span>
         <span class="project-arrow" aria-hidden="true">→</span>
       </a>}
     </div>
@@ -60,10 +61,6 @@ const hasHomelab = references.some((entry) => entry.id === "homelab");
       <h2>About</h2>
       <a class="label" href={url("/about")}>more →</a>
     </div>
-    <p class="prose">
-      I worked on AWS operations, networking, security, monitoring and cost management for
-      enterprise customers at Zarthi. My public projects extend that work into infrastructure as
-      code, container platforms and serverless systems. I am also preparing for the CKA.
-    </p>
+    <p class="prose">{home.about}</p>
   </section>
 </Base>

@@ -1,11 +1,10 @@
 # Portfolio tasks
 
-## Current phase: 15a, local CMS foundation
+## Current phase: 15b, content-source migration
 
-The author approved Git-backed browser editing on 2026-09-10. Phase 15a is stacked on the
-still-unmerged content expansion and does not merge or deploy it. Sveltia edits only existing
-Blog, Homelab and How I work Markdown locally. Remote GitHub authentication, broader content
-migration and an admin-specific CloudFront policy are separate phases.
+Phase 15a is draft PR #33, stacked on the still-unmerged expansion. Phase 15b moves ordinary
+Home/About copy and all eight project-list records into validated content files. Six custom
+case-study bodies stay in Astro for 15b2. Remote GitHub auth remains a separate Risky phase.
 
 | Phase | Branch | Draft PR | State |
 |---|---|---|---|
@@ -15,8 +14,10 @@ migration and an admin-specific CloudFront policy are separate phases.
 | 12, curated Homelab | `feat/content-homelab` | #30 | CI passed |
 | 13, How I work and public skill | `feat/content-workflow` | #31 | CI passed |
 | 14, performance/security validation | `feat/content-validation` | #32 | CI and fresh review passed |
+| 15a, local CMS foundation | `feat/cms-foundation` | #33 | CI and fresh review passed |
+| 15b, page/project content model | `feat/cms-content-model` | #34 | local gate and fresh review passed |
 
-Final merge order is #27, #28, #29, #30, #31, then Phase 14. Each PR base must be moved
+Final merge order is #27, #28, #29, #30, #31, #32, #33, then #34. Each PR base must be moved
 to `main` after its parent merges, or the phases may be combined only with explicit human
 approval. Agents do not merge or apply.
 
@@ -118,6 +119,18 @@ recaptured. `docs/evidence/browser-results.json` records the final page matrix.
 - [x] Fresh Terra-medium review found three issues: public media staging, a weak optional-date
       assertion and missing local YAML MIME coverage. All fixed; re-review found no blocker.
 - [ ] Commit/push and open stacked draft PR.
+
+## Phase 15b tasks
+
+- [x] Home and About now load validated singleton JSON with no duplicate content arrays.
+- [x] Eight project metadata records now have stable filename IDs and deterministic order.
+- [x] Home Discover copy and project kicker/lede fields are CMS-editable.
+- [x] Six detail routes preserve their custom Astro bodies and read shared metadata.
+- [x] CMS blank optional values normalize safely; malformed IDs and metadata fail tests.
+- [x] Astro check passed with 0 diagnostics; 8 tests passed; 18 pages built.
+- [x] Public browser matrix and local/inert admin checks passed.
+- [x] Full browser/security/Terraform gate and fresh review passed; rendered copy is unchanged.
+- [x] Commit, push and open stacked draft PR #34.
 
 ## Phase 14 approval gates
 

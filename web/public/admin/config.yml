@@ -35,6 +35,109 @@ collections:
       - { label: Draft, name: draft, widget: boolean, default: true }
       - { label: Article, name: body, widget: markdown }
 
+  - name: pages
+    label: Site pages
+    delete: false
+    files:
+      - label: Home
+        name: home
+        file: web/src/content/pages/home.json
+        fields:
+          - { label: ID, name: id, widget: hidden, default: home }
+          - label: Hero
+            name: hero
+            widget: object
+            fields:
+              - { label: Role, name: role, widget: string }
+              - { label: Introduction, name: introduction, widget: text }
+          - label: Discover links
+            name: discover
+            widget: object
+            fields:
+              - label: Blog
+                name: blog
+                widget: object
+                fields:
+                  - { label: Title, name: title, widget: string }
+                  - { label: Description, name: description, widget: text }
+              - label: Homelab
+                name: homelab
+                widget: object
+                fields:
+                  - { label: Title, name: title, widget: string }
+                  - { label: Description, name: description, widget: text }
+              - label: How I work
+                name: workflow
+                widget: object
+                fields:
+                  - { label: Title, name: title, widget: string }
+                  - { label: Description, name: description, widget: text }
+          - { label: About copy, name: about, widget: text }
+      - label: About
+        name: about
+        file: web/src/content/pages/about.json
+        fields:
+          - { label: ID, name: id, widget: hidden, default: about }
+          - { label: Introduction, name: introduction, widget: text }
+          - label: Experience
+            name: experience
+            widget: list
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Organisation, name: org, widget: string }
+              - { label: Period, name: period, widget: string }
+              - { label: Location, name: location, widget: string }
+              - { label: Points, name: points, widget: list }
+          - label: Certifications
+            name: certifications
+            widget: list
+            fields:
+              - { label: Name, name: name, widget: string }
+              - { label: Issuer, name: issuer, widget: string }
+              - { label: Verification URL, name: verify, widget: string }
+              - { label: Badge image path, name: image, widget: string }
+              - { label: Badge image alt text, name: imageAlt, widget: string }
+          - { label: Skills, name: skills, widget: list, fields: [{ label: Label, name: label, widget: string }, { label: Items, name: items, widget: string }] }
+          - label: Education
+            name: education
+            widget: object
+            fields:
+              - { label: School, name: school, widget: string }
+              - { label: Place, name: place, widget: string }
+              - { label: Finished, name: finished, widget: string }
+              - { label: Degree, name: degree, widget: string }
+          - { label: Contact copy, name: contact, widget: text }
+
+  - name: projects
+    label: Projects
+    folder: web/src/content/projects
+    create: false
+    delete: false
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    summary: "{{order}} — {{name}}"
+    sortable_fields: [order, name]
+    fields:
+      - { label: Name, name: name, widget: string }
+      - { label: Status, name: status, widget: select, options: [live, completed, in progress] }
+      - { label: Summary, name: summary, widget: text }
+      - { label: Stack, name: stack, widget: list }
+      - { label: Image path, name: image, widget: string, required: false }
+      - { label: Image alt text, name: imageAlt, widget: string, required: false }
+      - { label: Repository URL, name: repo, widget: string, required: false }
+      - label: Secondary repository
+        name: secondaryRepo
+        widget: object
+        required: false
+        fields:
+          - { label: Label, name: label, widget: string }
+          - { label: URL, name: url, widget: string }
+      - { label: Order, name: order, widget: number, value_type: int, min: 1 }
+      - { label: Featured order, name: featuredOrder, widget: number, value_type: int, min: 1, required: false }
+      - { label: Case study kicker, name: kicker, widget: string, required: false }
+      - { label: Case study lede, name: lede, widget: text, required: false }
+
   - name: reference
     label: Reference pages
     delete: false

@@ -2,8 +2,9 @@
 import Base from "../layouts/Base.astro";
 import ProjectRow from "../components/ProjectRow.astro";
 import { site } from "../lib/site";
-import { projects } from "../lib/projects";
+import { getProjects } from "../lib/projects";
 
+const projects = await getProjects();
 ---
 
 <Base
