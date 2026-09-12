@@ -124,14 +124,25 @@ test("public review skill has source, license and source-edit safeguards", () =>
   assert.match(readFileSync(join(root, "public/skills/static-site-review/LICENSE.txt"), "utf8"), /MIT License/);
 });
 
-test("CMS config matches content schemas and uses a pinned same-origin bundle", () => {
+test("CMS remote shell, worker provenance, policy isolation and deploy workflow stay narrow", () => {
   const admin = join(root, "public/admin");
   const config = readFileSync(join(admin, "config.yml"), "utf8");
   const shell = readFileSync(join(admin, "index.html"), "utf8");
+  const bootstrap = readFileSync(join(admin, "bootstrap.js"), "utf8");
+  const headers = readFileSync(join(root, "../cms-auth/assets/_headers"), "utf8");
   const bundle = readFileSync(join(admin, "sveltia-cms-0.209.0.js"));
   const terraform = readFileSync(join(root, "../frontend.tf"), "utf8");
+  const worker = readFileSync(join(root, "../cms-auth/src/index.js"));
+  const upstreamWorker = readFileSync(join(root, "../cms-auth/vendor/index.js"));
+  const workerSource = readFileSync(join(root, "../cms-auth/SOURCE.md"), "utf8");
+  const workerLicense = readFileSync(join(root, "../cms-auth/LICENSE.txt"), "utf8");
+  const wrangler = readFileSync(join(root, "../cms-auth/wrangler.toml"), "utf8");
+  const workflow = readFileSync(join(root, "../.github/workflows/deploy-cms-auth.yml"), "utf8");
 
   assert.match(config, /publish_mode: editorial_workflow/);
+  assert.match(config, /base_url: https:\/\/cms-auth\.aravindakrishnan\.cloud/);
+  assert.match(config, /auth_scope: public_repo/);
+  assert.match(config, /local_backend: true/);
   assert.match(config, /folder: web\/src\/content\/blog/);
   assert.match(config, /file: web\/src\/content\/pages\/home\.json/);
   assert.match(config, /file: web\/src\/content\/pages\/about\.json/);
@@ -148,10 +159,41 @@ test("CMS config matches content schemas and uses a pinned same-origin bundle", 
   assert.match(config, /label: Case-study body, name: body, widget: markdown, required: false/);
   assert.doesNotMatch(shell, /src=["']https?:/);
   assert.match(shell, /noindex,nofollow,noarchive/);
-  assert.match(shell, /localHosts\.has/);
+  assert.match(shell, /\.\/bootstrap\.js/);
+  assert.doesNotMatch(shell, /onload=|<script>[^<]/);
+  assert.match(bootstrap, /cms-auth\.aravindakrishnan\.cloud/);
+  assert.match(bootstrap, /sveltia-cms-0\.209\.0\.js/);
+  assert.match(bootstrap, /CMS\.init\(\)/);
+  assert.match(shell, /Remote editing runs at/);
   assert.match(terraform, /"yml"\s+= "application\/yaml"/);
   assert.match(terraform, /"yaml"\s+= "application\/yaml"/);
+  assert.match(terraform, /resource "aws_cloudfront_response_headers_policy" "security"[\s\S]*?connect-src 'self' \$\{trimsuffix/);
+  assert.doesNotMatch(terraform, /admin_security|path_pattern\s+= "admin\/\*"/);
+  assert.match(headers, /connect-src 'self' https:\/\/api\.github\.com/);
+  assert.match(headers, /script-src 'self';/);
+  assert.doesNotMatch(headers, /script-src 'self' 'unsafe-inline'/);
+  assert.match(headers, /img-src 'self' data: blob: https:\/\/avatars\.githubusercontent\.com/);
   assert.equal(createHash("sha256").update(bundle).digest("hex"), "a2bc0e080e0eb1599ae0ae82026619e64442c363ee36882e965892c1acc61d85");
+  assert.equal(createHash("sha256").update(upstreamWorker).digest("hex"), "a2858897152ffda6652e060f12f4976183879ae8baec6d00e60957f2ea802985");
+  assert.equal(createHash("sha256").update(worker).digest("hex"), "b553bc400385ff63eada7750d4215d1e00b06dba7de2eabed1ec7f3f7072623e");
+  assert.match(workerSource, /449b1d357e0173491d453749ed2e4507fef6399a/);
+  assert.match(workerLicense, /MIT License/);
+  assert.match(wrangler, /pattern = "cms-auth\.aravindakrishnan\.cloud", custom_domain = true/);
+  assert.match(wrangler, /ALLOWED_DOMAINS = "cms-auth\.aravindakrishnan\.cloud"/);
+  assert.match(wrangler, /directory = "\.worker-assets"/);
+  assert.match(wrangler, /run_worker_first = \["\/auth", "\/callback", "\/oauth\/\*"\]/);
+  assert.match(wrangler, /workers_dev = false/);
+  assert.match(workflow, /^on:\n  workflow_dispatch:/m);
+  assert.doesNotMatch(workflow, /\n  push:|\n  pull_request:/);
+  assert.match(workflow, /cloudflare\/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd/);
+  assert.match(workflow, /wranglerVersion: 4\.131\.0/);
+  for (const secret of ["CLOUDFLARE_API_TOKEN", "CLOUDFLARE_ACCOUNT_ID", "CMS_GITHUB_CLIENT_ID", "CMS_GITHUB_CLIENT_SECRET"]) {
+    assert.match(workflow, new RegExp(`secrets\\.${secret}`));
+  }
+  assert.match(workflow, /permissions:\n  contents: read/);
+  assert.match(workflow, /if: github\.ref == 'refs\/heads\/main'/);
+  assert.doesNotMatch(workflow, /AWS_|terraform|apply\.yml|test-client|test-client-secret/);
+  assert.doesNotMatch(config, /aws|s3|cloudfront/i);
 });
 
 test("case-study bodies are source-owned, route-stable and safe to render", () => {

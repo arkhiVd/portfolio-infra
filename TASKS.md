@@ -1,11 +1,9 @@
 # Portfolio tasks
 
-## Current phase: 15b2, project case-study prose migration
+## Current phase: 15c, remote CMS authentication and PR workflow
 
-Phase 15a is draft PR #33, stacked on the still-unmerged expansion. Phase 15b moved ordinary
-Home/About copy and all eight project-list records into validated content files. Phase 15b2 moves
-the six published case-study bodies into those existing project Markdown files without changing
-project metadata, routes or layouts. Remote GitHub auth remains a separate Risky phase.
+Phase 15c adds only the reviewed remote-auth code. The Worker and OAuth app are not live, and no
+remote Save round-trip has been performed.
 
 | Phase | Branch | Draft PR | State |
 |---|---|---|---|
@@ -18,8 +16,9 @@ project metadata, routes or layouts. Remote GitHub auth remains a separate Risky
 | 15a, local CMS foundation | `feat/cms-foundation` | #33 | CI and fresh review passed |
 | 15b, page/project content model | `feat/cms-content-model` | #34 | local gate and fresh review passed |
 | 15b2, case-study prose | `feat/cms-case-studies` | #35 | CI and fresh review passed |
+| 15c, remote CMS auth | `feat/cms-remote-auth` | #36 | code-only CI/review passed; not deployed |
 
-Final merge order is #27, #28, #29, #30, #31, #32, #33, #34, then #35. Each PR base must be moved
+Final merge order is #27, #28, #29, #30, #31, #32, #33, #34, #35, then #36. Each PR base must be moved
 to `main` after its parent merges, or the phases may be combined only with explicit human
 approval. Agents do not merge or apply.
 
@@ -145,6 +144,33 @@ recaptured. `docs/evidence/browser-results.json` records the final page matrix.
 - [x] Browser, audit, Gitleaks, actionlint, Terraform validation/plan and unchanged Checkov baseline passed.
 - [x] Fresh Terra review found two parser-structure gaps; both were fixed and re-review found no findings.
 - [x] Commit, push and open stacked draft PR #35; CI plan passed.
+
+## Phase 15c tasks
+
+- [x] Vendor the exact Sveltia CMS Authenticator Worker source and MIT license with checksum and behavior tests.
+- [x] Create an isolated Wrangler project for `cms-auth.aravindakrishnan.cloud`; it serves the editor and trusts only its own origin.
+- [x] Add a manual-dispatch-only Worker workflow using the `cms-auth` environment and named Cloudflare/OAuth secrets.
+- [x] Enable Sveltia remote configuration with `public_repo` and `editorial_workflow`, while retaining local backend mode.
+- [x] Keep the public `/admin/` shell inert on `www`; the remote editor uses a separate Worker origin and CSP. The public-site CSP is unchanged.
+- [ ] Human creates the GitHub OAuth app with callback `https://cms-auth.aravindakrishnan.cloud/callback`.
+- [ ] Enforce `main` protection for administrators and confirm the OAuth identity has no bypass. Current live evidence has required PR/`plan`, no force push/deletion, but `enforce_admins` is false.
+- [ ] Human creates a main-only, reviewer-gated `cms-auth` environment, adds the four named secrets, and runs the Worker workflow.
+- [ ] Human merges and deploys the site, then proves Save creates an editorial branch and PR without writing to `main`.
+- [x] Code-only gate passed: web lint 0, web 9 tests, Worker 5 tests, both audits 0, 18-page build, Wrangler 4.131.0 dry-run, browser matrix, actionlint, Gitleaks and Terraform validation.
+- [x] Plan: 19 add, 11 change, 1 obsolete hashed-CSS destroy, 0 replace. Checkov remains 116 passed and 30 failed.
+- [x] Fresh Sol Risky review found six issues. Scope enforcement, separate-origin hosting, Worker hardening, workflow controls, rollback and extensionless asset handling were fixed; final re-review found no findings.
+- [x] Commit and open stacked draft PR #36; GitHub Actions plan passed.
+- [ ] Live activation and deployment-dependent checks remain blocked on the three human prerequisites above.
+
+### Phase 15c handoff
+
+Next session must start on `feat/cms-remote-auth` and inspect PR #36 before changing code. The
+owner's next action is to enable administrator enforcement on `main`; prerequisite: confirm the
+existing required `plan` check will not lock out merges. Then the owner creates the OAuth app and
+the main-only, reviewer-gated `cms-auth` environment described in `docs/content-editing.md`.
+Agents must not merge, deploy the Worker, apply Terraform, create secrets or run a live CMS Save
+without fresh explicit approval. The live Save/direct-main rejection and authenticated CSP capture
+remain unproven.
 
 ## Phase 14 approval gates
 
