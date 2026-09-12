@@ -185,8 +185,8 @@ test("CMS remote shell, worker provenance, policy isolation and deploy workflow 
   assert.match(wrangler, /workers_dev = false/);
   assert.match(workflow, /^on:\n  workflow_dispatch:/m);
   assert.doesNotMatch(workflow, /\n  push:|\n  pull_request:/);
-  assert.match(workflow, /cloudflare\/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd/);
-  assert.match(workflow, /wranglerVersion: 4\.131\.0/);
+  assert.match(workflow, /cloudflare\/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0/);
+  assert.match(workflow, /wranglerVersion: 4\.131\.1/);
   for (const secret of ["CLOUDFLARE_API_TOKEN", "CLOUDFLARE_ACCOUNT_ID", "CMS_GITHUB_CLIENT_ID", "CMS_GITHUB_CLIENT_SECRET"]) {
     assert.match(workflow, new RegExp(`secrets\\.${secret}`));
   }
