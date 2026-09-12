@@ -17,6 +17,8 @@ locals {
     "avif"  = "image/avif",
     "woff2" = "font/woff2",
     "json"  = "application/json",
+    "yml"   = "application/yaml",
+    "yaml"  = "application/yaml",
     "xml"   = "application/xml",
     "pdf"   = "application/pdf",
     "map"   = "application/json"

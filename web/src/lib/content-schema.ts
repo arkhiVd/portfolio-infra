@@ -1,10 +1,13 @@
 import { z } from "astro/zod";
 
+// Git-backed form editors serialize a cleared optional date as an empty string.
+const optionalDate = z.preprocess((value) => (value === "" ? undefined : value), z.iso.date().optional());
+
 export const blogSchema = z.object({
   title: z.string().min(1),
   description: z.string().min(1),
   published: z.iso.date(),
-  updated: z.iso.date().optional(),
+  updated: optionalDate,
   tags: z.array(z.string().min(1)).min(1),
   draft: z.boolean(),
 });

@@ -84,6 +84,8 @@ Every Terraform command in this repo must run with `AWS_PROFILE=second`, e.g.
 - Ask before anything destructive, cost-bearing, or account-wide.
 - Keep public content in Git. Review Markdown, diagram sources and skill examples before
   publishing; never auto-export the private vault, atlas, machine configs or agent sessions.
+  The CMS may edit content source only. It never receives AWS credentials, writes `web/dist/`,
+  bypasses a PR/human merge, or directly publishes to S3/CloudFront.
 - Commits: conventional style, author `arkhiVd`, **no AI attribution of any kind**.
 - Blast radius: the live public site and its domain; the CloudFront distribution; the
   DynamoDB table holding real accumulated visitor counts (destroying it loses that data);

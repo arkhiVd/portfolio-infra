@@ -1,0 +1,59 @@
+backend:
+  name: github
+  repo: arkhiVd/portfolio-infra
+  branch: main
+
+local_backend: true
+publish_mode: editorial_workflow
+# Sveltia requires these keys even when uploads are not part of this phase. This ignored,
+# source-only path prevents draft media from entering Astro's verbatim public directory.
+media_folder: web/.cms-unpublished-media
+public_folder: /cms-unpublished-media
+
+collections:
+  - name: blog
+    label: Blog
+    label_singular: Blog post
+    folder: web/src/content/blog
+    create: true
+    delete: false
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    summary: "{{published}} — {{title}}"
+    sortable_fields: [published, title]
+    view_filters:
+      - label: Drafts
+        field: draft
+        pattern: true
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: text }
+      - { label: Published, name: published, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }
+      - { label: Updated, name: updated, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD, required: false }
+      - { label: Tags, name: tags, widget: list, min: 1 }
+      - { label: Draft, name: draft, widget: boolean, default: true }
+      - { label: Article, name: body, widget: markdown }
+
+  - name: reference
+    label: Reference pages
+    delete: false
+    files:
+      - label: Homelab
+        name: homelab
+        file: web/src/content/reference/homelab.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Description, name: description, widget: text }
+          - { label: Reviewed, name: reviewed, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }
+          - { label: Draft, name: draft, widget: boolean, default: true }
+          - { label: Body, name: body, widget: markdown }
+      - label: How I work
+        name: how-i-work
+        file: web/src/content/reference/how-i-work.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Description, name: description, widget: text }
+          - { label: Reviewed, name: reviewed, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }
+          - { label: Draft, name: draft, widget: boolean, default: true }
+          - { label: Body, name: body, widget: markdown }

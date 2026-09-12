@@ -1,9 +1,11 @@
 # Portfolio tasks
 
-## Current phase: 14, final validation and merge preparation
+## Current phase: 15a, local CMS foundation
 
-The approved expansion is implemented as stacked draft PRs. Nothing is merged or deployed.
-The homepage remains recruiter-focused; Blog, Homelab and How I work follow selected work.
+The author approved Git-backed browser editing on 2026-09-10. Phase 15a is stacked on the
+still-unmerged content expansion and does not merge or deploy it. Sveltia edits only existing
+Blog, Homelab and How I work Markdown locally. Remote GitHub authentication, broader content
+migration and an admin-specific CloudFront policy are separate phases.
 
 | Phase | Branch | Draft PR | State |
 |---|---|---|---|
@@ -95,7 +97,29 @@ recaptured. `docs/evidence/browser-results.json` records the final page matrix.
 - Browser tests use a local visitor-counter stub and do not increment production counts.
 - Monthly cost and live post-deploy behavior cannot be proven before deployment.
 
-## Remaining approval gates
+## Phase 15a tasks
+
+- [x] Branch `feat/cms-foundation` from Phase 14 without merging the stack.
+- [x] Verify and vendor Sveltia CMS 0.209.0 with SHA-256 and MIT license.
+- [x] Add local-only admin shell/config for Blog and both reference pages.
+- [x] Keep the production shell inert until remote auth receives Risky review.
+- [x] Document public-draft, privacy, Git publication and removal boundaries.
+- [x] Disposable CMS save preserved headings, links, inline code, fenced Bash/Mermaid,
+      blockquote and inline figure HTML in Markdown source mode; fixture removed afterward.
+      Cleared optional dates serialize as `updated: ''`, now normalized to undefined by schema.
+- [x] Clean Node gate: 0 lint diagnostics, 6 tests passed, 18 pages built, npm audit 0.
+- [x] Browser gate: 13 public pages unchanged; local CMS config loads with external requests
+      blocked; simulated remote hostname loads no CMS/config; admin screenshots captured.
+- [x] Gitleaks passed. One exact false-positive fingerprint in the checksum-pinned upstream
+      bundle is documented in `SOURCE.md`; first-party files remain scanned.
+- [x] Terraform fmt/validate passed. Cumulative plan: 18 add, 11 change, 1 hashed-CSS
+      destroy, 0 replace. Phase 15a adds five S3 objects and updates `robots.txt` only.
+- [x] Checkov baseline unchanged: 116 passed, 30 failed, 0 skipped.
+- [x] Fresh Terra-medium review found three issues: public media staging, a weak optional-date
+      assertion and missing local YAML MIME coverage. All fixed; re-review found no blocker.
+- [ ] Commit/push and open stacked draft PR.
+
+## Phase 14 approval gates
 
 - [x] Fresh-context Sol-medium review against `origin/main..HEAD`: three findings fixed;
       reviewer confirmed no unresolved actionable blocker.

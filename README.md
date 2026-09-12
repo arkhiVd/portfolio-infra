@@ -47,6 +47,19 @@ Edit source under `web/`, not the removed legacy `site/` or generated `web/dist/
 There is no deployed staging environment or active preview-prefix upload. Review
 unfinished work locally. Publishing a preview would require a separately reviewed change.
 
+## Content editing
+
+Blog, Homelab and How I work are Git-backed Markdown. Phase 15a adds a local browser editor
+at `http://localhost:4321/admin/index.html`; setup and publishing steps are in
+[`docs/content-editing.md`](docs/content-editing.md). Home, About and Projects remain
+code-owned until their separate migration.
+
+The editor changes source in the working tree. It never uploads to S3 and has no AWS
+credentials. Commit edits on a feature branch, review the pull request, and merge only after
+human approval. The existing main-branch workflow remains the only production publisher.
+The deployed `/admin/` shell stays inert until remote GitHub authentication passes its own
+security review.
+
 ## Terraform and deployment
 
 Read `AGENTS.md` before using AWS. The default local AWS profile is the wrong account.
