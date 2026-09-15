@@ -1,6 +1,8 @@
 ---
 import { render } from "astro:content";
 import Reference from "../layouts/Reference.astro";
+import HomelabAtlas from "../components/HomelabAtlas.astro";
+import Base from "../layouts/Base.astro";
 import { getPublishedReferences } from "../lib/content";
 
 export async function getStaticPaths() {
@@ -10,4 +12,10 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 ---
-<Reference id={entry.id} {...entry.data}><Content /></Reference>
+{entry.id === "homelab" ? (
+  <Base title="Homelab Atlas — Aravindakrishnan V" description="A public architecture atlas of a self-hosted homelab." current="homelab">
+    <HomelabAtlas />
+  </Base>
+) : (
+  <Reference id={entry.id} {...entry.data}><Content /></Reference>
+)}
