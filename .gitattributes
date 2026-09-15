@@ -1,2 +1,6 @@
 # Reviewed vendored browser bundle; checksum and provenance are tested separately.
 web/public/admin/sveltia-cms-0.209.0.js binary
+
+# Reviewed generated Homelab Atlas artifact and local assets; canonical source validation runs in arkhiVd/homelab-atlas.
+web/public/homelab/** -whitespace
+web/src/components/HomelabAtlas.artifact.html -whitespace

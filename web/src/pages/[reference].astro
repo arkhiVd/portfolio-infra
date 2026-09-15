@@ -5,7 +5,7 @@ import { getPublishedReferences } from "../lib/content";
 
 export async function getStaticPaths() {
   const references = await getPublishedReferences();
-  return references.map((entry) => ({ params: { reference: entry.id }, props: { entry } }));
+  return references.filter((entry) => entry.id !== "homelab").map((entry) => ({ params: { reference: entry.id }, props: { entry } }));
 }
 const { entry } = Astro.props;
 const { Content } = await render(entry);

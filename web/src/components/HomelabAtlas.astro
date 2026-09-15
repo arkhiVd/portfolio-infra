@@ -1,0 +1,12 @@
+---
+import artifact from "./HomelabAtlas.artifact.html?raw";
+---
+<div id="atlas-root" set:html={artifact}></div>
+<div id="atlas-veil" aria-hidden="true">
+  <p>Loading atlas…</p>
+  <button id="atlas-retry" type="button" hidden>Retry</button>
+  <button id="atlas-show-text" type="button" hidden>Show diagram source</button>
+</div>
+<script is:inline src="/homelab/mermaid.min.js"></script>
+<script is:inline src="/homelab/atlas-loader.js"></script>
+<script is:inline src="/homelab/atlas.js"></script>
