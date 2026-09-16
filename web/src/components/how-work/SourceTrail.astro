@@ -1,0 +1,12 @@
+---
+import { sources } from "../../data/how-i-work";
+---
+<div class="how-sources">
+  {sources.map((source) => (
+    <a href={source.href} target="_blank" rel="noreferrer">
+      <span class="how-source__label">{source.label}</span>
+      <span><strong>{source.title}</strong><small>{source.detail}</small></span>
+      <span class="how-source__arrow" aria-hidden="true">↗</span>
+    </a>
+  ))}
+</div>

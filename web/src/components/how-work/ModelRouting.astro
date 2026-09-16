@@ -1,0 +1,19 @@
+---
+import { routingTiers } from "../../data/how-i-work";
+---
+<div class="how-routing" aria-label="Model routing by task complexity">
+  <div class="how-routing__header">
+    <span>routing policy</span>
+    <p>Choose the route for the task's risk and reasoning load, then promote it when evidence reveals hidden coupling or external effects.</p>
+  </div>
+  <div class="how-routing__rows">
+    {routingTiers.map((tier) => (
+      <article>
+        <span class="how-routing__tier">{tier.tier}</span>
+        <div><strong>{tier.fit}</strong><small>{tier.work}</small></div>
+        <p>{tier.evidence}</p>
+      </article>
+    ))}
+  </div>
+  <p class="how-routing__note">The labels describe a portable policy, not a permanent provider ranking. Fresh context matters more to independent review than asking the same model to repeat the same assumptions.</p>
+</div>

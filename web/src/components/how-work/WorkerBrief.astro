@@ -1,0 +1,15 @@
+---
+import { workerBrief } from "../../data/how-i-work";
+---
+<aside class="how-brief" aria-labelledby="worker-brief-title">
+  <div class="how-brief__intro">
+    <span>example worker contract</span>
+    <h3 id="worker-brief-title">A worker should not need the coordinator's chat history.</h3>
+    <p>The brief carries the boundary into the worktree: observable outcome, writable paths, acceptance, exact verification and the handoff format.</p>
+  </div>
+  <dl class="how-brief__fields">
+    {workerBrief.map(([label, value]) => (
+      <div><dt>{label}</dt><dd>{value}</dd></div>
+    ))}
+  </dl>
+</aside>

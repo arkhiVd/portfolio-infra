@@ -1,0 +1,8 @@
+---
+import { failureModes } from "../../data/how-i-work";
+---
+<div class="how-failures">
+  {failureModes.map(([mode, guard]) => (
+    <article><h3>{mode}</h3><p>{guard}</p></article>
+  ))}
+</div>

@@ -1,0 +1,27 @@
+---
+import { url } from "../../lib/site";
+interface Props {
+  name: "pi" | "herdr" | "providers" | "mcp" | "github" | "terraform" | "obsidian" | "obsidian-mcp" | "docker" | "browser" | "human" | "checks" | "git";
+  compact?: boolean;
+}
+const { name, compact = false } = Astro.props;
+const atlasAsset = (file: string) => url(`/homelab/assets/08-ai-plane/${file}.svg`);
+---
+<span class:list={["how-tech-icon", compact && "is-compact", name === "providers" && "is-stack"]} aria-hidden="true">
+  {name === "pi" && <img class="is-mono" src={atlasAsset("pi")} alt="" />}
+  {name === "herdr" && <img class="is-mono" src={atlasAsset("herdr")} alt="" />}
+  {name === "mcp" && <img class="is-mono" src={atlasAsset("mcp")} alt="" />}
+  {name === "providers" && <><img src={atlasAsset("codex")} alt="" /><img src={atlasAsset("claude")} alt="" /></>}
+  {(name === "github" || name === "git") && <img class="is-mono" src={atlasAsset("github")} alt="" />}
+  {name === "terraform" && (
+    <svg viewBox="0 0 24 24"><path d="M1.44 0v7.575l6.561 3.79V3.787zm21.12 4.227-6.561 3.791v7.574l6.56-3.787zM8.72 4.23v7.575l6.561 3.787V8.018zm0 8.405v7.575L15.28 24v-7.578z"/></svg>
+  )}
+  {(name === "obsidian" || name === "obsidian-mcp") && <img src={atlasAsset("obsidian")} alt="" />}
+  {name === "obsidian-mcp" && <img class="how-tech-icon__satellite is-mono" src={atlasAsset("mcp")} alt="" />}
+  {name === "docker" && <img src={atlasAsset("docker")} alt="" />}
+  {name === "browser" && (
+    <svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="4" width="19" height="15.5" rx="2.2"/><path d="M2.5 8h19"/><circle cx="5.5" cy="6" r=".7" fill="currentColor" stroke="none"/><circle cx="8" cy="6" r=".7" fill="currentColor" stroke="none"/><path d="m8.2 14 2.2 2.1 5.4-5.2"/></svg>
+  )}
+  {name === "human" && <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c.8-4.1 3-6.1 6.5-6.1s5.7 2 6.5 6.1"/></svg>}
+  {name === "checks" && <svg viewBox="0 0 24 24" fill="none"><path d="m4.5 12.5 4.2 4.2L19.5 6"/><path d="M4 4h16v16H4z"/></svg>}
+</span>

@@ -1,0 +1,21 @@
+---
+import { evidenceRows } from "../../data/how-i-work";
+---
+<div class="how-evidence" role="list" aria-label="Evidence by system">
+  {evidenceRows.map((row) => (
+    <article class="how-evidence__row" role="listitem">
+      <span class="how-evidence__system">{row.system}</span>
+      <div class="how-evidence__checks">
+        <strong>{row.checks}</strong>
+        <span>{row.kind}</span>
+      </div>
+      <p>{row.inspect}</p>
+      <div class="how-evidence__links">
+        {row.links.map((link) => (
+          <a class="how-micro-link" href={link.href} target="_blank" rel="noreferrer">{link.label} ↗</a>
+        ))}
+      </div>
+      <span class="how-evidence__check" aria-label="required evidence">✓</span>
+    </article>
+  ))}
+</div>

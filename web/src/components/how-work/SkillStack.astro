@@ -1,0 +1,22 @@
+---
+import { skills } from "../../data/how-i-work";
+---
+<div class="how-skills" aria-label="Engineering skills encoded into the workflow">
+  {skills.map((skill, index) => (
+    <article class="how-skill">
+      <header>
+        <span>{String(index + 1).padStart(2, "0")}</span>
+        <h3>{skill.title}</h3>
+      </header>
+      <dl>
+        <div><dt>when I reach for it</dt><dd>{skill.trigger}</dd></div>
+        <div><dt>what I actually do</dt><dd>{skill.practice}</dd></div>
+        <div><dt>why it stays</dt><dd>{skill.why}</dd></div>
+      </dl>
+      <footer>
+        <span>influence</span>
+        <a class="how-micro-link" href={skill.href} target="_blank" rel="noreferrer">{skill.influence} ↗</a>
+      </footer>
+    </article>
+  ))}
+</div>

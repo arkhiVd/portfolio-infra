@@ -1,0 +1,126 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import SectionFrame from "./SectionFrame.astro";
+import WorkflowLoop from "./WorkflowLoop.astro";
+import ChangeClasses from "./ChangeClasses.astro";
+import AgentPlane from "./AgentPlane.astro";
+import OwnershipLanes from "./OwnershipLanes.astro";
+import WorkerBrief from "./WorkerBrief.astro";
+import ContextMap from "./ContextMap.astro";
+import EvidenceLedger from "./EvidenceLedger.astro";
+import ToolMatrix from "./ToolMatrix.astro";
+import SkillStack from "./SkillStack.astro";
+import Influences from "./Influences.astro";
+import ModelRouting from "./ModelRouting.astro";
+import FailureModes from "./FailureModes.astro";
+import ChangeWalkthrough from "./ChangeWalkthrough.astro";
+import SourceTrail from "./SourceTrail.astro";
+import { operatingRules } from "../../data/how-i-work";
+import { site } from "../../lib/site";
+import "../../styles/how-i-work.css";
+
+interface Props { entry: CollectionEntry<"reference">; }
+const { entry } = Astro.props;
+---
+
+<Base title={`${entry.data.title} — ${site.name}`} description={entry.data.description} current="how-i-work">
+  <div class="how-page">
+    <header class="how-hero wrap">
+      <div class="how-hero__grid">
+        <div>
+          <p class="how-kicker">engineering workflow</p>
+          <h1>How I actually build.</h1>
+          <p class="how-hero__lede">
+            I use agents as <strong>bounded engineering collaborators</strong>, not as a replacement for owning the system.
+            Git holds the project contract, agents work in reviewable slices, and I keep the gates that can change risk:
+            architecture, evidence, merge and deployment.
+          </p>
+        </div>
+        <aside class="how-hero__aside" aria-label="Working principles">
+          <p><strong>Chat is temporary.</strong> A clean session should recover the work from durable project state.</p>
+          <p><strong>“Done” is not evidence.</strong> I want the diff, check output, infrastructure plan or rendered behavior.</p>
+          <p><strong>Parallelism needs ownership.</strong> If two workers need the same file, I would rather serialize the work.</p>
+        </aside>
+      </div>
+
+      <div class="how-principles" aria-label="Operating invariants">
+        {operatingRules.map(([title, detail], index) => (
+          <article class="how-principle">
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <strong>{title}</strong>
+            <p>{detail}</p>
+          </article>
+        ))}
+      </div>
+    </header>
+
+    <div class="wrap how-layout">
+      <nav class="how-local-nav" aria-label="How I work sections">
+        <span>on this page</span>
+        <a href="#operating-loop">00 / loop</a>
+        <a href="#agent-plane">01 / agent plane</a>
+        <a href="#multiple-agents">02 / ownership</a>
+        <a href="#context">03 / context</a>
+        <a href="#evidence">04 / evidence</a>
+        <a href="#skills">05 / skills</a>
+        <a href="#tools">06 / tools</a>
+        <a href="#failure-modes">07 / guardrails</a>
+        <a href="#walkthrough">08 / one change</a>
+        <a href="#influences">09 / influences</a>
+        <a href="#sources">10 / sources</a>
+      </nav>
+
+      <div class="how-content">
+        <SectionFrame id="operating-loop" number="00" title="The workflow is a sequence of gates." lede="Each stage settles a different question, leaves a durable artifact and makes ownership visible. Small work can compress gates; risk makes them explicit.">
+          <WorkflowLoop />
+          <h3 class="how-subhead">Risk changes how much of the loop I make explicit.</h3>
+          <ChangeClasses />
+        </SectionFrame>
+
+        <SectionFrame id="agent-plane" number="01" title="The agent plane has boundaries, not magic." lede="The useful part of the setup is not the number of models. Project truth, agent execution, guarded context, evidence and human authority are different layers.">
+          <AgentPlane />
+        </SectionFrame>
+
+        <SectionFrame id="multiple-agents" number="02" title="Multiple agents only help when work splits cleanly." lede="I parallelize independent ownership, not overlapping edits. The coordinator tracks state and dependencies; the reviewer starts fresh on purpose.">
+          <OwnershipLanes />
+          <WorkerBrief />
+        </SectionFrame>
+
+        <SectionFrame id="context" number="03" title="Context has a lifecycle too." lede="Git is project truth. Private knowledge is a separate durable source. Agent sessions are temporary working memory and get only the context the approved task needs.">
+          <ContextMap />
+        </SectionFrame>
+
+        <SectionFrame id="evidence" number="04" title="I close work with evidence, not confidence." lede="The proof changes with the system. What stays constant is that it exists outside the agent’s own explanation and can disagree with it.">
+          <EvidenceLedger />
+        </SectionFrame>
+
+        <SectionFrame id="skills" number="05" title="The useful skills are habits I can rerun." lede="I keep these as explicit operating patterns instead of vague 'AI best practices'. Each one has a trigger, a behavior and a reason it exists.">
+          <SkillStack />
+        </SectionFrame>
+
+        <SectionFrame id="tools" number="06" title="Tools have jobs, boundaries and proof." lede="I keep this list to the tools that actually shape the workflow: what each one does, where it runs, what it may touch, and how I verify the result.">
+          <ToolMatrix />
+          <ModelRouting />
+          <p class="how-inline-note">Model names and individual CLIs are intentionally secondary. Routing by task risk and reasoning load matters more than maintaining a permanent model leaderboard.</p>
+        </SectionFrame>
+
+        <SectionFrame id="failure-modes" number="07" title="The failure modes are part of the design." lede="Most of this workflow is a set of problems I do not want to discover at the end of a change.">
+          <FailureModes />
+        </SectionFrame>
+
+        <SectionFrame id="walkthrough" number="08" title="What one change looks like end to end." lede="This page redesign is a useful example: the process itself should be visible in the artifact it produces.">
+          <div class="how-panel how-panel--padded"><ChangeWalkthrough /></div>
+        </SectionFrame>
+
+        <SectionFrame id="influences" number="09" title="The workflow has visible influences." lede="I prefer attribution over pretending these patterns appeared from nowhere. I borrow ideas, test them against my own constraints, and keep the resulting workflow inspectable.">
+          <Influences />
+        </SectionFrame>
+
+        <SectionFrame id="sources" number="10" title="Go deeper than the portfolio summary." lede="The portfolio is the readable entry point. The repositories and upstream influences carry the longer contracts and source material behind it.">
+          <SourceTrail />
+        </SectionFrame>
+      </div>
+    </div>
+  </div>
+</Base>

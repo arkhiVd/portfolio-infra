@@ -1,0 +1,15 @@
+---
+import { walkthrough } from "../../data/how-i-work";
+---
+<ol class="how-timeline">
+  {walkthrough.map((item, index) => (
+    <li>
+      <span class="how-timeline__number">{String(index + 1).padStart(2, "0")}</span>
+      <div>
+        <h3>{item.stage}</h3>
+        <p>{item.detail}</p>
+        <a class="how-micro-link" href={item.href} target="_blank" rel="noreferrer">evidence / {item.evidence} ↗</a>
+      </div>
+    </li>
+  ))}
+</ol>
