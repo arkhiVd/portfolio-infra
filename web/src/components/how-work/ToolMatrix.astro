@@ -1,0 +1,24 @@
+---
+import TechIcon from "./TechIcon.astro";
+import { tools } from "../../data/how-i-work";
+---
+<div class="how-tools">
+  {tools.map((tool) => (
+    <article class="how-tool">
+      <header>
+        <TechIcon name={tool.icon} />
+        <div><span class="how-tool__category">{tool.category}</span><h3>{tool.name}</h3></div>
+      </header>
+      <p class="how-tool__role">{tool.role}</p>
+      <dl>
+        <div><dt>use it when</dt><dd>{tool.when}</dd></div>
+        <div><dt>why</dt><dd>{tool.why}</dd></div>
+        <div><dt>boundary</dt><dd>{tool.boundary}</dd></div>
+        <div><dt>proof</dt><dd>{tool.proof}</dd></div>
+      </dl>
+      <footer class="how-tool__footer">
+        <a class="how-micro-link" href={tool.href} target="_blank" rel="noreferrer">source / {tool.source} <span aria-hidden="true">↗</span></a>
+      </footer>
+    </article>
+  ))}
+</div>

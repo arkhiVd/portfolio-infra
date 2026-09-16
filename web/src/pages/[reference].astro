@@ -2,6 +2,7 @@
 import { render } from "astro:content";
 import Reference from "../layouts/Reference.astro";
 import HomelabAtlas from "../components/HomelabAtlas.astro";
+import HowIWorkPage from "../components/how-work/HowIWorkPage.astro";
 import Base from "../layouts/Base.astro";
 import { getPublishedReferences } from "../lib/content";
 
@@ -16,6 +17,8 @@ const { Content } = await render(entry);
   <Base title="Homelab Atlas — Aravindakrishnan V" description="A public architecture atlas of a self-hosted homelab." current="homelab">
     <HomelabAtlas />
   </Base>
+) : entry.id === "how-i-work" ? (
+  <HowIWorkPage entry={entry} />
 ) : (
   <Reference id={entry.id} {...entry.data}><Content /></Reference>
 )}

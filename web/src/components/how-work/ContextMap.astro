@@ -1,0 +1,45 @@
+---
+import TechIcon from "./TechIcon.astro";
+---
+<figure class="how-panel how-context-figure" aria-labelledby="context-caption">
+  <div class="how-panel__bar">
+    <span>context architecture / what survives the session</span>
+    <span class="how-panel__links">
+      <a class="how-micro-link" href="https://github.com/arkhiVd/agent-workbench/blob/main/SPEC.md" target="_blank" rel="noreferrer">context contract ↗</a>
+      <a class="how-micro-link" href="https://github.com/arkhiVd/homelab-atlas/blob/main/src/08-ai-plane.mmd" target="_blank" rel="noreferrer">Atlas MCP flow ↗</a>
+    </span>
+  </div>
+  <div class="how-context-map">
+    <section class="how-context-store is-project">
+      <TechIcon name="github" compact />
+      <span class="how-context-store__kind">01 / project truth</span>
+      <h3>Git</h3>
+      <p>AGENTS · specs · tasks · source · diagrams · validation instructions</p>
+      <small>clean clone must make sense</small>
+    </section>
+    <div class="how-context-arrow" aria-hidden="true"><span>task context</span><i></i></div>
+    <section class="how-context-session">
+      <TechIcon name="pi" compact />
+      <span>02 / working context</span>
+      <h3>Agent session</h3>
+      <p>temporary · scoped · disposable</p>
+      <div class="how-context-tools"><span>read</span><span>edit</span><span>test</span><span>report</span></div>
+      <small>only the approved task needs to fit here</small>
+    </section>
+    <div class="how-context-arrow is-reverse" aria-hidden="true"><span>selected retrieval</span><i></i></div>
+    <section class="how-context-store is-private">
+      <TechIcon name="obsidian-mcp" compact />
+      <span class="how-context-store__kind">03 / private durable knowledge</span>
+      <h3>Obsidian + guarded MCP</h3>
+      <p>research · learning · selected cross-project context</p>
+      <small>never silent project authority</small>
+    </section>
+  </div>
+  <div class="how-context-output">
+    <span>promotion after the task</span>
+    <div><b>project decision</b><em>durable</em><span>→ Git</span></div>
+    <div><b>private learning</b><em>durable</em><span>→ private knowledge</span></div>
+    <div><b>working chatter</b><em>temporary</em><span>→ discard</span></div>
+  </div>
+  <figcaption id="context-caption">The important distinction is authority, not “memory.” Git contains what another clean session needs to continue the project; private knowledge can inform the task through a narrow bridge; chat remains disposable.</figcaption>
+</figure>

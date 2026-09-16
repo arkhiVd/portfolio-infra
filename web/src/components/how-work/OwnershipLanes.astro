@@ -1,0 +1,32 @@
+---
+import { ownershipLanes } from "../../data/how-i-work";
+---
+<figure class="how-panel" aria-labelledby="ownership-caption">
+  <div class="how-panel__bar">
+    <span>parallel work / ownership map</span>
+    <span class="how-state">one writer per boundary</span>
+  </div>
+  <div class="how-lanes">
+    {ownershipLanes.map((lane, index) => (
+      <section class={`how-lane is-${lane.mode}`}>
+        <header>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <div>
+            <h3>{lane.title}</h3>
+            <small>{lane.badge}</small>
+          </div>
+        </header>
+        <ol>
+          {lane.steps.map((step) => <li>{step}</li>)}
+        </ol>
+        <footer>{lane.output}</footer>
+      </section>
+    ))}
+  </div>
+  <div class="how-boundary-rule">
+    <span>same file?</span>
+    <b>rescope or serialize</b>
+    <span>not “let both agents try”</span>
+  </div>
+  <figcaption id="ownership-caption">Read-only discovery is easy to parallelize. Writes are only parallel when the ownership boundary is physically clear and the combined result is validated again.</figcaption>
+</figure>

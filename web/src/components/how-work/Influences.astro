@@ -1,0 +1,19 @@
+---
+import { influences } from "../../data/how-i-work";
+---
+<div class="how-influences">
+  <div class="how-influences__intro">
+    <span>influence ≠ dependency</span>
+    <p>I did not invent every idea here. I keep the sources visible, then adapt the parts that survive my own constraints: Git-held project state, bounded agent authority, explicit evidence and human release gates.</p>
+  </div>
+  <div class="how-influences__grid">
+    {influences.map((item) => (
+      <article>
+        <h3>{item.title}</h3>
+        <div><span>idea I borrowed</span><p>{item.idea}</p></div>
+        <div><span>my adaptation</span><p>{item.adaptation}</p></div>
+        <a class="how-micro-link" href={item.href} target="_blank" rel="noreferrer">read the original source ↗</a>
+      </article>
+    ))}
+  </div>
+</div>

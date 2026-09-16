@@ -1,0 +1,129 @@
+---
+import TechIcon from "./TechIcon.astro";
+---
+<figure class="how-panel how-architecture how-atlas" aria-labelledby="agent-plane-caption">
+  <div class="how-panel__bar">
+    <span>architecture / agent-assisted development plane</span>
+    <span class="how-panel__links">
+      <a class="how-micro-link" href="https://github.com/arkhiVd/homelab-atlas/blob/main/src/08-ai-plane.mmd" target="_blank" rel="noreferrer">Atlas AI plane ↗</a>
+      <a class="how-micro-link" href="https://github.com/arkhiVd/agent-workbench/blob/main/kb/main-flow.md" target="_blank" rel="noreferrer">Workbench flow ↗</a>
+    </span>
+  </div>
+
+  <div class="how-atlas__legend" aria-label="Diagram legend">
+    <span><i class="is-solid"></i>control / write path</span>
+    <span><i class="is-dashed"></i>selected context</span>
+    <span><i class="is-proof"></i>evidence path</span>
+    <span><i class="is-gate"></i>human authority</span>
+  </div>
+
+  <div class="how-atlas__plane">
+    <section class="how-atlas__group" aria-label="Intent and project contract">
+      <header><span>01 / intent + contract</span><small>durable authority</small></header>
+      <div class="how-atlas-node is-human">
+        <TechIcon name="human" compact />
+        <div><b>Human operator</b><span>intent · tradeoffs · risk acceptance</span></div>
+        <small>decides</small>
+      </div>
+      <div class="how-atlas-edge is-down"><span>approves direction</span></div>
+      <div class="how-atlas-node is-contract">
+        <TechIcon name="github" compact />
+        <div><b>Git project contract</b><span>AGENTS · SPEC · ROADMAP · TASKS</span></div>
+        <small>source of truth</small>
+      </div>
+      <div class="how-atlas-node is-context">
+        <TechIcon name="obsidian" compact />
+        <div><b>Private knowledge</b><span>selected research · cross-project notes</span></div>
+        <small>bounded read</small>
+      </div>
+      <footer><span>what this layer owns</span><b>what may change</b></footer>
+    </section>
+
+    <div class="how-atlas-rail" aria-hidden="true"><span>approved brief</span><i></i></div>
+
+    <section class="how-atlas__group is-active" aria-label="Remote homelab sandbox and coordination">
+      <header><span>02 / remote homelab sandbox</span><small>isolated execution host</small></header>
+      <div class="how-atlas-node is-context">
+        <TechIcon name="docker" compact />
+        <div><b>Remote homelab host</b><span>long-running sessions · containers · Tailscale preview</span></div>
+        <small>private reachability · separate host</small>
+      </div>
+      <div class="how-atlas-edge is-down"><span>scoped agent workspace</span></div>
+      <div class="how-atlas-node is-agent">
+        <TechIcon name="pi" compact />
+        <div><b>Pi</b><span>remote interactive session · inspect / edit / verify</span></div>
+        <small>one task</small>
+      </div>
+      <div class="how-atlas-edge is-down"><span>parallel only if independent</span></div>
+      <div class="how-atlas-node is-agent">
+        <TechIcon name="herdr" compact />
+        <div><b>Herdr</b><span>workspaces · ownership · reconciliation state</span></div>
+        <small>optional</small>
+      </div>
+      <div class="how-atlas-node is-context">
+        <TechIcon name="mcp" compact />
+        <div><b>Guarded MCP</b><span>allow-listed context and capabilities</span></div>
+        <small>narrow tools</small>
+      </div>
+      <footer><span>execution rule</span><b>isolated host · one writer / boundary</b></footer>
+    </section>
+
+    <div class="how-atlas-rail" aria-hidden="true"><span>provider + tool calls</span><i></i></div>
+
+    <section class="how-atlas__group" aria-label="Execution and deterministic evidence">
+      <header><span>03 / execution + proof</span><small>bounded workers</small></header>
+      <div class="how-atlas-node is-provider">
+        <TechIcon name="providers" compact />
+        <div><b>Codex / Claude routes</b><span>implementation · analysis · independent review</span></div>
+        <small>routed by risk</small>
+      </div>
+      <div class="how-atlas-edge is-down"><span>writes named paths</span></div>
+      <div class="how-atlas-node is-contract">
+        <TechIcon name="git" compact />
+        <div><b>Branch / worktree</b><span>physical ownership · complete diff</span></div>
+        <small>exclusive</small>
+      </div>
+      <div class="how-atlas-node is-proof">
+        <TechIcon name="checks" compact />
+        <div><b>Deterministic checks</b><span>tests · Terraform plan · headless browser</span></div>
+        <small>evidence</small>
+      </div>
+      <footer><span>completion means</span><b>diff + proof</b></footer>
+    </section>
+
+    <div class="how-atlas-rail is-proof" aria-hidden="true"><span>diff + evidence</span><i></i></div>
+
+    <section class="how-atlas__group is-review" aria-label="Fresh review and delivery boundary">
+      <header><span>04 / review + delivery</span><small>authority boundary</small></header>
+      <div class="how-atlas-node is-proof">
+        <TechIcon name="checks" compact />
+        <div><b>Fresh reviewer</b><span>contract · complete diff · evidence</span></div>
+        <small>new context</small>
+      </div>
+      <div class="how-atlas-edge is-down"><span>recommendation only</span></div>
+      <div class="how-atlas-node is-human">
+        <TechIcon name="human" compact />
+        <div><b>Human approval</b><span>architecture · risk · merge / apply decision</span></div>
+        <small>human gate</small>
+      </div>
+      <div class="how-atlas-node is-contract">
+        <TechIcon name="github" compact />
+        <div><b>CI / OIDC delivery</b><span>publishes reviewed repository state</span></div>
+        <small>post-merge</small>
+      </div>
+      <footer><span>release authority</span><b>never agent-owned</b></footer>
+    </section>
+  </div>
+
+  <div class="how-atlas__flow" aria-label="End-to-end agent flow">
+    <span><b>1</b> human intent</span><i>→</i>
+    <span><b>2</b> Git contract</span><i>→</i>
+    <span><b>3</b> remote sandbox + Tailscale + Pi / Herdr</span><i>→</i>
+    <span><b>4</b> Codex / Claude + MCP</span><i>→</i>
+    <span><b>5</b> diff + checks</span><i>→</i>
+    <span><b>6</b> fresh review</span><i>→</i>
+    <span><b>7</b> human merge / apply</span>
+  </div>
+
+  <figcaption id="agent-plane-caption">The setup is useful because the boundaries are explicit: agents run on a remote homelab workspace rather than my daily laptop, private previews are reached over Tailscale, project truth still lives in Git, headless/browser verification happens outside the chat, and release authority stays human. The icon treatment and trust-boundary layout intentionally mirror the public Homelab Atlas.</figcaption>
+</figure>

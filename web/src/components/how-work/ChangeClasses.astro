@@ -1,0 +1,19 @@
+---
+import { changeClasses } from "../../data/how-i-work";
+---
+<div class="how-change-classes" aria-label="Change classes">
+  {changeClasses.map((item) => (
+    <article class={`how-change-class is-${item.key}`}>
+      <header>
+        <span>{item.label}</span>
+        <small>{item.posture}</small>
+      </header>
+      <p>{item.examples}</p>
+      <dl>
+        <div><dt>planning</dt><dd>{item.planning}</dd></div>
+        <div><dt>proof</dt><dd>{item.proof}</dd></div>
+      </dl>
+    </article>
+  ))}
+</div>
+<p class="how-callout"><strong>When I am uncertain, I use the higher class.</strong> A short diff is not automatically low risk; permissions, credentials, networking, data, deployment, deletion and cost-bearing resources change the review posture.</p>

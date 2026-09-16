@@ -1,0 +1,23 @@
+---
+import { workflowStages } from "../../data/how-i-work";
+---
+<figure class="how-panel how-workflow" aria-labelledby="workflow-caption">
+  <div class="how-panel__bar">
+    <span>agent-workbench / main flow</span>
+    <span class="how-state">human-controlled</span>
+  </div>
+  <ol class="how-workflow__grid">
+    {workflowStages.map((stage, index) => (
+      <li class="how-gate">
+        <span class="how-gate__index">{String(index + 1).padStart(2, "0")}</span>
+        <h3>{stage.label}</h3>
+        <p class="how-gate__question">{stage.question}</p>
+        <dl>
+          <div><dt>artifact</dt><dd>{stage.artifact}</dd></div>
+          <div><dt>owner</dt><dd>{stage.owner}</dd></div>
+        </dl>
+      </li>
+    ))}
+  </ol>
+  <figcaption id="workflow-caption">A gate can be compressed for small work, but its decision does not disappear. Evidence closes the loop; agent confidence does not.</figcaption>
+</figure>
