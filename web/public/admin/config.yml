@@ -102,12 +102,11 @@ collections:
           - { label: Skills, name: skills, widget: list, fields: [{ label: Label, name: label, widget: string }, { label: Items, name: items, widget: string }] }
           - label: Education
             name: education
-            widget: object
+            widget: list
             fields:
               - { label: School, name: school, widget: string }
               - { label: Place, name: place, widget: string }
               - { label: Finished, name: finished, widget: string }
-              - { label: Degree, name: degree, widget: string }
               - { label: Degree, name: degree, widget: string }
           - { label: Contact copy, name: contact, widget: text }
 
