@@ -108,6 +108,7 @@ collections:
               - { label: Place, name: place, widget: string }
               - { label: Finished, name: finished, widget: string }
               - { label: Degree, name: degree, widget: string }
+              - { label: Degree, name: degree, widget: string }
           - { label: Contact copy, name: contact, widget: text }
 
   - name: projects
@@ -147,26 +148,3 @@ collections:
       - { label: Case study kicker, name: kicker, widget: string, required: false }
       - { label: Case study lede, name: lede, widget: text, required: false }
       - { label: Case-study body, name: body, widget: markdown, required: false }
-
-  - name: reference
-    label: Reference pages
-    delete: false
-    files:
-      - label: Homelab
-        name: homelab
-        file: web/src/content/reference/homelab.md
-        fields:
-          - { label: Title, name: title, widget: string }
-          - { label: Description, name: description, widget: text }
-          - { label: Reviewed, name: reviewed, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }
-          - { label: Draft, name: draft, widget: boolean, default: true }
-          - { label: Body, name: body, widget: markdown }
-      - label: How I work
-        name: how-i-work
-        file: web/src/content/reference/how-i-work.md
-        fields:
-          - { label: Title, name: title, widget: string }
-          - { label: Description, name: description, widget: text }
-          - { label: Reviewed, name: reviewed, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }
-          - { label: Draft, name: draft, widget: boolean, default: true }
-          - { label: Body, name: body, widget: markdown }
