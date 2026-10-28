@@ -42,8 +42,8 @@ architecture, domain and intended cost profile unchanged.
 - Visitor counter renders a live count; when the API is unreachable it renders a neutral
   placeholder and never a fabricated number.
 - `resume.pdf` downloadable from the site with correct `Content-Type`. The PDF is
-  **committed to this repo** (`web/public/resume.pdf`) and refreshed by hand from the LaTeX
-  source in `~/Documents/resume/` — that source stays out of this repo, so a resume change
+  **committed to this repo** (`web/public/resume.pdf`) and refreshed by hand from the source
+  in `~/Documents/resume/devops/` — that source stays out of this repo, so a resume change
   is a deliberate commit here, not an invisible CI side effect.
 - Full keyboard operability: visible focus on every interactive element, working skip link.
 - `prefers-reduced-motion: reduce` disables all non-essential motion.
@@ -274,28 +274,40 @@ Resolved 2026-08-01:
 - **LinkedIn:** `https://linkedin.com/in/aravindakrishnan-v-2b0651218`, taken from Aravind's
   own `resume.tex` header rather than guessed. Published in the About contact block.
 
-Resolved 2026-08-01 (continued):
+Resolved 2026-08-01, rewritten 2026-10-03:
 
-- **Resume PDF: published, redacted.** `web/public/resume.pdf` is a build of `resume.tex`
-  with **only** the personal phone number removed from the header — email, location,
-  portfolio, LinkedIn and GitHub all stay. Verified by decompressing the PDF's FlateDecode
-  streams and searching for the digits, the spaced form, the country code, and a kerned
-  digit run; all absent, while the name, email, LinkedIn and employer are present.
-
-  To refresh it (there is no LaTeX toolchain on the laptop; this builds one in a container):
+- **Resume PDF: published, redacted.** `web/public/resume.pdf` is a print of the DevOps
+  resume HTML with **only** the personal phone number removed from the header — email,
+  location, portfolio, LinkedIn and GitHub all stay. The redaction rule is unchanged since
+  2026-08-01; only the source and the build changed.
 
   ```bash
-  mkdir -p /tmp/resume-build && cp ~/Documents/resume/resume.tex /tmp/resume-build/
-  # delete only the "+91 ..." fragment from the header line, keep everything else
+  rm -rf /tmp/resume-build && mkdir -p /tmp/resume-build
+  cp ~/Documents/resume/devops/Aravindakrishnan_V_DevOps_Engineer.html /tmp/resume-build/resume.html
+  # delete only the "+91 ..." fragment from the contact line, keep everything else
   cd /tmp/resume-build
-  printf 'FROM debian:stable-slim\nRUN apt-get update && apt-get install -y --no-install-recommends \\\n  texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended\n' > Dockerfile
-  docker build -t resume-latex:local .
-  docker run --rm -v "$PWD":/w -w /w resume-latex:local pdflatex -interaction=nonstopmode -halt-on-error resume.tex
-  # VERIFY the phone is absent from the binary before copying it into web/public/
+  sed -i 's/ | +91 9895526005 | / | /' resume.html
+  chromium --headless --disable-gpu --no-sandbox --no-pdf-header-footer \
+    --print-to-pdf=/tmp/resume-build/resume.pdf file:///tmp/resume-build/resume.html
   ```
 
-  `~/Documents/resume/resume.tex` stays the canonical resume, phone number included — the
-  redaction applies only to the copy published on the web.
+  **Verify on rendered text, not on the binary.** The 2026-08-01 recipe searched decompressed
+  FlateDecode streams for the digits. That worked for the pdfTeX build, which stored text
+  literally, and it is worthless here: Chrome's Skia PDF encoder subsets fonts and stores
+  glyph indices, so searching for a literal string returns "absent" whether or not the text
+  is on the page. That check gives a false pass on every Chrome-built resume. Decode the
+  text instead and confirm the phone is gone and nothing else moved:
+
+  ```bash
+  pdftotext -layout /tmp/resume-build/resume.pdf - | grep -c '9895526005'   # must be 0
+  # the only permitted difference from the canonical PDF is the contact line
+  pdftotext -layout /tmp/resume-build/resume.pdf a.txt
+  pdftotext -layout ~/Documents/resume/devops/Aravindakrishnan_V_DevOps_Engineer.pdf b.txt
+  diff a.txt b.txt
+  ```
+
+  `~/Documents/resume/devops/Aravindakrishnan_V_DevOps_Engineer.html` stays the canonical
+  resume, phone number included — the redaction applies only to the copy published on the web.
 
 - **Employer is Zarthi.** Confirmed by Aravind 2026-08-01. The v2 site said Centilytics;
   that was wrong and does not carry over. `web/src/lib/about.ts` exports `employer` and both
