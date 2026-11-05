@@ -6,7 +6,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "lint": "astro check",
-    "test": "node --test tests/content.test.mjs"
+    "test": "node --test tests/content.test.mjs tests/edge.test.mjs"
   },
   "type": "module",
   "dependencies": {

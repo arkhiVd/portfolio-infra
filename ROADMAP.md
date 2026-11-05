@@ -225,6 +225,31 @@ Exit criteria:
 Rollback: disable OAuth grants, delete the Worker/custom domain and secrets, then remove the
 remote backend configuration. Local content files and public rendering continue to work.
 
+## Phase 16a: edge fixes for clean URLs, compression and 404
+
+**Class:** Risky. Spec: `SPEC.md`, "Edge delivery". Found by the live audit on 2026-11-05.
+
+Scope: `compress = true`; a viewer-request CloudFront Function for extensionless and
+trailing-slash paths; 403 and 404 custom error responses serving a new `404.astro`; a unit test
+for the function. No template link changes, no bucket, OAC, DNS, Lambda, DynamoDB or IAM changes.
+
+Exit criteria:
+- [ ] Function unit tests pass in `npm run test`; full local gate passes.
+- [ ] Read-only plan shows only the new function and an in-place distribution update; 0 destroy, 0 replace.
+- [ ] Fresh-context review passes.
+- [ ] After apply: `/about` and `/blog/` return 200 HTML; `/nope` returns 404 with the site page;
+      `curl -H 'Accept-Encoding: br'` shows `content-encoding: br` on HTML, CSS and JS.
+
+Rollback: revert on `main` and let CI apply (see SPEC).
+
+## Phase 16b: clean links
+
+**Class:** Standard. Depends on 16a being live.
+
+Scope: `url()`, canonical URLs, sitemap and RSS emit extensionless paths. Keep `.html` objects
+and old links working. Exit: built output has no `.html` page links; live links, canonical
+tags, sitemap and feed resolve with 200.
+
 ## Delegation budget
 
 Use Pi through Herdr with the `openai-codex` subscription provider. Luna at low thinking
