@@ -6,7 +6,7 @@ merge. The existing `apply.yml` then builds Astro and lets Terraform upload `web
 
 ## Current Phase 15c boundary
 
-The local editor manages Blog, Homelab, How I work, Home, About and all project records. Project
+The local editor manages Blog, Home, About and all project records. Project
 metadata drives the home list and `/projects`, including order, featured order, status, summary,
 stack, images and repository links. The six published case studies also keep their ordinary prose
 in the body of their existing project Markdown file. Local editing stays at `/admin/`. The remote
@@ -69,9 +69,10 @@ The draft flag is publication control, not privacy.
 
 ## Homelab and How I work
 
-These are singleton Reference pages. The editor can change reviewed public prose and
-metadata. Use Markdown source mode for their inline `<figure>` elements. Always inspect the
-saved diff and rebuild before committing.
+These pages are not in the editor. Custom components render them, so the CMS fields had no
+effect on the page body. Edit `web/src/content/reference/homelab.md`, `how-i-work.md` or their
+components in a normal source change. How I work still reads `title` and `description` from its
+Markdown file for the page title and meta description.
 
 Media upload is intentionally disabled for this phase. Sveltia requires a media path, so it
 points to the ignored `web/.cms-unpublished-media/` staging directory rather than
