@@ -19,5 +19,5 @@ The infrastructure is small, but the distinction is worth writing down. A cache 
 
 ## Sources
 
-- [Portfolio case study](/projects/portfolio.html)
+- [Portfolio case study](/projects/portfolio)
 - [Portfolio infrastructure source](https://github.com/arkhiVd/portfolio-infra)

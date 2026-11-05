@@ -234,10 +234,10 @@ trailing-slash paths; 403 and 404 custom error responses serving a new `404.astr
 for the function. No template link changes, no bucket, OAC, DNS, Lambda, DynamoDB or IAM changes.
 
 Exit criteria:
-- [ ] Function unit tests pass in `npm run test`; full local gate passes.
-- [ ] Read-only plan shows only the new function and an in-place distribution update; 0 destroy, 0 replace.
-- [ ] Fresh-context review passes.
-- [ ] After apply: `/about` and `/blog/` return 200 HTML; `/nope` returns 404 with the site page;
+- [x] Function unit tests pass in `npm run test`; full local gate passes.
+- [x] Read-only plan shows only the new function and an in-place distribution update; 0 destroy, 0 replace.
+- [x] Fresh-context review passes (two rounds).
+- [x] After apply (2026-11-05, PR #52): `/about` and `/blog/` return 200 HTML; `/nope` returns 404 with the site page;
       `curl -H 'Accept-Encoding: br'` shows `content-encoding: br` on HTML, CSS and JS.
 
 Rollback: revert on `main` and let CI apply (see SPEC).

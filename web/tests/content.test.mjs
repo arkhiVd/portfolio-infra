@@ -35,6 +35,12 @@ const outputContains = (value, directory = dist) =>
       ? outputContains(value, join(directory, entry.name))
       : readFileSync(join(directory, entry.name)).toString().includes(value),
   );
+const htmlFiles = (directory = dist) =>
+  readdirSync(directory, { withFileTypes: true }).flatMap((entry) =>
+    entry.isDirectory()
+      ? htmlFiles(join(directory, entry.name))
+      : entry.name.endsWith(".html") ? [join(directory, entry.name)] : [],
+  );
 
 test("reference schema restricts IDs and dates", () => {
   assert.equal(referenceSchema.safeParse({ title: "X", description: "Y", reviewed: "2026-09-09", draft: false }).success, true);
@@ -254,9 +260,16 @@ test("published output excludes drafts, future posts and their assets", (t) => {
     assert.equal(sitemap.includes(id), false);
   }
   assert.equal(outputContains("DRAFT_ONLY_ASSET_MARKER"), false);
-  assert.match(feed, /https:\/\/www\.aravindakrishnan\.cloud\/blog\/two-cdn-cache-trap\.html/);
+  assert.match(feed, /<link>https:\/\/www\.aravindakrishnan\.cloud\/blog\/two-cdn-cache-trap<\/link>/);
+  assert.match(feed, /<guid isPermaLink="true">https:\/\/www\.aravindakrishnan\.cloud\/blog\/two-cdn-cache-trap\.html<\/guid>/);
   assert.match(index, /rel="alternate"[^>]+type="application\/rss\+xml"[^>]+href="\/feed\.xml"/);
   assert.match(index, /<a class="label" href="\/feed\.xml">RSS feed<\/a>/);
-  assert.match(sitemap, /https:\/\/www\.aravindakrishnan\.cloud\/blog\/two-cdn-cache-trap\.html/);
+  assert.match(sitemap, /<loc>https:\/\/www\.aravindakrishnan\.cloud\/blog\/two-cdn-cache-trap<\/loc>/);
+  assert.equal(sitemap.includes(".html"), false);
+  for (const file of htmlFiles()) {
+    const page = readFileSync(file, "utf8");
+    assert.doesNotMatch(page, /(?:href|url)=["']?\/[^"'\s>]*\.html/, `${file} links to a .html page`);
+    assert.doesNotMatch(page, /rel="canonical" href="[^"]*\.html"/, `${file} has a .html canonical`);
+  }
   assert.ok(feed.includes("Cache &amp; XML"));
 });

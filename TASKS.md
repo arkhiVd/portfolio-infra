@@ -1,6 +1,21 @@
 # Portfolio tasks
 
-## Current phase: 16a, edge fixes for clean URLs, compression and 404
+## Current phase: 16b, clean links
+
+Branch `feat/clean-links`. Standard: templates and generated XML only, no infrastructure change.
+
+- [x] `url()` returns extensionless page paths; file paths pass through.
+- [x] Canonical URLs, sitemap `<loc>` and RSS `<link>` are extensionless; RSS `<guid>` keeps `.html`.
+- [x] Legacy `*-detail` redirects and the one blog link point to clean paths.
+- [x] Test: no built page links to an internal `.html` page or has a `.html` canonical.
+- [ ] Fresh-context review.
+- [ ] After apply: live links, canonical tags, sitemap and feed URLs return 200.
+
+## Previous phase: 16a, edge fixes for clean URLs, compression and 404
+
+Merged as PR #52 and applied by CI on 2026-11-05: 2 added, 1 changed, 0 destroyed; post-apply plan
+empty. Live: `/about`, `/blog/` and `/projects/clearsky` return 200; `/nope` returns the 404 page;
+Brotli on HTML, CSS and JS (`mermaid.min.js` 3,565,102 to 1,059,631 bytes).
 
 Branch `feat/edge-fixes`. Risky: changes the live CloudFront distribution and the CI apply role.
 
