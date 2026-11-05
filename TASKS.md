@@ -1,6 +1,45 @@
 # Portfolio tasks
 
-## Current phase: 15c, remote CMS authentication and PR workflow
+## Current phase: 16a, edge fixes for clean URLs, compression and 404
+
+Branch `feat/edge-fixes`. Risky: changes the live CloudFront distribution and the CI apply role.
+
+- [x] SPEC entry and rollback plan written first (`SPEC.md`, "Edge delivery").
+- [x] `edge/clean-urls.js` viewer-request function with 14 passing unit tests in `npm run test`.
+- [x] `compress = true`, function association, 403 and 404 error responses to `/404.html`.
+- [x] `404.astro` with `noindex`; excluded from the sitemap.
+- [x] Apply role granted CloudFront Function actions: `CreateFunction` on `*` (it has no resource
+      type in the IAM service reference), the other five on the one function ARN.
+- [x] `404.html` skips the visitor counter script; existing pages stay byte-identical.
+- [x] `bootstrap/` applied 2026-11-05 as `admin` with the author's explicit approval, from a saved
+      plan (0 add, 1 change, 0 destroy, additions only). Live `deploy` policy shows both
+      statements; post-apply bootstrap plan is empty.
+- [x] Fresh-context review round 1: approve; IAM `CreateFunction` scope, slash loop, counter
+      on 404 and misplaced comment fixed.
+- [x] Fresh-context review round 2: approve. Plan role `ReadOnlyAccess` v191 confirmed to grant
+      `cloudfront:Describe*`, `Get*` and `List*`.
+- [ ] Post-apply live checks from ROADMAP Phase 16a.
+
+Local evidence, 2026-11-05:
+
+```text
+git diff --check: exit 0
+npm ci: ok; astro check: 0 errors, 0 warnings, 0 hints
+node:test: 14 passed, 0 failed
+build: 19 pages; dist/404.html has <meta name="robots" content="noindex">
+terraform fmt -check -recursive: exit 0; terraform validate: Success
+checkov: 116 passed, 30 failed, 0 skipped (unchanged from the 2026-09-09 baseline)
+terraform plan (root): 2 add, 1 change, 0 destroy, 0 replace
+  + aws_cloudfront_function.clean_urls
+  + aws_s3_object.portfolio_files["404.html"]
+  ~ aws_cloudfront_distribution.portfolio_cdn: compress false -> true, function_association,
+    two custom_error_response blocks
+terraform plan (bootstrap): 0 add, 1 change, 0 destroy (apply_deploy policy, two statements)
+```
+
+Local Node was 26.13.0, not the pinned 24.18.1. CI runs the pinned version.
+
+## Previous phase: 15c, remote CMS authentication and PR workflow
 
 Phase 15c adds only the reviewed remote-auth code. The Worker and OAuth app are not live, and no
 remote Save round-trip has been performed.

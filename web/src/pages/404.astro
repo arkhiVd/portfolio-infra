@@ -1,0 +1,22 @@
+---
+import Base from "../layouts/Base.astro";
+import { site, url } from "../lib/site";
+---
+
+<Base
+  title={`Page not found — ${site.name}`}
+  description="There is no page at this address."
+  noindex
+>
+  <section class="hero wrap">
+    <p class="label">404</p>
+    <h1>Nothing at this address</h1>
+    <p>The link may be old, or the address may have a typo. These pages are here:</p>
+    <div class="cta">
+      <a class="btn" href={url("/projects")}>View projects</a>
+      <a class="btn-quiet" href={url("/")}>home →</a>
+      <a class="btn-quiet" href={url("/about")}>about →</a>
+      <a class="btn-quiet" href={url(site.resume)}>download resume →</a>
+    </div>
+  </section>
+</Base>

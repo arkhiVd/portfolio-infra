@@ -134,6 +134,15 @@ resource "aws_cloudfront_response_headers_policy" "security" {
   }
 }
 
+# Viewer-request rewrite so /about and /blog/ resolve to the .html objects Astro emits.
+resource "aws_cloudfront_function" "clean_urls" {
+  name    = "portfolio-clean-urls"
+  runtime = "cloudfront-js-2.0"
+  comment = "Map extensionless and trailing-slash paths to .html objects"
+  publish = true
+  code    = file("${path.module}/edge/clean-urls.js")
+}
+
 resource "aws_cloudfront_distribution" "portfolio_cdn" {
   origin {
     domain_name              = aws_s3_bucket.portfolio_bucket.bucket_regional_domain_name
@@ -155,6 +164,27 @@ resource "aws_cloudfront_distribution" "portfolio_cdn" {
     viewer_protocol_policy     = "redirect-to-https"
     cache_policy_id            = "658327ea-f89d-4fab-a63d-7e88639e58f6" # CachingOptimized
     response_headers_policy_id = aws_cloudfront_response_headers_policy.security.id
+    compress                   = true
+
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.clean_urls.arn
+    }
+  }
+
+  # A private OAC origin answers a missing key with 403. Serve the site's 404 page for both.
+  custom_error_response {
+    error_code            = 403
+    response_code         = 404
+    response_page_path    = "/404.html"
+    error_caching_min_ttl = 60
+  }
+
+  custom_error_response {
+    error_code            = 404
+    response_code         = 404
+    response_page_path    = "/404.html"
+    error_caching_min_ttl = 60
   }
 
   restrictions {

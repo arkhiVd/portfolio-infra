@@ -148,6 +148,42 @@ web/ (Astro, source)  --npm run build-->  web/dist/  --aws_s3_object-->  S3 (pri
 - State: S3 backend with native lockfile locking. Environments: one — production,
   account `486539985928`, `us-east-1`.
 
+## Edge delivery: clean URLs, compression and 404
+
+Added 2026-11-05 after a live audit. **Class:** Risky, because it changes the CloudFront
+distribution that serves the public site.
+
+Problem, measured on the live domain:
+
+- `/about`, `/projects`, `/blog/` and every mistyped path return HTTP 403 with an S3
+  `AccessDenied` XML body. Only `.html` paths resolve.
+- No response carries `content-encoding`. `default_cache_behavior` has no `compress = true`,
+  so `homelab/mermaid.min.js` downloads at 3,565,102 bytes.
+
+Required behavior after Phase 16a:
+
+- A CloudFront Function on viewer-request maps an extensionless path to its `.html` object
+  (`/about` to `/about.html`, `/projects/clearsky` to `/projects/clearsky.html`) and strips one
+  trailing slash first (`/blog/` to `/blog.html`). `/` and paths whose last segment has a dot
+  pass through unchanged. Source: `edge/clean-urls.js`, runtime `cloudfront-js-2.0`.
+- A missing object returns HTTP 404 with the site's own `/404.html`, for both the 403 a private
+  OAC origin sends and a plain 404. Error responses cache for 60 seconds.
+- CloudFront compresses eligible responses (`compress = true`). `CachingOptimized` already keys
+  on gzip and Brotli.
+- Existing `.html` links keep working. Templates keep emitting `.html` links until Phase 16b,
+  so no link depends on the function during the apply window.
+
+Cost: CloudFront Functions are billed per invocation with a monthly free allowance far above
+this site's traffic. Compression lowers transfer. Expected monthly delta: none measurable.
+
+Diagnosis: the 403-to-404 mapping also hides an origin failure. If every path, `/` included,
+returns the 404 page, check OAC and the bucket policy before looking for missing content.
+
+Rollback: revert the PR on `main` and let CI apply. That removes the function association,
+the error responses and `compress`, and deletes the function. `.html` links work throughout,
+so a rollback breaks nothing that works today. Nothing here touches S3 bucket settings, OAC,
+the certificate, DNS, Lambda, DynamoDB, IAM or state.
+
 ## Security and privacy
 
 - S3 bucket private, public access blocked, reachable only via CloudFront OAC.
