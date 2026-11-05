@@ -8,14 +8,14 @@ export const GET: APIRoute = async () => {
   const references = await getPublishedReferences();
   const paths = [
     "/",
-    "/projects.html",
-    "/about.html",
-    "/blog.html",
+    "/projects",
+    "/about",
+    "/blog",
     ...projects
       .filter((project) => project.caseStudy)
-      .map((project) => `${project.caseStudy}.html`),
-    ...posts.map((post) => `/blog/${post.id}.html`),
-    ...references.map((entry) => `/${entry.id}.html`),
+      .map((project) => `${project.caseStudy}`),
+    ...posts.map((post) => `/blog/${post.id}`),
+    ...references.map((entry) => `/${entry.id}`),
   ];
   const urls = paths
     .map((path) => `  <url><loc>${origin}${path}</loc></url>`)

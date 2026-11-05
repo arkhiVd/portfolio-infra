@@ -170,8 +170,9 @@ Required behavior after Phase 16a:
   OAC origin sends and a plain 404. Error responses cache for 60 seconds.
 - CloudFront compresses eligible responses (`compress = true`). `CachingOptimized` already keys
   on gzip and Brotli.
-- Existing `.html` links keep working. Templates keep emitting `.html` links until Phase 16b,
-  so no link depends on the function during the apply window.
+- Existing `.html` links keep working. Since Phase 16b, templates, canonical URLs, the sitemap
+  and RSS `<link>` use clean paths (`/about`). RSS `<guid>` keeps the original `.html` URL so
+  feed readers do not show old posts again.
 
 Cost: CloudFront Functions are billed per invocation with a monthly free allowance far above
 this site's traffic. Compression lowers transfer. Expected monthly delta: none measurable.
@@ -279,7 +280,7 @@ Local gates completed on 2026-09-09. Deployment-dependent checks remain open:
 - [x] New Markdown metadata validates; malformed metadata fails the build.
 - [x] Draft fixtures and source-only assets are absent from pages, RSS, sitemap and navigation.
 - [x] Blog index and one author-approved, source-backed article build with a valid feed.
-- [ ] Live production `.html` links, canonical URLs, feed links and sitemap resolve correctly.
+- [ ] Live production clean links, canonical URLs, feed links and sitemap resolve correctly.
       Local built-output checks pass.
 - [x] Public atlas sources and exports passed privacy review; diagrams are legible at
       375 px, with captions, text explanations and full-size links.

@@ -27,19 +27,22 @@ export const site = {
 } as const;
 
 /**
- * Prefix a site-root path with Astro's configured base ("/preview" now, "/" after the
- * Phase 8 cutover). Never hardcode a leading-slash URL in a template — it 404s under the
- * preview prefix and silently changes meaning at cutover.
+ * Prefix a site-root path with Astro's configured base. Never hardcode a leading-slash URL
+ * in a template.
+ *
+ * Page links are extensionless (`/about`). Astro still emits `about.html`, and the
+ * viewer-request CloudFront Function in `edge/clean-urls.js` maps the clean path to that
+ * object. File paths (`/resume.pdf`, `/feed.xml`) pass through unchanged.
  */
 export function url(path: string): string {
   const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   const clean = path.startsWith("/") ? path : `/${path}`;
+  return base ? `${base}${clean}` : clean;
+}
 
-  // CloudFront serves a private S3 origin, not S3 website hosting. It resolves only the
-  // distribution root to index.html; extensionless subpaths have no rewrite and return 403.
-  if (clean === "/") return base ? `${base}/index.html` : "/";
-
-  const segment = clean.slice(clean.lastIndexOf("/") + 1);
-  const objectPath = segment.includes(".") ? clean : `${clean}.html`;
-  return `${base}${objectPath}`;
+/** The public, extensionless path for a built page path such as `/about.html`. */
+export function cleanPath(pathname: string): string {
+  if (pathname === "/index.html") return "/";
+  if (pathname.endsWith("/index.html")) return pathname.slice(0, -"index.html".length);
+  return pathname.endsWith(".html") ? pathname.slice(0, -".html".length) : pathname;
 }
