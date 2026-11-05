@@ -32,6 +32,11 @@
   --muted: #9b9ba3;
   --accent: #4fc1d4;
   --accent-dim: rgba(79, 193, 212, 0.14);
+  --surface-2: #151a22;           /* hover and pressed rows; muted is 6.3:1 on it */
+  --hairline-strong: rgba(255, 255, 255, 0.16); /* edges of controls, not decoration */
+  --accent-strong: #7fd6e4;       /* accent on hover; 12.3:1 on ink */
+  --live: #5ccf8f;                /* live status and availability; always beside a word */
+  --progress: #e5b567;            /* in-progress status; always beside a word */
 
   /* type */
   --sans: "Instrument Sans", system-ui, -apple-system, sans-serif;
@@ -44,6 +49,7 @@
   --t-34: 34px;
   --t-44: 44px;
   --t-56: 56px;
+  --t-72: 72px;                   /* page heroes only, one per page */
 
   /* space */
   --s-1: 4px;
@@ -66,4 +72,5 @@
   --max: 1400px;
   --pad: clamp(24px, 5vw, 72px);
   --measure: 74ch;
+  --hit: 44px;                    /* minimum height of every standalone link and control */
 }

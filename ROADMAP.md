@@ -250,6 +250,20 @@ Scope: `url()`, canonical URLs, sitemap and RSS emit extensionless paths. Keep `
 and old links working. Exit: built output has no `.html` page links; live links, canonical
 tags, sitemap and feed resolve with 200.
 
+## Phase 17: design tokens, phone nav and tap targets
+
+**Class:** Standard. First build phase of the 2026-11-05 redesign system ("Phase B" there).
+
+Scope: new colour tokens, `--t-72`, `--hit`; How I work drops the off-font `550` weight and
+off-token greys and caps its hero at 72 px; one-row phone nav with a `<details>` menu; 44 px
+standalone targets; nav stacking fix; browser gate updated for clean URLs and the 404 page.
+No Home content or layout change (Phase 18), no infrastructure.
+
+Exit criteria:
+- [x] Browser gate: 0 axe violations, no overflow 320 to 2560 px, no-JS, keyboard and links pass on all 14 pages.
+- [x] No standalone link under 44 px on any page at 375 px except the Homelab Atlas rail (Phase F).
+- [ ] Fresh-context review; CI; merge; live check of the phone menu.
+
 ## Delegation budget
 
 Use Pi through Herdr with the `openai-codex` subscription provider. Luna at low thinking

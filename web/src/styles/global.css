@@ -34,7 +34,7 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 .ocean-fade { background: linear-gradient(to bottom, transparent 0%, transparent 58%, var(--ink) 100%); }
-body > :not(.ocean):not(.loader) { position: relative; z-index: 1; }
+body > :not(.ocean):not(.loader):not(.nav) { position: relative; z-index: 1; }
 
 .loader {
   position: fixed;
@@ -83,7 +83,10 @@ img { max-width: 100%; display: block; }
   background: var(--surface);
   border: 1px solid var(--hairline);
   border-radius: 8px;
-  padding: 10px 16px;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hit);
+  padding: 0 16px;
   color: var(--text);
 }
 
@@ -95,9 +98,10 @@ img { max-width: 100%; display: block; }
 
 /* ---------- nav ---------- */
 
+/* Not sticky: the broad z-index rule above used to override `position: sticky` here, so the
+   live nav never stuck. It stays in flow; z-index 20 keeps the phone menu sheet above main. */
 .nav {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 20;
   padding-block: 20px;
 }
@@ -111,7 +115,7 @@ img { max-width: 100%; display: block; }
   justify-content: space-between;
   gap: 16px 24px;
 }
-.brand { display: inline-flex; color: var(--muted); }
+.brand { display: inline-flex; align-items: center; min-height: var(--hit); color: var(--muted); }
 .brand:hover { color: var(--text); }
 .brand svg { width: 42px; height: 30px; }
 .nav-actions { gap: clamp(16px, 2.5vw, 32px); }
@@ -139,7 +143,7 @@ img { max-width: 100%; display: block; }
   padding-inline: 8px;
   color: var(--muted);
 }
-.nav-links a[aria-current="page"] { color: var(--text); }
+.nav-links a[aria-current="page"] { color: var(--text); background: var(--accent-dim); border-radius: 999px; }
 .nav-links a:hover { color: var(--accent); }
 .status {
   display: inline-flex;
@@ -148,18 +152,63 @@ img { max-width: 100%; display: block; }
   color: var(--muted);
   white-space: nowrap;
 }
+.nav-menu { display: none; position: relative; }
+.nav-menu summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hit);
+  padding-inline: 16px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.045);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  color: var(--text);
+  font: 400 13px/1 var(--mono);
+  letter-spacing: 0.02em;
+  list-style: none;
+  cursor: pointer;
+}
+.nav-menu summary::-webkit-details-marker { display: none; }
+.nav-menu .nav-menu-open,
+.nav-menu[open] .nav-menu-closed { display: none; }
+.nav-menu[open] .nav-menu-open { display: inline; }
+.nav-sheet {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  display: grid;
+  width: min(327px, calc(100vw - 2 * var(--pad)));
+  padding: 8px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.nav-sheet a {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding-inline: 16px;
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 17px;
+}
+.nav-sheet a + a { border-top: 1px solid var(--hairline); }
+.nav-sheet a[aria-current="page"] { background: var(--accent-dim); }
+.nav-sheet a:hover { color: var(--accent-strong); }
 @media (max-width: 680px) {
-  .nav { padding-block: 16px; }
-  .nav .wrap { align-items: flex-start; flex-direction: column; }
-  .nav-actions { width: 100%; }
-  .status { display: none; }
-  .nav-links { width: 100%; justify-content: center; border-radius: 24px; }
+  .nav { padding-block: 10px; }
+  .nav-actions { gap: 12px; }
+  .nav-links { display: none; }
+  .nav-menu { display: block; }
 }
 .dot {
   width: 7px;
   height: 7px;
   border-radius: 999px;
-  background: var(--accent);
+  background: var(--live);
   flex: none;
 }
 
@@ -212,6 +261,12 @@ img { max-width: 100%; display: block; }
   transition: opacity 200ms var(--ease);
 }
 .btn:hover { opacity: 0.78; color: #08080b; }
+.btn-quiet,
+a.label {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hit);
+}
 .btn-quiet {
   font: 400 13px/1.4 var(--mono);
   letter-spacing: 0.02em;
@@ -529,12 +584,13 @@ figure.arch figcaption {
 }
 .footer-col > .label { display: block; }
 .footer-col p { margin: 14px 0 0; color: var(--muted); }
-.footer-col > a { display: flex; width: fit-content; margin-top: 14px; }
+.footer-col > a { display: flex; width: fit-content; margin-top: 4px; }
 .footer-col a,
 .footer-links a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  min-height: var(--hit);
   color: var(--muted);
   font-size: 15px;
 }
@@ -542,8 +598,7 @@ figure.arch figcaption {
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 14px;
+  margin-top: 4px;
 }
 .footer-col a:hover { color: var(--accent); }
 .footer-col svg { width: 16px; height: 16px; flex: none; }

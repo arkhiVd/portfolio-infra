@@ -7,6 +7,19 @@ interface Props {
   current?: "home" | "projects" | "about" | "blog" | "homelab" | "how-i-work";
 }
 const { current } = Astro.props;
+
+const links: { id: NonNullable<Props["current"]>; label: string; href: string }[] = [
+  { id: "home", label: "home", href: url("/") },
+  { id: "projects", label: "projects", href: url("/projects") },
+  { id: "about", label: "about", href: url("/about") },
+  { id: "blog", label: "blog", href: url("/blog") },
+  ...(references.some((entry) => entry.id === "homelab")
+    ? [{ id: "homelab" as const, label: "homelab", href: url("/homelab") }]
+    : []),
+  ...(references.some((entry) => entry.id === "how-i-work")
+    ? [{ id: "how-i-work" as const, label: "how i work", href: url("/how-i-work") }]
+    : []),
+];
 ---
 
 <header class="nav">
@@ -26,13 +39,15 @@ const { current } = Astro.props;
         )
       }
       <nav class="nav-links" aria-label="Primary">
-        <a href={url("/")} aria-current={current === "home" ? "page" : undefined}>home</a>
-        <a href={url("/projects")} aria-current={current === "projects" ? "page" : undefined}>projects</a>
-        <a href={url("/about")} aria-current={current === "about" ? "page" : undefined}>about</a>
-        <a href={url("/blog")} aria-current={current === "blog" ? "page" : undefined}>blog</a>
-        {references.some((entry) => entry.id === "homelab") && <a href={url("/homelab")} aria-current={current === "homelab" ? "page" : undefined}>homelab</a>}
-        {references.some((entry) => entry.id === "how-i-work") && <a href={url("/how-i-work")} aria-current={current === "how-i-work" ? "page" : undefined}>how i work</a>}
+        {links.map((link) => <a href={link.href} aria-current={current === link.id ? "page" : undefined}>{link.label}</a>)}
       </nav>
+      {/* Phones get one row and a disclosure sheet. <details> opens without JavaScript. */}
+      <details class="nav-menu">
+        <summary><span class="nav-menu-closed">menu</span><span class="nav-menu-open">close</span></summary>
+        <nav class="nav-sheet" aria-label="Primary">
+          {links.map((link) => <a href={link.href} aria-current={current === link.id ? "page" : undefined}>{link.label}</a>)}
+        </nav>
+      </details>
     </div>
   </div>
 </header>

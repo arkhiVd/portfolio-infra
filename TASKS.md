@@ -1,6 +1,44 @@
 # Portfolio tasks
 
-## Current phase: 16b, clean links
+## Current phase: 17, design tokens, phone nav and tap targets
+
+Branch `feat/design-tokens-nav`. Standard: CSS, nav markup and the local browser gate.
+
+- [x] Tokens: `--surface-2`, `--hairline-strong`, `--accent-strong`, `--live`, `--progress`,
+      `--t-72`, `--hit`. Availability dot uses `--live`.
+- [x] How I work: 19 `font-weight: 550` to 500 (the fonts ship 400 to 500, so no visual change);
+      18 off-token greys to `--muted`; hero capped at 72 px.
+- [x] Phone nav (below 680 px): one row with mark, availability and a `<details>` menu.
+      Availability was hidden on phones before.
+- [x] `.nav` now stacks above `main`. A broad `body > *` z-index rule had overridden it, which
+      also disabled `position: sticky`. The nav stays non-sticky, as it has been live.
+- [x] 44 px targets: brand mark, quiet links, section links, footer links, skip link, How I work
+      section nav; citation chips on touch screens.
+- [x] Browser gate resolves paths through `edge/clean-urls.js`, expects the `····` placeholder on
+      noindex pages, and counts only rendered tab stops. Phase 16a and 16b had broken all three.
+
+Local evidence, 2026-11-05:
+
+```text
+git diff --check: exit 0; astro check: 0 errors; node:test: 14 passed, 0 failed
+browser gate (playwright 1.63.0, axe-core 4.13.0, /usr/bin/chromium), 14 pages:
+  axe 0 violations; overflow none at 320/375/768/1280/2560; no-JS, keyboard focus, links PASS
+  admin, counter stub and feed/sitemap XML PASS
+  before this phase, How I work had 108 color-contrast nodes (#737681 on #050507 at 4.49:1)
+terraform fmt/validate: ok
+terraform plan: 2 add, 14 change, 2 destroy, 0 replace (the destroys are the two superseded
+  hashed CSS bundles; the adds are their replacements)
+```
+
+Open, not in this phase:
+- How I work has 54 font sizes under 12 px, down to 8 px. Needs its own type pass.
+- Homelab Atlas rail links are 40 px; Phase F rebuilds that page.
+- A sticky nav needs a background behind the mark and status first; author decision.
+
+## Previous phase: 16b, clean links
+
+Merged as PR #53 and applied 2026-11-05: 0 add, 21 change, 0 destroy. All 13 sitemap URLs return
+200; canonical, RSS and redirects are clean; post-apply plan empty.
 
 Branch `feat/clean-links`. Standard: templates and generated XML only, no infrastructure change.
 
@@ -11,7 +49,7 @@ Branch `feat/clean-links`. Standard: templates and generated XML only, no infras
 - [x] Fresh-context review: approve. Noted, not fixed here: the link scan does not check absolute
       same-site URLs or `src=`; `/admin/` resolves only as `/admin/index.html` through CloudFront,
       as before 16a (the CMS is local-only).
-- [ ] After apply: live links, canonical tags, sitemap and feed URLs return 200.
+- [x] After apply: live links, canonical tags, sitemap and feed URLs return 200.
 
 ## Previous phase: 16a, edge fixes for clean URLs, compression and 404
 
