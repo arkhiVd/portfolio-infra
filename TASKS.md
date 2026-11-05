@@ -11,10 +11,13 @@ Branch `feat/edge-fixes`. Risky: changes the live CloudFront distribution and th
 - [x] Apply role granted CloudFront Function actions: `CreateFunction` on `*` (it has no resource
       type in the IAM service reference), the other five on the one function ARN.
 - [x] `404.html` skips the visitor counter script; existing pages stay byte-identical.
-- [ ] Human applies `bootstrap/` as admin before merge.
+- [x] `bootstrap/` applied 2026-11-05 as `admin` with the author's explicit approval, from a saved
+      plan (0 add, 1 change, 0 destroy, additions only). Live `deploy` policy shows both
+      statements; post-apply bootstrap plan is empty.
 - [x] Fresh-context review round 1: approve; IAM `CreateFunction` scope, slash loop, counter
       on 404 and misplaced comment fixed.
-- [ ] Fresh-context review of the round-1 fixes.
+- [x] Fresh-context review round 2: approve. Plan role `ReadOnlyAccess` v191 confirmed to grant
+      `cloudfront:Describe*`, `Get*` and `List*`.
 - [ ] Post-apply live checks from ROADMAP Phase 16a.
 
 Local evidence, 2026-11-05:
