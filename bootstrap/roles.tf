@@ -91,6 +91,17 @@ data "aws_iam_policy_document" "apply_deploy" {
   }
 
   # ACM cert for the custom domain (cert ARN unknown before create).
+  # CloudFront Functions accept resource ARNs, so this is scoped to the one function.
+  statement {
+    sid    = "CloudFrontFunction"
+    effect = "Allow"
+    actions = [
+      "cloudfront:CreateFunction", "cloudfront:UpdateFunction", "cloudfront:PublishFunction",
+      "cloudfront:DeleteFunction", "cloudfront:DescribeFunction", "cloudfront:GetFunction"
+    ]
+    resources = ["arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:function/portfolio-clean-urls"]
+  }
+
   statement {
     sid    = "ACM"
     effect = "Allow"
