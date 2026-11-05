@@ -7,6 +7,12 @@ const assert = require('node:assert/strict');
 const tools = createRequire(path.resolve(process.env.BROWSER_TOOLS || '.', 'package.json'));
 const { chromium } = tools('playwright');
 const root = path.resolve('web/dist');
+// Resolve paths exactly as CloudFront does: run the deployed viewer-request function.
+const edgeHandler = new Function(fs.readFileSync(path.resolve('edge/clean-urls.js'), 'utf8') + '\nreturn handler;')();
+const objectKey = pathname => {
+  const uri = edgeHandler({ request: { uri: pathname } }).uri;
+  return uri === '/' ? '/index.html' : uri;
+};
 const evidence = path.resolve('docs/evidence');
 const origin = 'http://127.0.0.1:8766';
 const types = { '.html': 'text/html', '.css': 'text/css', '.js': 'application/javascript',
@@ -24,7 +30,7 @@ const server = http.createServer((req, res) => {
   if (pathname === '/__visitor') {
     res.setHeader('Content-Type', 'application/json'); res.end('{"count":1234}'); return;
   }
-  const file = path.resolve(root, '.' + (pathname === '/' ? '/index.html' : pathname));
+  const file = path.resolve(root, '.' + objectKey(pathname));
   if (!file.startsWith(root + '/') || !fs.existsSync(file) || !fs.statSync(file).isFile()) {
     res.writeHead(404).end(); return;
   }
@@ -55,7 +61,9 @@ const captures = new Set(['/index.html', '/blog.html', '/blog/two-cdn-cache-trap
       await page.evaluate(() => document.fonts.ready);
       await page.waitForSelector('html.is-ready');
       assert.equal(await page.locator('h1').count(), 1, route + ': heading');
-      assert.equal(await page.locator('#visitor-count').innerText(), '1,234');
+      // noindex pages (the 404) skip the counter script, so the readout stays at the placeholder.
+      const noindex = await page.locator('meta[name="robots"][content*="noindex"]').count();
+      assert.equal(await page.locator('#visitor-count').innerText(), noindex ? '····' : '1,234', route + ': visitor count');
       for (const width of [320, 375, 768, 1280, 2560]) {
         await page.setViewportSize({ width, height: 900 });
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, route + ': overflow ' + width);
@@ -74,7 +82,7 @@ const captures = new Set(['/index.html', '/blog.html', '/blog/two-cdn-cache-trap
       for (const href of await page.locator('a[href]').evaluateAll(nodes => nodes.map(n => n.getAttribute('href')))) {
         if (!href || /^(https?:|mailto:|tel:)/.test(href)) continue;
         const target = new URL(href, origin + route);
-        assert.ok(fs.existsSync(path.join(root, target.pathname === '/' ? 'index.html' : target.pathname)), route + ': link ' + href);
+        assert.ok(fs.existsSync(path.join(root, objectKey(target.pathname))), route + ': link ' + href);
         if (target.hash && target.pathname === route) {
           assert.ok(await page.locator('[id="' + decodeURIComponent(target.hash.slice(1)) + '"]').count(), route + ': anchor ' + href);
         }
@@ -86,7 +94,10 @@ const captures = new Set(['/index.html', '/blog.html', '/blog/two-cdn-cache-trap
       assert.ok(await nojs.locator('h1').isVisible());
       await nojs.keyboard.press('Tab');
       assert.equal(await nojs.evaluate(() => document.activeElement.textContent), 'Skip to content');
-      const tabStops = await nojs.locator('a[href]').count();
+      // Count only rendered stops: the closed phone menu's links and the hidden pill take no focus.
+      const tabStops = await nojs.evaluate(() => [...document.querySelectorAll('a[href], summary, button')]
+        .filter(el => el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden'
+          && !(el.tagName !== 'SUMMARY' && el.closest('details:not([open])'))).length);
       for (let i = 0; i < tabStops; i++) {
         const focus = await nojs.evaluate(() => {
           const el = document.activeElement, style = getComputedStyle(el);
