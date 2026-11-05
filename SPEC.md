@@ -42,8 +42,8 @@ architecture, domain and intended cost profile unchanged.
 - Visitor counter renders a live count; when the API is unreachable it renders a neutral
   placeholder and never a fabricated number.
 - `resume.pdf` downloadable from the site with correct `Content-Type`. The PDF is
-  **committed to this repo** (`web/public/resume.pdf`) and refreshed by hand from the LaTeX
-  source in `~/Documents/resume/` — that source stays out of this repo, so a resume change
+  **committed to this repo** (`web/public/resume.pdf`) and refreshed by hand from the source
+  in `~/Documents/resume/devops/` — that source stays out of this repo, so a resume change
   is a deliberate commit here, not an invisible CI side effect.
 - Full keyboard operability: visible focus on every interactive element, working skip link.
 - `prefers-reduced-motion: reduce` disables all non-essential motion.
@@ -147,6 +147,42 @@ web/ (Astro, source)  --npm run build-->  web/dist/  --aws_s3_object-->  S3 (pri
   external script and reads `window.VISITOR_API`.
 - State: S3 backend with native lockfile locking. Environments: one — production,
   account `486539985928`, `us-east-1`.
+
+## Edge delivery: clean URLs, compression and 404
+
+Added 2026-11-05 after a live audit. **Class:** Risky, because it changes the CloudFront
+distribution that serves the public site.
+
+Problem, measured on the live domain:
+
+- `/about`, `/projects`, `/blog/` and every mistyped path return HTTP 403 with an S3
+  `AccessDenied` XML body. Only `.html` paths resolve.
+- No response carries `content-encoding`. `default_cache_behavior` has no `compress = true`,
+  so `homelab/mermaid.min.js` downloads at 3,565,102 bytes.
+
+Required behavior after Phase 16a:
+
+- A CloudFront Function on viewer-request maps an extensionless path to its `.html` object
+  (`/about` to `/about.html`, `/projects/clearsky` to `/projects/clearsky.html`) and strips one
+  trailing slash first (`/blog/` to `/blog.html`). `/` and paths whose last segment has a dot
+  pass through unchanged. Source: `edge/clean-urls.js`, runtime `cloudfront-js-2.0`.
+- A missing object returns HTTP 404 with the site's own `/404.html`, for both the 403 a private
+  OAC origin sends and a plain 404. Error responses cache for 60 seconds.
+- CloudFront compresses eligible responses (`compress = true`). `CachingOptimized` already keys
+  on gzip and Brotli.
+- Existing `.html` links keep working. Templates keep emitting `.html` links until Phase 16b,
+  so no link depends on the function during the apply window.
+
+Cost: CloudFront Functions are billed per invocation with a monthly free allowance far above
+this site's traffic. Compression lowers transfer. Expected monthly delta: none measurable.
+
+Diagnosis: the 403-to-404 mapping also hides an origin failure. If every path, `/` included,
+returns the 404 page, check OAC and the bucket policy before looking for missing content.
+
+Rollback: revert the PR on `main` and let CI apply. That removes the function association,
+the error responses and `compress`, and deletes the function. `.html` links work throughout,
+so a rollback breaks nothing that works today. Nothing here touches S3 bucket settings, OAC,
+the certificate, DNS, Lambda, DynamoDB, IAM or state.
 
 ## Security and privacy
 
@@ -274,28 +310,40 @@ Resolved 2026-08-01:
 - **LinkedIn:** `https://linkedin.com/in/aravindakrishnan-v-2b0651218`, taken from Aravind's
   own `resume.tex` header rather than guessed. Published in the About contact block.
 
-Resolved 2026-08-01 (continued):
+Resolved 2026-08-01, rewritten 2026-10-03:
 
-- **Resume PDF: published, redacted.** `web/public/resume.pdf` is a build of `resume.tex`
-  with **only** the personal phone number removed from the header — email, location,
-  portfolio, LinkedIn and GitHub all stay. Verified by decompressing the PDF's FlateDecode
-  streams and searching for the digits, the spaced form, the country code, and a kerned
-  digit run; all absent, while the name, email, LinkedIn and employer are present.
-
-  To refresh it (there is no LaTeX toolchain on the laptop; this builds one in a container):
+- **Resume PDF: published, redacted.** `web/public/resume.pdf` is a print of the DevOps
+  resume HTML with **only** the personal phone number removed from the header — email,
+  location, portfolio, LinkedIn and GitHub all stay. The redaction rule is unchanged since
+  2026-08-01; only the source and the build changed.
 
   ```bash
-  mkdir -p /tmp/resume-build && cp ~/Documents/resume/resume.tex /tmp/resume-build/
-  # delete only the "+91 ..." fragment from the header line, keep everything else
+  rm -rf /tmp/resume-build && mkdir -p /tmp/resume-build
+  cp ~/Documents/resume/devops/Aravindakrishnan_V_DevOps_Engineer.html /tmp/resume-build/resume.html
+  # delete only the "+91 ..." fragment from the contact line, keep everything else
   cd /tmp/resume-build
-  printf 'FROM debian:stable-slim\nRUN apt-get update && apt-get install -y --no-install-recommends \\\n  texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended\n' > Dockerfile
-  docker build -t resume-latex:local .
-  docker run --rm -v "$PWD":/w -w /w resume-latex:local pdflatex -interaction=nonstopmode -halt-on-error resume.tex
-  # VERIFY the phone is absent from the binary before copying it into web/public/
+  sed -i 's/ | +91 9895526005 | / | /' resume.html
+  chromium --headless --disable-gpu --no-sandbox --no-pdf-header-footer \
+    --print-to-pdf=/tmp/resume-build/resume.pdf file:///tmp/resume-build/resume.html
   ```
 
-  `~/Documents/resume/resume.tex` stays the canonical resume, phone number included — the
-  redaction applies only to the copy published on the web.
+  **Verify on rendered text, not on the binary.** The 2026-08-01 recipe searched decompressed
+  FlateDecode streams for the digits. That worked for the pdfTeX build, which stored text
+  literally, and it is worthless here: Chrome's Skia PDF encoder subsets fonts and stores
+  glyph indices, so searching for a literal string returns "absent" whether or not the text
+  is on the page. That check gives a false pass on every Chrome-built resume. Decode the
+  text instead and confirm the phone is gone and nothing else moved:
+
+  ```bash
+  pdftotext -layout /tmp/resume-build/resume.pdf - | grep -c '9895526005'   # must be 0
+  # the only permitted difference from the canonical PDF is the contact line
+  pdftotext -layout /tmp/resume-build/resume.pdf a.txt
+  pdftotext -layout ~/Documents/resume/devops/Aravindakrishnan_V_DevOps_Engineer.pdf b.txt
+  diff a.txt b.txt
+  ```
+
+  `~/Documents/resume/devops/Aravindakrishnan_V_DevOps_Engineer.html` stays the canonical
+  resume, phone number included — the redaction applies only to the copy published on the web.
 
 - **Employer is Zarthi.** Confirmed by Aravind 2026-08-01. The v2 site said Centilytics;
   that was wrong and does not carry over. `web/src/lib/about.ts` exports `employer` and both
