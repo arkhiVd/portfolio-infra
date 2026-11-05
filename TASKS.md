@@ -8,7 +8,9 @@ Branch `feat/clean-links`. Standard: templates and generated XML only, no infras
 - [x] Canonical URLs, sitemap `<loc>` and RSS `<link>` are extensionless; RSS `<guid>` keeps `.html`.
 - [x] Legacy `*-detail` redirects and the one blog link point to clean paths.
 - [x] Test: no built page links to an internal `.html` page or has a `.html` canonical.
-- [ ] Fresh-context review.
+- [x] Fresh-context review: approve. Noted, not fixed here: the link scan does not check absolute
+      same-site URLs or `src=`; `/admin/` resolves only as `/admin/index.html` through CloudFront,
+      as before 16a (the CMS is local-only).
 - [ ] After apply: live links, canonical tags, sitemap and feed URLs return 200.
 
 ## Previous phase: 16a, edge fixes for clean URLs, compression and 404
