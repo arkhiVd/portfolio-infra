@@ -107,7 +107,7 @@ const articleSchema = article && {
     <Footer />
 
     {/* Rendered by Terraform with the Lambda Function URL injected; served from the site
-        root in both preview and production, so it is referenced absolutely on purpose. */}
-    <script is:inline src="/assets/js/visitorscript.js" defer></script>
-  </body>
+        root in both preview and production, so it is referenced absolutely on purpose.
+        Skipped on noindex pages so scanner hits on the 404 page do not count as visits. */}
+    {!noindex && <script is:inline src="/assets/js/visitorscript.js" defer></script>}</body>
 </html>

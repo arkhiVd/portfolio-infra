@@ -176,6 +176,9 @@ Required behavior after Phase 16a:
 Cost: CloudFront Functions are billed per invocation with a monthly free allowance far above
 this site's traffic. Compression lowers transfer. Expected monthly delta: none measurable.
 
+Diagnosis: the 403-to-404 mapping also hides an origin failure. If every path, `/` included,
+returns the 404 page, check OAC and the bucket policy before looking for missing content.
+
 Rollback: revert the PR on `main` and let CI apply. That removes the function association,
 the error responses and `compress`, and deletes the function. `.html` links work throughout,
 so a rollback breaks nothing that works today. Nothing here touches S3 bucket settings, OAC,

@@ -90,18 +90,26 @@ data "aws_iam_policy_document" "apply_deploy" {
     resources = ["*"]
   }
 
-  # ACM cert for the custom domain (cert ARN unknown before create).
-  # CloudFront Functions accept resource ARNs, so this is scoped to the one function.
+  # CloudFront Functions. CreateFunction has no resource type in the IAM service reference,
+  # so it needs "*". Every other function action is scoped to the one function.
+  statement {
+    sid       = "CloudFrontFunctionCreate"
+    effect    = "Allow"
+    actions   = ["cloudfront:CreateFunction"]
+    resources = ["*"]
+  }
+
   statement {
     sid    = "CloudFrontFunction"
     effect = "Allow"
     actions = [
-      "cloudfront:CreateFunction", "cloudfront:UpdateFunction", "cloudfront:PublishFunction",
-      "cloudfront:DeleteFunction", "cloudfront:DescribeFunction", "cloudfront:GetFunction"
+      "cloudfront:UpdateFunction", "cloudfront:PublishFunction", "cloudfront:DeleteFunction",
+      "cloudfront:DescribeFunction", "cloudfront:GetFunction"
     ]
     resources = ["arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:function/portfolio-clean-urls"]
   }
 
+  # ACM cert for the custom domain (cert ARN unknown before create).
   statement {
     sid    = "ACM"
     effect = "Allow"

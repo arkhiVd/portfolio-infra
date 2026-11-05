@@ -5,7 +5,7 @@ function handler(event) {
   var request = event.request;
   var uri = request.uri;
 
-  if (uri.length > 1 && uri.endsWith("/")) {
+  while (uri.length > 1 && uri.endsWith("/")) {
     uri = uri.slice(0, -1);
   }
   if (uri === "" || uri === "/") {

@@ -18,6 +18,12 @@ test("one trailing slash is dropped before mapping", () => {
   assert.equal(rewrite("/blog/"), "/blog.html");
   assert.equal(rewrite("/homelab/"), "/homelab.html");
   assert.equal(rewrite("/about.html/"), "/about.html");
+  assert.equal(rewrite("/blog//"), "/blog.html");
+});
+
+test("unusual paths still map to one object key", () => {
+  assert.equal(rewrite("//about"), "//about.html");
+  assert.equal(rewrite("/about%20"), "/about%20.html");
 });
 
 test("root and file paths pass through unchanged", () => {
