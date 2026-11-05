@@ -158,7 +158,7 @@ test("CMS remote shell, worker provenance, policy isolation and deploy workflow 
   for (const field of ["title", "description", "published", "updated", "tags", "draft", "body"]) {
     assert.match(config, new RegExp(`name: ${field}(?:,|\\n)`));
   }
-  for (const file of ["homelab.md", "how-i-work.md"]) assert.match(config, new RegExp(file.replace(".", "\\.")));
+  for (const file of ["homelab.md", "how-i-work.md"]) assert.doesNotMatch(config, new RegExp(file.replace(".", "\\.")));
   for (const field of ["order", "featuredOrder", "secondaryRepo", "additionalFigures", "kicker", "lede", "body"]) {
     assert.match(config, new RegExp(`name: ${field}(?:,|\\n)`));
   }
