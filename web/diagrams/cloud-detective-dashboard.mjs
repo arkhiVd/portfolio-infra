@@ -38,11 +38,11 @@ line([n.apigw.R, n.api.L]);
 step(3, (n.apigw.R[0] + n.api.L[0]) / 2, n.apigw.y - 18);
 line([n.api.R, n.chat.L]);
 step(4, (n.api.R[0] + n.chat.L[0]) / 2, n.api.y - 18);
-// The agent's lane: the model call leaves AWS; findings stay in DynamoDB.
+// The model call leaves AWS; the agent's findings writes stay in DynamoDB.
 line([n.chat.R, n.llm.L]);
 step(5, n.llm.L[0] - 32, n.chat.y - 18); // past the AWS Cloud edge
-line([[n.findings.x, n.chat.y], n.findings.T]);
-step(6, n.findings.x + 22, (n.chat.y + n.findings.T[1]) / 2);
+line([n.chat.B, [n.chat.x, n.findings.y], n.findings.L]);
+step(6, (n.chat.x + n.findings.L[0]) / 2, n.findings.y - 18);
 // The API Lambda's lane to the workers it invokes.
 line([n.api.B, [n.api.x, n.arch.y], n.arch.L]);
 line([[n.api.x, n.arch.y], [n.api.x, n.scanner.y], n.scanner.L]);
@@ -55,8 +55,8 @@ const legend = [
   "API Gateway checks the Cognito token on every /api/* route; the page shell is public.",
   "One Lambda serves the dashboard and its JSON API.",
   "Ask the detective: the API Lambda invokes the chat agent asynchronously, and the page polls.",
-  "Only the model call leaves AWS, to an OpenAI-compatible provider; its key is in SSM SecureString.",
-  "The agent reads AWS under ViewOnlyAccess, and can add findings or mark them resolved.",
+  "Only model calls leave AWS, to an OpenAI-compatible provider whose key is in SSM SecureString.",
+  "The agent reads AWS under ViewOnlyAccess, can add or resolve findings, and can edit a diagram.",
   "The architecture worker discovers resources and writes the diagram to S3.",
   "Run scan invokes the scanner on demand.",
 ];
@@ -64,9 +64,11 @@ const dashedKey = "Dashed line: API Gateway validating the Cognito token.";
 const notes = [
   "There is no CloudFront: the account could not create distributions, and API Gateway serves HTTPS.",
   "The chat agent and the architecture worker also assume the member accounts' read-only role.",
+  "The architecture worker also calls the provider for its optional summary and AI layout pass.",
+  "The API Lambda also reads and writes the conversations, diagram jobs and settings.",
 ];
 
-const cloud = { x: 200, y: 20, r: 1100, b: row[4] + 130 };
+const cloud = { x: 200, y: 20, r: 1100, b: row[4] + 150 };
 const home = { x: 220, y: 60, r: 1084, b: cloud.b - 16 };
 const region = { x: 240, y: 100, r: 1070, b: home.b - 16 };
 const width = 1300;
@@ -83,7 +85,7 @@ process.stdout.write(render({
     box(region, C.region, "group-region", "AWS Region · us-east-1", "6 5"),
   ],
   paths,
-  junctions: [[n.findings.x, n.chat.y], [n.api.x, n.arch.y]],
+  junctions: [[n.api.x, n.arch.y]],
   nodes: Object.entries(spec).map(([id, [, , iconName, title, detail]]) => ({ ...n[id], icon: iconName, title, detail })),
   steps,
   legend: { x: cloud.x, top: legendTop, items: legend, dashedKey, notes },

@@ -17,6 +17,12 @@ Branch `feat/diagram-cloud-detective`. Standard: two generators, 3 icons, two SV
       create findings (`add_finding`, `resolve_finding`, with `PutItem`/`UpdateItem` on the findings
       table), so "explains but does not create" and "read-only IAM everywhere the AI can reach" are
       replaced by what holds: its AWS access is read-only.
+- [x] Fresh-context review: nothing blocking. Fixed: the unchanged "diagram generation as code"
+      prose now says an opt-in AI layout pass and the chat agent can propose structured edits
+      (`ai_layout_plan`, `edit_architecture`) while the generator still renders; the dashboard
+      figure says the architecture worker calls the provider too, the agent can edit a diagram, and
+      the API Lambda's other reads and writes; chat → DynamoDB no longer branches off the outbound
+      lane; the caption limits the token check to `/api/*`; two spacing nits; a dead alias.
 - [x] Every case study now requires an image (schema and test).
 - [x] Browser gate: lazy images far below the fold were never fetched in its 900 px viewport, so
       the second figure failed the image check. The gate now loads images eagerly (5 s cap) before

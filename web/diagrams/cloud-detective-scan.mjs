@@ -1,7 +1,8 @@
 // Cloud Detective: the daily scan, in the AWS reference-architecture style.
 // Source of truth: arkhiVd/cloud-detective terraform/main.tf, iam.tf, ssm.tf, member-role/main.tf
 // and src/detective/handler.py + store.py (the repo has no diagram source). 20 detector classes
-// register in src/detective/detectors; the README's 24 also counts the report modules.
+// register in src/detective/detectors. The README says 24, which matches if it also counts the four
+// report modules (cost watch, inventory, posture, commitments); the repo doesn't say.
 // Run: node web/diagrams/cloud-detective-scan.mjs > web/public/assets/img/cloud-detective-scan.svg
 import { C, ports, render } from "./aws-diagram.mjs";
 
@@ -30,8 +31,8 @@ const step = (num, x, y) => steps.push({ n: num, x, y });
 
 line([n.scheduler.R, n.scanner.L]);
 step(1, (n.scheduler.R[0] + n.scanner.L[0]) / 2, n.scheduler.y - 18);
-line([[n.scanner.x - 14, n.scanner.B[1]], [n.scanner.x - 14, n.ssm.y], n.ssm.R], true);
-step(2, (n.ssm.R[0] + n.scanner.x - 14) / 2, n.ssm.y - 18);
+line([[n.scanner.x - 28, n.scanner.B[1]], [n.scanner.x - 28, n.ssm.y], n.ssm.R], true);
+step(2, (n.ssm.R[0] + n.scanner.x - 28) / 2, n.ssm.y - 18);
 line([n.scanner.B, n.member.T], true);
 step(3, n.scanner.x + 22, row[3] + 40); // above the account edge
 // One lane fans out to the three outputs.

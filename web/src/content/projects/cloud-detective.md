@@ -25,7 +25,7 @@ lede: A serverless AWS scanner for cost, inventory and security posture. It trac
       could then explain any single answer without me going back to the console.
     </p>
     <p>
-      Detection and diagram generation are deterministic, fixture-tested and read-only. The AI
+      Detection and the default diagram are deterministic, fixture-tested and read-only. The AI
       layer is optional and stays off until a provider key is set. The scheduled detectors produce
       the findings. The chat agent can add one it confirms on a live resource or mark one resolved,
       but its AWS access is read-only.
@@ -48,7 +48,7 @@ lede: A serverless AWS scanner for cost, inventory and security posture. It trac
       emits draw.io XML with AWS icons and an SVG preview.
     </p>
     <figure class="arch" data-project-figure="1">
-<figcaption>API Gateway checks the Cognito token before the API Lambda runs. That one Lambda serves the dashboard and starts the chat agent, the architecture worker or a scan. Only the model call leaves AWS.</figcaption></figure>
+<figcaption>API Gateway checks the Cognito token before the API Lambda handles any /api/* request. That one Lambda serves the dashboard and starts the chat agent, the architecture worker or a scan. Only model calls leave AWS.</figcaption></figure>
     <p>
       Multi-account scanning fans out over cross-account read-only roles, tracked in an SSM
       registry that the dashboard writes to when an account is onboarded.
@@ -80,7 +80,9 @@ lede: A serverless AWS scanner for cost, inventory and security posture. It trac
         <dd>
           The generator is deterministic: same account state, same diagram. An LLM drawing
           architecture would be plausible and occasionally wrong, which is the worst possible
-          property for a diagram someone is about to trust.
+          property for a diagram someone is about to trust. An opt-in AI layout pass and the chat
+          agent can propose structured edits, such as pinning a column or dropping an edge, but the
+          generator still renders the result.
         </dd>
       </div>
       <div class="row">
