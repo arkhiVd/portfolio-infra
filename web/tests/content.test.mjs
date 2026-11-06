@@ -288,7 +288,7 @@ test("case-study anchors are unique and the numbers strip reads one list as text
 });
 
 test("architecture diagrams are their generators' output, not hand edits", () => {
-  for (const [script, svg] of [["clearsky", "clearsky-architecture"], ["appstack", "appstack-architecture"]]) {
+  for (const [script, svg] of [["clearsky", "clearsky-architecture"], ["appstack", "appstack-architecture"], ["cdc", "cdc-architecture"]]) {
     const generated = execFileSync(process.execPath, [`diagrams/${script}.mjs`], { cwd: root }).toString();
     assert.equal(readFileSync(join(root, `public/assets/img/${svg}.svg`), "utf8"), generated, `${svg}.svg drifted`);
   }

@@ -1,6 +1,31 @@
 # Portfolio tasks
 
-## Current phase: 21, AppStack diagram
+## Current phase: 22, CDC diagram
+
+Branch `feat/diagram-cdc`. Standard: one generator, 4 icons, one SVG, case-study metadata.
+
+- [x] `web/diagrams/cdc.mjs` from `arkhiVd/cdc-infra` `docs/architecture.drawio`: all 7 edges, no
+      floating endpoints, badges follow the source's own ① to ⑦ flow.
+- [x] Two facts taken from the repo's Terraform because the drawing is stale: the VPC is a dedicated
+      `aws_vpc.main` (the drawing says "Default VPC, data source, never managed"), and RDS, both MSK
+      brokers and MSK Connect span both public subnets (the drawing pins RDS to 1a and MSK to 1b).
+      Versions and sizes match the Terraform defaults: PostgreSQL 18 on db.t4g.micro,
+      2 × kafka.t3.small, Debezium 2.7.4 with 1 MCU and 1 worker. The CIDR is left out because
+      `tfvars` may override it and was not read.
+- [x] Fresh-context review: one accuracy fix. The drawing's "scoped S3 + logs" IAM role is not
+      scoped: `main.tf` does not pass `plugin_bucket_arn`, so S3 read falls back to `"*"`, and logs
+      are `"*"`. The node and legend now say "S3 read + CloudWatch Logs". The subnet title says the
+      RDS *subnet group* spans both AZs (the instance is single-AZ). Names assume `project_name`
+      stays `lab`.
+- [x] 4 more icons (MSK, MSK Connect, CloudWatch, client), unmodified from the same AWS package.
+- [x] The 1.1 MB PNG is removed; drift test covers all three diagrams.
+- [x] Measured: desktop 848 x 892, names 13.0 px, captions 10.6 px; phone pans at 900 px, names
+      13.8 px; page width 375.
+
+## Previous phase: 21, AppStack diagram
+
+Merged as PR #58 and applied 2026-11-06: 1 add, 1 change, 1 destroy; post-apply plan empty. Live
+SVG 31.6 KB with Brotli, replacing a 309 KB PNG.
 
 Branch `feat/diagram-appstack`. Standard: generator, shared renderer, 14 more AWS icons, one SVG.
 
