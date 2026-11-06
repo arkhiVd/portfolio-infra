@@ -41,9 +41,11 @@ const nodes = {
   llm: [5, 1, "internet", "LLM provider"],
   email: [5, 2, "email", "Ops email"],
 };
+// The member role sits right of its column so its account box clears the scanner's stem.
+const nudge = { mrole: 24 };
 const at = (id) => {
   const [c, r] = nodes[id];
-  const x = col[c], y = row[r], h = S / 2 + 6;
+  const x = col[c] + (nudge[id] ?? 0), y = row[r], h = S / 2 + 6;
   return { x, y, L: [x - h, y], R: [x + h, y], T: [x, y - h], B: [x, y + S / 2 + 48] };
 };
 
@@ -83,7 +85,7 @@ const step = (n, x, y) => steps.push({ n, x, y });
   line([[jScan, n.ddb.y], n.ddb.L]);
   line([[jScan, n.mrole.y], n.mrole.L]);
   line([n.sns.R, n.email.L]);
-  step(5, jScan + 22, (n.budget.y + n.mrole.y) / 2);
+  step(5, jScan + 52, n.mrole.y - 18);
   step(6, jScan + 26, n.ddb.y - 18);
   // 7 · chat reads its API key from SSM and calls the model.
   line([n.chat.T, n.ssm.B], true);
@@ -103,13 +105,14 @@ const legend = [
   "The scanner assumes a read-only role in each member account (sts:AssumeRole).",
   "Findings go to DynamoDB; the daily digest goes through SNS to email.",
   "The chat Lambda reads its API key from SSM and calls the LLM provider over HTTPS.",
-  "GitHub Actions deploys through OIDC CI roles; Terraform state lives in S3.",
+  "GitHub Actions assumes the CI roles through OIDC; Terraform state lives in S3.",
 ];
+const dashedKey = "Dashed lines are sign-in, token checks and reads of settings or state.";
 
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
 const width = col[5] + 130;
 const legendTop = row[5] + 140;
-const height = legendTop + legend.length * 32 + 20;
+const height = legendTop + (legend.length + 1) * 32 + 20;
 const out = [];
 out.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" font-family="${FONT}">`);
 out.push(`<title>ClearSky architecture on AWS. ${legend.map((text, i) => `${i + 1}. ${text}`).join(" ")}</title>`);
@@ -122,11 +125,12 @@ const group = (x, y, w, h, stroke, iconName, label) => {
   out.push(`<image href="${icon(iconName)}" x="${x}" y="${y}" width="32" height="32"/>`);
   out.push(`<text x="${x + 42}" y="${y + 21}" fill="${C.text}" font-size="15">${esc(label)}</text>`);
 };
-const cloudX = col[1] - 128, cloudY = 20, cloudR = col[4] + 152, cloudB = row[5] + 96;
+const cloudX = col[1] - 128, cloudY = 20, cloudR = col[4] + 176, cloudB = row[5] + 96;
 group(cloudX, cloudY, cloudR - cloudX, cloudB - cloudY, C.cloud, "group-aws-cloud", "AWS Cloud");
-group(cloudX + 18, cloudY + 44, cloudR - cloudX - 60, row[4] + 96 - (cloudY + 44), C.account, "group-aws-account", "ClearSky account · us-east-1 (scans every enabled region)");
+group(cloudX + 18, cloudY + 44, cloudR - cloudX - 60, row[4] + 96 - (cloudY + 44), C.account, "group-aws-account", "ClearSky account · us-east-1 (all-region scanning)");
 const m = at("mrole");
-group(m.x - 136, m.y - 66, 272, 154, C.account, "group-aws-account", "Member accounts (any number)");
+const memberX = (col[3] + col[4]) / 2 + 22;
+group(memberX, m.y - 66, cloudR - 8 - memberX, 154, C.account, "group-aws-account", "Member accounts (any number)");
 
 for (const { points, dashed, arrow } of paths) {
   const d = points.map(([x, y], i) => `${i ? "L" : "M"}${x} ${y}`).join("");
@@ -148,5 +152,10 @@ legend.forEach((text, i) => {
   out.push(badge(i + 1, x + 12, y));
   out.push(`<text x="${x + 34}" y="${y + 5}" fill="${C.text}" font-size="15">${esc(text)}</text>`);
 });
+{
+  const y = legendTop + legend.length * 32;
+  out.push(`<path d="M${cloudX} ${y}H${cloudX + 24}" stroke="${C.line}" stroke-width="1.6" stroke-dasharray="6 5"/>`);
+  out.push(`<text x="${cloudX + 34}" y="${y + 5}" fill="${C.sub}" font-size="15">${esc(dashedKey)}</text>`);
+}
 out.push("</svg>");
 process.stdout.write(out.join("\n") + "\n");

@@ -14,6 +14,9 @@ Branch `feat/dark-diagrams`. Standard: one generator, one SVG, renderer link, CS
       diagram that looks like an AWS architecture diagram. Redrawn in the AWS reference style:
       squid-ink canvas, AWS Cloud > account groups, straight or single-bend arrows with junction
       fan-outs, 8 numbered steps with a legend.
+- [x] Fresh-context review of the AWS-style draft: approve, all 18 edges verified against the
+      draw.io. Fixed: the member-account box no longer sits on the scanner's stem, badge 5 is on its
+      branch, the legend keys dashed lines, and two phrases use the source's wording.
 - [x] Figures link to their full-size file. Below 680 px SVG figures pan at 900 px.
 - [x] Test: the committed SVG equals the generator's output.
 - [x] Measured: desktop 848 px wide, node text 10.6 px, edge labels 9.3 px (the PNG gave about 6 px);
