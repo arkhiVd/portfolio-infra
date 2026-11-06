@@ -31,10 +31,11 @@ const badge = (n, x, y) =>
  *   groups: [{ x, y, w, h, stroke, icon, label, dash? }],
  *   paths: [{ points, dashed, arrow }],
  *   nodes: [{ x, y, icon, title, detail?: string | string[] }],
+ *   junctions?: [[x, y]],  // dots where branches leave a shared lane
  *   steps: [{ n, x, y }],
  *   legend: { x, top, items: string[], dashedKey, notes?: string[] } }
  */
-export const render = ({ width, height, title, groups, paths, nodes, steps, legend }) => {
+export const render = ({ width, height, title, groups, paths, junctions = [], nodes, steps, legend }) => {
   const out = [];
   out.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" font-family="${FONT}">`);
   out.push(`<title>${esc(title)}</title>`);
@@ -49,6 +50,7 @@ export const render = ({ width, height, title, groups, paths, nodes, steps, lege
     const d = points.map(([x, y], i) => `${i ? "L" : "M"}${x} ${y}`).join("");
     out.push(`<path d="${d}" fill="none" stroke="${C.line}" stroke-width="1.6"${dashed ? ' stroke-dasharray="6 5"' : ""}${arrow ? ' marker-end="url(#arrow)"' : ""}/>`);
   }
+  for (const [x, y] of junctions) out.push(`<circle cx="${x}" cy="${y}" r="4" fill="${C.line}"/>`);
   for (const n of nodes) {
     out.push(`<image href="${icon(n.icon)}" x="${n.x - S / 2}" y="${n.y - S / 2}" width="${S}" height="${S}"/>`);
     out.push(`<text x="${n.x}" y="${n.y + S / 2 + 21}" text-anchor="middle" fill="${C.text}" font-size="16">${esc(n.title)}</text>`);

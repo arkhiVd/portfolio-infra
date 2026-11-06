@@ -39,6 +39,7 @@ const n = Object.fromEntries(Object.entries(spec).map(([id, [x, y, , , detail]])
 
 const paths = [];
 const steps = [];
+const junctions = [];
 const line = (points, dashed = false, arrow = true) => paths.push({ points, dashed, arrow });
 const step = (num, x, y) => steps.push({ n: num, x, y });
 
@@ -57,6 +58,7 @@ line([[L1, band], [L1, n.os.y]], false, false);
 line([[L1, n.redis.y], n.redis.L]);
 line([[L1, n.rds.y], n.rds.L]);
 line([[L1, n.os.y], n.os.L]);
+junctions.push([L1, n.redis.y], [L1, n.rds.y]);
 step(3, L1 + 26, n.rds.y - 18);
 // 4 · publish to SQS price-sync.
 line([[L1, band], [n.sqsp.x, band], n.sqsp.T]);
@@ -70,6 +72,7 @@ line([[n.os.x, yBot], n.os.B]);
 line([[L2a, yBot], [L2a, n.rds.y], n.rds.R], true); // batch insert (dashed in the source)
 line([[L2b, yBot], [L2b, n.sqsp.y], n.sqsp.L]);
 line([[n.sqspdf.x, yBot], n.sqspdf.B]);
+junctions.push([n.os.x, yBot], [L2a, yBot], [L2b, yBot]);
 step(6, n.wkr.x + 60, yBot);
 // 7 · the hosts pull images from ECR.
 // Enters the hosts from the right so it clears the cluster's title.
@@ -117,6 +120,7 @@ process.stdout.write(render({
     box(ecs, C.ecs, "ecs", "ECS cluster", "6 5"),
   ],
   paths,
+  junctions,
   nodes: Object.entries(spec).map(([id, [, , iconName, title, detail]]) => ({ ...n[id], icon: iconName, title, detail })),
   steps,
   legend: { x: cloud.x, top: legendTop, items: legend, dashedKey, notes },

@@ -15,6 +15,9 @@ Branch `feat/diagram-appstack`. Standard: generator, shared renderer, 14 more AW
       one trunk under the cluster, the queues to the right.
 - [x] 14 more icons copied unmodified from the same AWS package (31 icons in total).
 - [x] Drift test covers both generated diagrams. The old 309 KB PNG is removed.
+- [x] Fresh-context review: approve. All 16 edges and every group placement verified against the
+      draw.io by geometry; ClearSky sha256 identical on main and branch. Added junction dots where
+      branches leave a lane, so the Redis branch no longer reads as starting at EC2.
 - [x] Measured: desktop 848 x 1082, names 9.5 px, captions 7.7 px (smaller than ClearSky: wider
       canvas); phone pans at 900 px, names 10.1 px; page width 375.
 
