@@ -329,6 +329,19 @@ Exit criteria:
 - [x] Browser gate passes on all 14 pages; ClearSky and AppStack SVGs unchanged.
 - [ ] Fresh-context review; CI; merge; live check.
 
+## Phase 23: containers diagrams
+
+**Class:** Standard. Fourth case study in the shared AWS style, and the first with two figures.
+
+Scope: draw the application architecture and the deployment pipeline of
+`arkhiVd/aws-ecs-containerized-webapp` from its `iac/*.tf` and `.github/workflows/deploy.yml`
+(the repo has no diagram source, only older PNGs). Correct case-study sentences that contradict that
+code; 3 more AWS icons; drift test covers both diagrams.
+
+Exit criteria:
+- [x] Browser gate passes on all 14 pages; ClearSky, AppStack and CDC SVGs unchanged.
+- [ ] Fresh-context review; CI; merge; live check.
+
 ## Delegation budget
 
 Use Pi through Herdr with the `openai-codex` subscription provider. Luna at low thinking
