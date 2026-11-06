@@ -302,6 +302,19 @@ their own PRs, each from that project's own source.
 Exit criteria:
 - [x] ClearSky labels render at about 10 px on desktop and phone; page has no horizontal scroll.
 - [x] Browser gate passes on all 14 pages.
+- [x] Fresh-context review; CI; merge; live check.
+
+## Phase 21: AppStack diagram
+
+**Class:** Standard. Second diagram after ClearSky (Phase 20), same style and shared renderer.
+
+Scope: extract the drawing code into `web/diagrams/aws-diagram.mjs` (ClearSky output unchanged
+byte for byte); draw AppStack from `arkhiVd/appstack-infra` `docs/architecture.drawio`
+(16 edges) with Region, VPC, public and private subnet and ECS cluster groups; drift test covers
+every generated diagram.
+
+Exit criteria:
+- [x] Browser gate passes on all 14 pages; ClearSky SVG byte-identical after the refactor.
 - [ ] Fresh-context review; CI; merge; live check.
 
 ## Delegation budget

@@ -1,6 +1,30 @@
 # Portfolio tasks
 
-## Current phase: 20, dark diagrams (ClearSky first)
+## Current phase: 21, AppStack diagram
+
+Branch `feat/diagram-appstack`. Standard: generator, shared renderer, 14 more AWS icons, one SVG.
+
+- [x] `web/diagrams/aws-diagram.mjs` holds the shared drawing code; ClearSky now only describes its
+      graph. Its SVG is byte-identical before and after (checked with `cmp`).
+- [x] `web/diagrams/appstack.mjs` from `arkhiVd/appstack-infra` `docs/architecture.drawio`: 16 edges.
+      Six have floating endpoints; each touches exactly one node (distance 0), which is the node used.
+      Groups as in the source: AWS Cloud > Region ap-south-1 > VPC > public subnets (ALB, ECS
+      cluster on 3 EC2 hosts) and private subnets (RDS, Redis, OpenSearch, gateway endpoints);
+      integration and CI/ops in the region; CloudFront and the admin SPA outside it.
+- [x] Layout has no crossings: the services fan out on one lane to the data tier, the workers along
+      one trunk under the cluster, the queues to the right.
+- [x] 14 more icons copied unmodified from the same AWS package (31 icons in total).
+- [x] Drift test covers both generated diagrams. The old 309 KB PNG is removed.
+- [x] Fresh-context review: approve. All 16 edges and every group placement verified against the
+      draw.io by geometry; ClearSky sha256 identical on main and branch. Added junction dots where
+      branches leave a lane, so the Redis branch no longer reads as starting at EC2.
+- [x] Measured: desktop 848 x 1082, names 9.5 px, captions 7.7 px (smaller than ClearSky: wider
+      canvas); phone pans at 900 px, names 10.1 px; page width 375.
+
+## Previous phase: 20, dark diagrams (ClearSky first)
+
+Merged as PR #57 and applied 2026-11-06: 2 add, 14 change, 2 destroy; post-apply plan empty. Live
+SVG 98 KB, 29.5 KB with Brotli.
 
 Branch `feat/dark-diagrams`. Standard: one generator, one SVG, renderer link, CSS and a test.
 
@@ -176,7 +200,7 @@ Branch `feat/edge-fixes`. Risky: changes the live CloudFront distribution and th
       on 404 and misplaced comment fixed.
 - [x] Fresh-context review round 2: approve. Plan role `ReadOnlyAccess` v191 confirmed to grant
       `cloudfront:Describe*`, `Get*` and `List*`.
-- [ ] Post-apply live checks from ROADMAP Phase 16a.
+- [x] Post-apply live checks from ROADMAP Phase 16a.
 
 Local evidence, 2026-11-05:
 

@@ -3,8 +3,8 @@ name: Microservices platform infrastructure
 status: in progress
 summary: Terraform infrastructure for eight .NET services and two background workers on ECS. The design separates request traffic from S3 and SQS event processing and avoids a NAT gateway.
 stack: [ECS on EC2, RDS, OpenSearch, SQS, Terraform]
-image: /assets/img/appstack-architecture.png
-imageAlt: "AppStack architecture: ALB in front of ECS on EC2, with RDS Postgres, Redis, OpenSearch and SQS workers inside one VPC"
+image: /assets/img/appstack-architecture.svg
+imageAlt: "AppStack architecture in ap-south-1: users reach the admin SPA through CloudFront and the services through an Application Load Balancer to ECS on EC2 in public subnets. Services use RDS PostgreSQL, ElastiCache Redis and OpenSearch in private subnets and publish to SQS; workers consume SQS price-sync and pdf-sync, which receives S3 upload events. Hosts pull images from ECR, and GitHub Actions deploys through OIDC roles."
 repo: https://github.com/arkhiVd/appstack-infra
 order: 2
 featuredOrder: 2
