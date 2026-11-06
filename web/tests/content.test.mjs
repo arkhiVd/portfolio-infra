@@ -287,7 +287,9 @@ test("case-study anchors are unique and the numbers strip reads one list as text
   assert.deepEqual(caseStudyMetrics(body), [{ value: "1 & 2", label: "A x <y>" }]);
 });
 
-test("the ClearSky diagram is the generator's output, not a hand edit", () => {
-  const generated = execFileSync(process.execPath, ["diagrams/clearsky.mjs"], { cwd: root }).toString();
-  assert.equal(readFileSync(join(root, "public/assets/img/clearsky-architecture.svg"), "utf8"), generated);
+test("architecture diagrams are their generators' output, not hand edits", () => {
+  for (const [script, svg] of [["clearsky", "clearsky-architecture"], ["appstack", "appstack-architecture"]]) {
+    const generated = execFileSync(process.execPath, [`diagrams/${script}.mjs`], { cwd: root }).toString();
+    assert.equal(readFileSync(join(root, `public/assets/img/${svg}.svg`), "utf8"), generated, `${svg}.svg drifted`);
+  }
 });

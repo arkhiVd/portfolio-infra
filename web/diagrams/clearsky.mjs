@@ -1,23 +1,11 @@
 // ClearSky architecture in the AWS reference-architecture style: official AWS Architecture Icons,
 // AWS Cloud and AWS Account groups, straight or single-bend arrows, numbered steps with a legend.
 // Graph source of truth: arkhiVd/clearsky docs/architecture.drawio (19 services, 18 edges).
-// Icons: web/diagrams/aws-icons (see NOTICE.md). Embedded as data URIs so the file works in <img>.
 // Run: node web/diagrams/clearsky.mjs > web/public/assets/img/clearsky-architecture.svg
-import { readFileSync } from "node:fs";
-
-const icon = (name) =>
-  `data:image/svg+xml;base64,${readFileSync(new URL(`./aws-icons/${name}.svg`, import.meta.url)).toString("base64")}`;
-
-// AWS dark diagram palette: squid-ink canvas, white cloud group, account pink, smile-orange steps.
-const C = {
-  canvas: "#232F3E", text: "#FFFFFF", sub: "#C8D0D9", line: "#C8D0D9",
-  cloud: "#FFFFFF", account: "#E7157B", step: "#FF9900", stepText: "#232F3E",
-};
-const FONT = "Amazon Ember, Helvetica Neue, Helvetica, Arial, sans-serif";
+import { C, ports, render } from "./aws-diagram.mjs";
 
 const col = [90, 320, 530, 770, 1000, 1240];
 const row = [112, 252, 392, 532, 672, 852];
-const S = 56;
 
 // [column, row, icon, name, detail]
 const nodes = {
@@ -45,8 +33,7 @@ const nodes = {
 const nudge = { mrole: 24 };
 const at = (id) => {
   const [c, r] = nodes[id];
-  const x = col[c] + (nudge[id] ?? 0), y = row[r], h = S / 2 + 6;
-  return { x, y, L: [x - h, y], R: [x + h, y], T: [x, y - h], B: [x, y + S / 2 + 48] };
+  return ports(col[c] + (nudge[id] ?? 0), row[r]);
 };
 
 const paths = []; // [points, dashed, arrow]
@@ -109,53 +96,24 @@ const legend = [
 ];
 const dashedKey = "Dashed lines are sign-in, token checks and reads of settings or state.";
 
-const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
 const width = col[5] + 130;
 const legendTop = row[5] + 140;
 const height = legendTop + (legend.length + 1) * 32 + 20;
-const out = [];
-out.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" font-family="${FONT}">`);
-out.push(`<title>ClearSky architecture on AWS. ${legend.map((text, i) => `${i + 1}. ${text}`).join(" ")}</title>`);
-out.push(`<defs><marker id="arrow" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="${C.line}"/></marker></defs>`);
-out.push(`<rect width="${width}" height="${height}" fill="${C.canvas}"/>`);
-
-// Groups: AWS Cloud contains the ClearSky account and the member accounts.
-const group = (x, y, w, h, stroke, iconName, label) => {
-  out.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="none" stroke="${stroke}" stroke-width="1.5"/>`);
-  out.push(`<image href="${icon(iconName)}" x="${x}" y="${y}" width="32" height="32"/>`);
-  out.push(`<text x="${x + 42}" y="${y + 21}" fill="${C.text}" font-size="15">${esc(label)}</text>`);
-};
 const cloudX = col[1] - 128, cloudY = 20, cloudR = col[4] + 176, cloudB = row[5] + 96;
-group(cloudX, cloudY, cloudR - cloudX, cloudB - cloudY, C.cloud, "group-aws-cloud", "AWS Cloud");
-group(cloudX + 18, cloudY + 44, cloudR - cloudX - 60, row[4] + 96 - (cloudY + 44), C.account, "group-aws-account", "ClearSky account · us-east-1 (all-region scanning)");
 const m = at("mrole");
 const memberX = (col[3] + col[4]) / 2 + 22;
-group(memberX, m.y - 66, cloudR - 8 - memberX, 154, C.account, "group-aws-account", "Member accounts (any number)");
 
-for (const { points, dashed, arrow } of paths) {
-  const d = points.map(([x, y], i) => `${i ? "L" : "M"}${x} ${y}`).join("");
-  out.push(`<path d="${d}" fill="none" stroke="${C.line}" stroke-width="1.6"${dashed ? ' stroke-dasharray="6 5"' : ""}${arrow ? ' marker-end="url(#arrow)"' : ""}/>`);
-}
-for (const [id, [, , name, title, detail]] of Object.entries(nodes)) {
-  const { x, y } = at(id);
-  out.push(`<image href="${icon(name)}" x="${x - S / 2}" y="${y - S / 2}" width="${S}" height="${S}"/>`);
-  out.push(`<text x="${x}" y="${y + S / 2 + 21}" text-anchor="middle" fill="${C.text}" font-size="16">${esc(title)}</text>`);
-  if (detail) out.push(`<text x="${x}" y="${y + S / 2 + 40}" text-anchor="middle" fill="${C.sub}" font-size="13">${esc(detail)}</text>`);
-}
-const badge = (n, x, y) =>
-  `<circle cx="${x}" cy="${y}" r="12" fill="${C.step}"/><text x="${x}" y="${y + 5}" text-anchor="middle" fill="${C.stepText}" font-size="14" font-weight="bold">${n}</text>`;
-for (const { n, x, y } of steps) out.push(badge(n, x, y));
-
-// Legend: the numbered flow.
-legend.forEach((text, i) => {
-  const x = cloudX, y = legendTop + i * 32;
-  out.push(badge(i + 1, x + 12, y));
-  out.push(`<text x="${x + 34}" y="${y + 5}" fill="${C.text}" font-size="15">${esc(text)}</text>`);
-});
-{
-  const y = legendTop + legend.length * 32;
-  out.push(`<path d="M${cloudX} ${y}H${cloudX + 24}" stroke="${C.line}" stroke-width="1.6" stroke-dasharray="6 5"/>`);
-  out.push(`<text x="${cloudX + 34}" y="${y + 5}" fill="${C.sub}" font-size="15">${esc(dashedKey)}</text>`);
-}
-out.push("</svg>");
-process.stdout.write(out.join("\n") + "\n");
+process.stdout.write(render({
+  width, height,
+  title: `ClearSky architecture on AWS. ${legend.map((text, i) => `${i + 1}. ${text}`).join(" ")}`,
+  // AWS Cloud contains the ClearSky account and the member accounts.
+  groups: [
+    { x: cloudX, y: cloudY, w: cloudR - cloudX, h: cloudB - cloudY, stroke: C.cloud, icon: "group-aws-cloud", label: "AWS Cloud" },
+    { x: cloudX + 18, y: cloudY + 44, w: cloudR - cloudX - 60, h: row[4] + 96 - (cloudY + 44), stroke: C.account, icon: "group-aws-account", label: "ClearSky account · us-east-1 (all-region scanning)" },
+    { x: memberX, y: m.y - 66, w: cloudR - 8 - memberX, h: 154, stroke: C.account, icon: "group-aws-account", label: "Member accounts (any number)" },
+  ],
+  paths,
+  nodes: Object.entries(nodes).map(([id, [, , name, title, detail]]) => ({ ...at(id), icon: name, title, detail })),
+  steps,
+  legend: { x: cloudX, top: legendTop, items: legend, dashedKey },
+}));
