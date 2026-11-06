@@ -10,8 +10,10 @@ Branch `feat/dark-diagrams`. Standard: one generator, one SVG, renderer link, CS
       `Icon-package_07312026`, 17 files copied unmodified, NOTICE included). Output
       `web/public/assets/img/clearsky-architecture.svg`, 99 KB with icons embedded; the white PNG
       it replaces was 66 KB and its SSM label was out of date.
-- [x] Author feedback after the first draft: AWS icons, a fitting background, clearer placement
-      and arrow direction. Redrawn on a 6-column flow with one lane per edge and no crossings.
+- [x] Author feedback on two drafts: wanted AWS icons, a fitting background, cleaner arrows, and a
+      diagram that looks like an AWS architecture diagram. Redrawn in the AWS reference style:
+      squid-ink canvas, AWS Cloud > account groups, straight or single-bend arrows with junction
+      fan-outs, 8 numbered steps with a legend.
 - [x] Figures link to their full-size file. Below 680 px SVG figures pan at 900 px.
 - [x] Test: the committed SVG equals the generator's output.
 - [x] Measured: desktop 848 px wide, node text 10.6 px, edge labels 9.3 px (the PNG gave about 6 px);

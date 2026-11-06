@@ -186,10 +186,12 @@ Every case study ends with previous and next links in project order.
 mono caption below in `--muted`. Must stay legible at 375 px — re-export rather than shrink.
 
 Architecture diagrams are dark SVG drawn on a grid by a generator in `web/diagrams/<name>.mjs`:
-official AWS Architecture Icons (unmodified, in `web/diagrams/aws-icons/` with a NOTICE) on a
-dotted canvas, AWS group conventions (AWS Cloud box with its logo, AWS Account box in the account
-colour), a left-to-right flow, orthogonal accent arrows in their own lanes with no crossings, and
-dashed lines for auth and reads. Sans labels, as AWS diagrams use. A test fails if the committed SVG differs from the generator's output.
+the AWS reference-architecture style. Official AWS Architecture Icons (unmodified, in
+`web/diagrams/aws-icons/` with a NOTICE) on AWS's dark squid-ink canvas; an AWS Cloud group with
+its logo holding AWS Account groups; full service names under each icon; thin light arrows that
+are straight or bend once, with fan-outs branching from one junction and no crossings; dashed lines
+for auth and reads; orange numbered steps instead of a label on every arrow, explained in a legend
+inside the SVG. Generated SVG figures are shown whole, without the 620 px height cap. A test fails if the committed SVG differs from the generator's output.
 Each figure links to its full-size file. Below 680 px an SVG figure keeps a 900 px width and pans
 inside its frame instead of shrinking, so its text stays near 10 px; the page itself never
 scrolls sideways. The graph data comes from the project's own diagram source (ClearSky:
