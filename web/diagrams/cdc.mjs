@@ -1,8 +1,9 @@
 // CDC pipeline architecture in the AWS reference-architecture style.
 // Graph source of truth: arkhiVd/cdc-infra docs/architecture.drawio (7 edges, its numbered flow
 // ① to ⑦). Facts come from the repo's Terraform where the drawing is stale: the VPC is a dedicated
-// aws_vpc.main (the drawing still says "Default VPC"), and RDS, the MSK brokers and MSK Connect all
-// span both public subnets.
+// aws_vpc.main (the drawing still says "Default VPC"); the RDS subnet group, the MSK brokers and
+// MSK Connect span both public subnets; and the IAM role is not bucket-scoped, because main.tf does
+// not pass plugin_bucket_arn, so S3 read falls back to "*". Resource names assume project_name "lab".
 // Run: node web/diagrams/cdc.mjs > web/public/assets/img/cdc-architecture.svg
 import { C, ports, render } from "./aws-diagram.mjs";
 
@@ -18,7 +19,7 @@ const spec = {
   connect: [col[2], row[1], "msk-connect", "Amazon MSK Connect", ["Debezium 2.7.4", "1 MCU · 1 worker"]],
   msk: [col[3], row[1], "msk", "Amazon MSK", ["2 × kafka.t3.small", "PLAINTEXT :9092", "topic rds.public.users"]],
   vpce: [col[2], row[2], "vpc-endpoints", "S3 gateway endpoint", "free · no NAT, no internet"],
-  iam: [col[1], row[3], "iam-role", "IAM role", ["lab-MSKConnectRole", "scoped to S3 + logs"]],
+  iam: [col[1], row[3], "iam-role", "IAM role", ["lab-MSKConnectRole", "S3 read + CloudWatch Logs"]],
   s3: [col[2], row[3], "s3", "Amazon S3", "Debezium plugin ZIP"],
   cw: [col[3], row[3], "cloudwatch", "Amazon CloudWatch Logs", "/msk-connect/lab-debezium"],
 };
@@ -53,7 +54,7 @@ const legend = [
   "The connector pulls its plugin through the S3 gateway endpoint,",
   "which serves the Debezium ZIP from S3 with no NAT gateway or internet path.",
   "Connector workers send their logs to CloudWatch Logs.",
-  "The IAM role, scoped to S3 and logs, is the connector's service execution role.",
+  "The IAM role, granting S3 read and CloudWatch Logs access, is the connector's service execution role.",
 ];
 const dashedKey = "Dashed lines are the control plane: plugin download, logs and the execution role.";
 const notes = [
@@ -77,7 +78,7 @@ process.stdout.write(render({
     box(cloud, C.cloud, "group-aws-cloud", "AWS Cloud"),
     box(region, C.region, "group-region", "AWS Region · us-east-1", "6 5"),
     box(vpc, C.vpc, "group-vpc", "VPC (dedicated, managed by Terraform)"),
-    box(pub, C.publicSubnet, "group-public-subnet", "Public subnets · 2 AZs (RDS, MSK brokers and MSK Connect span both)"),
+    box(pub, C.publicSubnet, "group-public-subnet", "Public subnets · 2 AZs (RDS subnet group, MSK brokers and MSK Connect span both)"),
   ],
   paths,
   nodes: Object.entries(spec).map(([id, [, , iconName, title, detail]]) => ({ ...n[id], icon: iconName, title, detail })),

@@ -12,6 +12,11 @@ Branch `feat/diagram-cdc`. Standard: one generator, 4 icons, one SVG, case-study
       Versions and sizes match the Terraform defaults: PostgreSQL 18 on db.t4g.micro,
       2 × kafka.t3.small, Debezium 2.7.4 with 1 MCU and 1 worker. The CIDR is left out because
       `tfvars` may override it and was not read.
+- [x] Fresh-context review: one accuracy fix. The drawing's "scoped S3 + logs" IAM role is not
+      scoped: `main.tf` does not pass `plugin_bucket_arn`, so S3 read falls back to `"*"`, and logs
+      are `"*"`. The node and legend now say "S3 read + CloudWatch Logs". The subnet title says the
+      RDS *subnet group* spans both AZs (the instance is single-AZ). Names assume `project_name`
+      stays `lab`.
 - [x] 4 more icons (MSK, MSK Connect, CloudWatch, client), unmodified from the same AWS package.
 - [x] The 1.1 MB PNG is removed; drift test covers all three diagrams.
 - [x] Measured: desktop 848 x 892, names 13.0 px, captions 10.6 px; phone pans at 900 px, names
