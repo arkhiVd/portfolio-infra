@@ -1,6 +1,33 @@
 # Portfolio tasks
 
-## Current phase: 19, case-study template
+## Current phase: 20, dark diagrams (ClearSky first)
+
+Branch `feat/dark-diagrams`. Standard: one generator, one SVG, renderer link, CSS and a test.
+
+- [x] `web/diagrams/clearsky.mjs` draws the ClearSky architecture on a 4-column grid from
+      `arkhiVd/clearsky` `docs/architecture.drawio`: 21 nodes, 18 labelled edges, account and
+      member-account boundaries. Output `web/public/assets/img/clearsky-architecture.svg`, 11 KB
+      (the PNG it replaces was 66 KB, white, and its SSM label was out of date).
+- [x] Figures link to their full-size file. Below 680 px SVG figures pan at 900 px.
+- [x] Test: the committed SVG equals the generator's output.
+- [x] Measured: desktop 848 px wide, node text 10.6 px, edge labels 9.2 px (the PNG gave about 6 px);
+      phone 900 px inside a 302 px frame, node text 11.3 px, labels 9.8 px; page width 375.
+
+Local evidence, 2026-11-06:
+
+```text
+astro check: 0 errors; node:test: 16 passed, 0 failed
+browser gate, 14 pages: axe 0 violations; overflow none at 320/375/768/1280/2560;
+  no-JS, keyboard focus, links and anchors PASS
+terraform plan: 2 add, 14 change, 2 destroy, 0 replace (hashed CSS swap; PNG replaced by the SVG,
+  content_type image/svg+xml)
+```
+
+Next: appstack, cdc, cicd-containers and cloud-detective diagrams, one PR each, from each repo's source.
+
+## Previous phase: 19, case-study template
+
+Merged as PR #56 and applied 2026-11-06: 1 add, 14 change, 1 destroy; post-apply plan empty.
 
 Branch `feat/case-study-template`. Standard: layout, renderer helpers, CSS and the gate's capture list.
 

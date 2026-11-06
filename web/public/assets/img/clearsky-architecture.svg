@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1195 821" width="1195" height="821" role="img" font-family="ui-monospace, 'DejaVu Sans Mono', Menlo, Consolas, monospace">
+<title>ClearSky architecture: CloudFront serves the dashboard from S3 and routes /api to a Lambda API. The API starts scans, chat and diagram jobs. A daily schedule runs the scanner, which assumes a read-only role in member accounts, stores findings in DynamoDB and sends a digest by email. GitHub Actions deploys through OIDC roles.</title>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#4FC1D4"/></marker></defs>
+<rect width="1195" height="821" rx="12" fill="#0F1218"/>
+<rect x="20" y="134" width="1155" height="513" rx="12" fill="#0B0E13" stroke="#2A313C" stroke-dasharray="6 6"/>
+<rect x="929" y="691" width="242" height="108" rx="12" fill="#0B0E13" stroke="#2A313C" stroke-dasharray="6 6"/>
+<path d="M150 93L150 167" fill="none" stroke="#4FC1D4" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M255 64L450 64L450 167" fill="none" stroke="#4FC1D4" stroke-width="1.6" stroke-dasharray="5 5" marker-end="url(#a)"/>
+<path d="M150 225L150 299" fill="none" stroke="#4FC1D4" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M255 208L288 208L288 316L345 316" fill="none" stroke="#4FC1D4" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M450 299L450 225" fill="none" stroke="#4FC1D4" stroke-width="1.6" stroke-dasharray="5 5" marker-end="url(#a)"/>
+<path d="M345 340L312 340L312 394L150 394L150 431" fill="none" stroke="#4FC1D4" stroke-width="1.6" stroke-dasharray="5 5" marker-end="url(#a)"/>
+<path d="M555 318L645 318" fill="none" stroke="#4FC1D4" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M450 357L450 431" fill="none" stroke="#4FC1D4" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M555 344L588 344L588 592L555 592" fill="none" stroke="#4FC1D4" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M750 225L750 299" fill="none" stroke="#4FC1D4" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M750 357L750 431" fill="none" stroke="#4FC1D4" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M855 318L890 318L890 450L945 450" fill="none" stroke="#4FC1D4" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M855 342L910 342L910 736L945 736" fill="none" stroke="#4FC1D4" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M345 454L255 454" fill="none" stroke="#4FC1D4" stroke-width="1.6" stroke-dasharray="5 5" marker-end="url(#a)"/>
+<path d="M345 476L288 476L288 736L255 736" fill="none" stroke="#4FC1D4" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M750 489L750 707" fill="none" stroke="#4FC1D4" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M1050 93L1050 167" fill="none" stroke="#4FC1D4" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M1050 225L1050 299" fill="none" stroke="#4FC1D4" stroke-width="1.6" stroke-dasharray="5 5" marker-end="url(#a)"/>
+<rect x="45" y="35" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="150" y="69" text-anchor="middle" fill="#EDEDF0" font-size="15">Dashboard user</text>
+<rect x="945" y="35" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="1050" y="69" text-anchor="middle" fill="#EDEDF0" font-size="15">GitHub Actions</text>
+<rect x="45" y="167" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="150" y="201" text-anchor="middle" fill="#EDEDF0" font-size="15">CloudFront</text>
+<rect x="345" y="167" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="450" y="192" text-anchor="middle" fill="#EDEDF0" font-size="15">Cognito</text>
+<text x="450" y="212" text-anchor="middle" fill="#9B9BA3" font-size="13">custom login</text>
+<rect x="645" y="167" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="750" y="192" text-anchor="middle" fill="#EDEDF0" font-size="15">EventBridge Scheduler</text>
+<text x="750" y="212" text-anchor="middle" fill="#9B9BA3" font-size="13">daily</text>
+<rect x="945" y="167" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="1050" y="201" text-anchor="middle" fill="#EDEDF0" font-size="15">IAM · CI roles (OIDC)</text>
+<rect x="45" y="299" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="150" y="333" text-anchor="middle" fill="#EDEDF0" font-size="15">S3 · dashboard (OAC)</text>
+<rect x="345" y="299" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="450" y="324" text-anchor="middle" fill="#EDEDF0" font-size="15">Lambda · API</text>
+<text x="450" y="344" text-anchor="middle" fill="#9B9BA3" font-size="13">function URL, JWT verify</text>
+<rect x="645" y="299" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="750" y="324" text-anchor="middle" fill="#EDEDF0" font-size="15">Lambda · scanner</text>
+<text x="750" y="344" text-anchor="middle" fill="#9B9BA3" font-size="13">24+ read-only detectors</text>
+<rect x="945" y="299" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="1050" y="333" text-anchor="middle" fill="#EDEDF0" font-size="15">S3 · Terraform state</text>
+<rect x="45" y="431" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="150" y="456" text-anchor="middle" fill="#EDEDF0" font-size="15">SSM · registry</text>
+<text x="150" y="476" text-anchor="middle" fill="#9B9BA3" font-size="13">+ SecureString key</text>
+<rect x="345" y="431" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="450" y="456" text-anchor="middle" fill="#EDEDF0" font-size="15">Lambda · agentic chat</text>
+<text x="450" y="476" text-anchor="middle" fill="#9B9BA3" font-size="13">read-only tool loop</text>
+<rect x="645" y="431" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="750" y="465" text-anchor="middle" fill="#EDEDF0" font-size="15">SNS · daily digest</text>
+<rect x="945" y="431" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="1050" y="456" text-anchor="middle" fill="#EDEDF0" font-size="15">DynamoDB · findings</text>
+<text x="1050" y="476" text-anchor="middle" fill="#9B9BA3" font-size="13">new / open / resolved</text>
+<rect x="345" y="563" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="450" y="588" text-anchor="middle" fill="#EDEDF0" font-size="15">Lambda · diagrams</text>
+<text x="450" y="608" text-anchor="middle" fill="#9B9BA3" font-size="13">discovery → draw.io</text>
+<rect x="945" y="563" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="1050" y="588" text-anchor="middle" fill="#EDEDF0" font-size="15">AWS Budgets</text>
+<text x="1050" y="608" text-anchor="middle" fill="#9B9BA3" font-size="13">guardrail</text>
+<rect x="45" y="707" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="150" y="741" text-anchor="middle" fill="#EDEDF0" font-size="15">LLM provider</text>
+<rect x="645" y="707" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="750" y="741" text-anchor="middle" fill="#EDEDF0" font-size="15">Ops email</text>
+<rect x="945" y="707" width="210" height="58" rx="8" fill="#151A22" stroke="#4FC1D4" stroke-opacity="0.55"/>
+<text x="1050" y="732" text-anchor="middle" fill="#EDEDF0" font-size="15">clearsky-readonly role</text>
+<text x="1050" y="752" text-anchor="middle" fill="#9B9BA3" font-size="13">ViewOnlyAccess</text>
+<text x="160" y="135" text-anchor="start" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">HTTPS</text>
+<text x="460" y="127.5" text-anchor="start" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">sign-in</text>
+<text x="140" y="256" text-anchor="end" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">static site, OAC</text>
+<text x="308" y="289" text-anchor="start" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">/api/*, OAC SigV4</text>
+<text x="460" y="245" text-anchor="start" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">JWT verify</text>
+<text x="231" y="386" text-anchor="middle" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">settings, registry</text>
+<text x="600" y="310" text-anchor="middle" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">on-demand scan</text>
+<text x="460" y="399" text-anchor="start" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">chat job</text>
+<text x="596" y="530" text-anchor="start" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">diagram job</text>
+<text x="760" y="267" text-anchor="start" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">daily</text>
+<text x="740" y="399" text-anchor="end" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">digest</text>
+<text x="884" y="399" text-anchor="end" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">findings</text>
+<text x="918" y="674" text-anchor="start" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">sts:AssumeRole, read-only</text>
+<text x="300" y="446" text-anchor="middle" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">API key</text>
+<text x="282" y="596" text-anchor="end" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">model call, HTTPS out</text>
+<text x="760" y="596" text-anchor="start" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">email</text>
+<text x="1060" y="135" text-anchor="start" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">OIDC assume</text>
+<text x="1060" y="267" text-anchor="start" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="5" stroke-linejoin="round">terraform state</text>
+<text x="36" y="156" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="6" stroke-linejoin="round">ClearSky account · us-east-1, scans every region</text>
+<text x="1050" y="789" text-anchor="middle" fill="#9B9BA3" font-size="13" paint-order="stroke" stroke="#0F1218" stroke-width="6" stroke-linejoin="round">member accounts · any number</text>
+</svg>

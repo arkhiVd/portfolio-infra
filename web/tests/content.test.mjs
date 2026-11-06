@@ -286,3 +286,8 @@ test("case-study anchors are unique and the numbers strip reads one list as text
   const body = '<ul class="metrics"><li><b>1 &amp; 2</b><span>A <code>x</code> &lt;y&gt;</span></li></ul><ul class="metrics"><li><b>9</b><span>second list</span></li></ul>';
   assert.deepEqual(caseStudyMetrics(body), [{ value: "1 & 2", label: "A x <y>" }]);
 });
+
+test("the ClearSky diagram is the generator's output, not a hand edit", () => {
+  const generated = execFileSync(process.execPath, ["diagrams/clearsky.mjs"], { cwd: root }).toString();
+  assert.equal(readFileSync(join(root, "public/assets/img/clearsky-architecture.svg"), "utf8"), generated);
+});
