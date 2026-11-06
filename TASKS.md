@@ -4,13 +4,17 @@
 
 Branch `feat/dark-diagrams`. Standard: one generator, one SVG, renderer link, CSS and a test.
 
-- [x] `web/diagrams/clearsky.mjs` draws the ClearSky architecture on a 4-column grid from
-      `arkhiVd/clearsky` `docs/architecture.drawio`: 21 nodes, 18 labelled edges, account and
-      member-account boundaries. Output `web/public/assets/img/clearsky-architecture.svg`, 11 KB
-      (the PNG it replaces was 66 KB, white, and its SSM label was out of date).
+- [x] `web/diagrams/clearsky.mjs` draws the ClearSky architecture left to right from
+      `arkhiVd/clearsky` `docs/architecture.drawio`: 19 services, 18 labelled edges, the ClearSky
+      account and the member accounts, with official AWS Architecture Icons (package
+      `Icon-package_07312026`, 17 files copied unmodified, NOTICE included). Output
+      `web/public/assets/img/clearsky-architecture.svg`, 99 KB with icons embedded; the white PNG
+      it replaces was 66 KB and its SSM label was out of date.
+- [x] Author feedback after the first draft: AWS icons, a fitting background, clearer placement
+      and arrow direction. Redrawn on a 6-column flow with one lane per edge and no crossings.
 - [x] Figures link to their full-size file. Below 680 px SVG figures pan at 900 px.
 - [x] Test: the committed SVG equals the generator's output.
-- [x] Measured: desktop 848 px wide, node text 10.6 px, edge labels 9.2 px (the PNG gave about 6 px);
+- [x] Measured: desktop 848 px wide, node text 10.6 px, edge labels 9.3 px (the PNG gave about 6 px);
       phone 900 px inside a 302 px frame, node text 11.3 px, labels 9.8 px; page width 375.
 
 Local evidence, 2026-11-06:

@@ -294,8 +294,8 @@ Exit criteria:
 
 **Class:** Standard. "Phase E" in the 2026-11-05 redesign system.
 
-Scope: a grid-layout SVG generator and the ClearSky diagram from its draw.io source (21 nodes,
-18 edges); figures link to their full-size file; phones pan wide SVG figures at a readable size; a
+Scope: a grid-layout SVG generator with official AWS icons and the ClearSky diagram from its
+draw.io source (19 services, 18 edges); figures link to their full-size file; phones pan wide SVG figures at a readable size; a
 test that the committed SVG matches its generator. The other four case-study diagrams follow in
 their own PRs, each from that project's own source.
 
