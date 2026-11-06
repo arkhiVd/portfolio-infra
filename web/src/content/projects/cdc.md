@@ -3,8 +3,8 @@ name: Change data capture pipeline
 status: in progress
 summary: Streams PostgreSQL changes from the write-ahead log into Amazon MSK with Debezium on MSK Connect. An S3 gateway endpoint supplies the connector plugin without a NAT gateway.
 stack: [RDS PostgreSQL, Amazon MSK, Debezium, Terraform]
-image: /assets/img/cdc-architecture.png
-imageAlt: "CDC pipeline architecture: RDS PostgreSQL write-ahead log streamed by Debezium on MSK Connect into Amazon MSK topics"
+image: /assets/img/cdc-architecture.svg
+imageAlt: "CDC pipeline in us-east-1: a developer queries RDS PostgreSQL over psql; Debezium on MSK Connect reads the write-ahead log through logical decoding and produces CDC events to the MSK topic rds.public.users. The connector pulls its plugin from S3 through an S3 gateway endpoint without NAT, logs to CloudWatch, and runs with a scoped IAM role. All three services span two public subnets in a dedicated VPC."
 repo: https://github.com/arkhiVd/cdc-infra
 order: 3
 featuredOrder: 3

@@ -315,6 +315,18 @@ every generated diagram.
 
 Exit criteria:
 - [x] Browser gate passes on all 14 pages; ClearSky SVG byte-identical after the refactor.
+- [x] Fresh-context review; CI; merge; live check.
+
+## Phase 22: CDC diagram
+
+**Class:** Standard. Third case-study diagram in the shared AWS style.
+
+Scope: draw the CDC pipeline from `arkhiVd/cdc-infra` `docs/architecture.drawio` (7 edges, its
+numbered flow ① to ⑦), correcting facts the drawing has gone stale on from the repo's Terraform;
+4 more AWS icons; drift test covers the new diagram.
+
+Exit criteria:
+- [x] Browser gate passes on all 14 pages; ClearSky and AppStack SVGs unchanged.
 - [ ] Fresh-context review; CI; merge; live check.
 
 ## Delegation budget
