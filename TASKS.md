@@ -1,6 +1,32 @@
 # Portfolio tasks
 
-## Current phase: 23, containers diagrams
+## Current phase: 24, Cloud Detective diagrams
+
+Branch `feat/diagram-cloud-detective`. Standard: two generators, 3 icons, two SVGs, case-study text.
+
+- [x] `web/diagrams/cloud-detective-scan.mjs` from `main.tf`, `iam.tf`, `ssm.tf`,
+      `member-role/main.tf`, `handler.py` and `store.py`: EventBridge Scheduler (01:30 UTC) → scanner
+      Lambda (20 registered detectors) → DynamoDB findings, S3 snapshots, SNS digest; registry in
+      Parameter Store; `cloud-detective-readonly` in member accounts.
+- [x] `web/diagrams/cloud-detective-dashboard.mjs` from `dashboard.tf`, `chat.tf`,
+      `architecture.tf` and `chat.py`: Cognito (code + PKCE, admin-created users), HTTP API with a JWT
+      authorizer on `/api/*`, one API Lambda invoking the chat agent, architecture worker and
+      scanner; the model call goes to an external OpenAI-compatible provider. No CloudFront.
+- [x] Case-study text corrected where the code contradicts it: the stack listed CloudFront and
+      GitHub Actions, which the repo has neither of (API Gateway and Cognito instead); the AI does
+      create findings (`add_finding`, `resolve_finding`, with `PutItem`/`UpdateItem` on the findings
+      table), so "explains but does not create" and "read-only IAM everywhere the AI can reach" are
+      replaced by what holds: its AWS access is read-only.
+- [x] Every case study now requires an image (schema and test).
+- [x] Browser gate: lazy images far below the fold were never fetched in its 900 px viewport, so
+      the second figure failed the image check. The gate now loads images eagerly (5 s cap) before
+      asserting that each one exists and decodes.
+- [x] 3 more icons (API Gateway, EventBridge Scheduler, Parameter Store), unmodified.
+
+## Previous phase: 23, containers diagrams
+
+Merged as PR #61 and applied 2026-11-06: 2 add, 1 change, 2 destroy; post-apply plan empty. Live
+SVGs 18.8 KB and 13.3 KB with Brotli, replacing PNGs of 940 KB and 676 KB.
 
 Branch `feat/diagram-containers`. Standard: two generators, 3 icons, two SVGs, case-study text.
 

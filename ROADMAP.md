@@ -342,6 +342,18 @@ Exit criteria:
 - [x] Browser gate passes on all 14 pages; ClearSky, AppStack and CDC SVGs unchanged.
 - [ ] Fresh-context review; CI; merge; live check.
 
+## Phase 24: Cloud Detective diagrams
+
+**Class:** Standard. Last case study without a diagram; it gets two, the daily scan and the dashboard.
+
+Scope: draw both from `arkhiVd/cloud-detective` `terraform/*.tf` and `src/detective/` (the repo has
+no diagram source). Correct case-study claims the code contradicts; every case study now requires an
+image; 3 more AWS icons; drift test covers both diagrams.
+
+Exit criteria:
+- [x] Browser gate passes on all 14 pages; the other five SVGs unchanged.
+- [ ] Fresh-context review; CI; merge; live check.
+
 ## Delegation budget
 
 Use Pi through Herdr with the `openai-codex` subscription provider. Luna at low thinking

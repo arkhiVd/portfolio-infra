@@ -2,13 +2,16 @@
 name: Cloud Detective — AWS account scanner
 status: completed
 summary: The project that preceded ClearSky. It scans AWS cost, inventory and security posture, tracks findings over time, and generates architecture diagrams from discovered resources.
-stack: [Lambda, DynamoDB, CloudFront, Terraform, GitHub Actions]
-image: null
-imageAlt: ''
+stack: [Lambda, API Gateway, Cognito, DynamoDB, Terraform]
+image: /assets/img/cloud-detective-scan.svg
+imageAlt: "Cloud Detective daily scan: EventBridge Scheduler invokes the scanner Lambda, which reads the account registry, assumes a read-only role in member accounts, and writes findings to DynamoDB, snapshots to S3 and a digest to SNS"
 repo: https://github.com/arkhiVd/cloud-detective
+additionalFigures:
+  - image: /assets/img/cloud-detective-dashboard.svg
+    imageAlt: "Cloud Detective dashboard: API Gateway checks a Cognito token before one Lambda serves the dashboard and starts the chat agent, the architecture worker or a scan; only the model call goes to an external provider"
 order: 6
 kicker: serverless · 2026
-lede: A serverless AWS scanner for cost, inventory and security posture. It tracks findings, generates diagrams from discovered resources and uses AI only to explain deterministic results.
+lede: A serverless AWS scanner for cost, inventory and security posture. It tracks findings and generates diagrams from discovered resources. Detection stays deterministic, and an optional AI agent investigates on top.
 ---
 
 <section class="block wrap">
@@ -23,7 +26,9 @@ lede: A serverless AWS scanner for cost, inventory and security posture. It trac
     </p>
     <p>
       Detection and diagram generation are deterministic, fixture-tested and read-only. The AI
-      layer is optional and disabled by default. It explains findings but does not create them.
+      layer is optional and stays off until a provider key is set. The scheduled detectors produce
+      the findings. The chat agent can add one it confirms on a live resource or mark one resolved,
+      but its AWS access is read-only.
     </p>
   </section>
 
@@ -33,11 +38,17 @@ lede: A serverless AWS scanner for cost, inventory and security posture. It trac
     <p>
       Daily detectors scan the account and write findings into DynamoDB with a real
       lifecycle — new, open, resolved — so a finding that comes back is not indistinguishable
-      from one that never left. A plain-text digest goes out by SNS. On top of that sits a
-      Cognito-authenticated dashboard, an LLM chat that investigates the live account through
-      read-only tools, and an on-demand architecture generator that emits draw.io XML and SVG
-      with real AWS icons.
+      from one that never left. A plain-text digest goes out by SNS.
     </p>
+    <figure class="arch" data-project-figure="0">
+<figcaption>EventBridge Scheduler runs the scanner Lambda daily. It reads the account registry, assumes a read-only role in each member account, reconciles findings in DynamoDB, writes snapshots to S3 and sends the digest through SNS.</figcaption></figure>
+    <p>
+      On top of that sits a Cognito-authenticated dashboard, an LLM chat that investigates the
+      live account through read-only AWS calls, and an on-demand architecture generator that
+      emits draw.io XML with AWS icons and an SVG preview.
+    </p>
+    <figure class="arch" data-project-figure="1">
+<figcaption>API Gateway checks the Cognito token before the API Lambda runs. That one Lambda serves the dashboard and starts the chat agent, the architecture worker or a scan. Only the model call leaves AWS.</figcaption></figure>
     <p>
       Multi-account scanning fans out over cross-account read-only roles, tracked in an SSM
       registry that the dashboard writes to when an account is onboarded.
@@ -112,7 +123,7 @@ lede: A serverless AWS scanner for cost, inventory and security posture. It trac
     <ul class="metrics">
       <li><b>106</b><span>tests, detectors covered by fixtures</span></li>
       <li><b>daily</b><span>scheduled scans with an emailed digest</span></li>
-      <li><b>read-only</b><span>IAM everywhere the AI can reach</span></li>
+      <li><b>read-only</b><span>access to every scanned resource</span></li>
     </ul>
     <p>
       Cloud Detective became the foundation for ClearSky. The successor retained the detector

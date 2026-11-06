@@ -76,6 +76,13 @@ const captures = new Set(['/index.html', '/blog.html', '/blog/two-cdn-cache-trap
       const axe = await page.evaluate(() => window.axe.run(document,
         { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] } }));
       assert.deepEqual(axe.violations.map(v => ({ id: v.id, targets: v.nodes.map(n => n.target) })), [], route + ': axe');
+      // Lazy images far below the fold are never fetched in a 900 px viewport: load them eagerly
+      // (5 s cap) so the check proves every image file exists and decodes.
+      await page.locator('img').evaluateAll(images => Promise.all(images.map(i => {
+        i.loading = 'eager';
+        if (i.complete) return null;
+        return Promise.race([new Promise(done => { i.addEventListener('load', done, { once: true }); i.addEventListener('error', done, { once: true }); }), new Promise(done => setTimeout(done, 5000))]);
+      })));
       assert.deepEqual(await page.locator('img').evaluateAll(images => images.filter(i => !i.complete || !i.naturalWidth).map(i => i.src)), [], route + ': images');
       assert.deepEqual(external, [], route + ': third-party requests');
       assert.deepEqual(errors, [], route + ': console errors');

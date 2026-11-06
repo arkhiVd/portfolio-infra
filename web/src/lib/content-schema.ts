@@ -90,7 +90,7 @@ export const projectSchema = z.object({
 });
 
 export const caseStudyIds = new Set(["clearsky", "appstack", "cdc", "portfolio", "cicd-containers", "cloud-detective"]);
-const illustratedCaseStudyIds = new Set(["clearsky", "appstack", "cdc", "portfolio", "cicd-containers"]);
+const illustratedCaseStudyIds = caseStudyIds;
 
 export const validateProjectSet = <T extends z.infer<typeof projectSchema> & { slug: string }>(projects: T[]): T[] => {
   const assertSequence = (values: number[], label: string) => {

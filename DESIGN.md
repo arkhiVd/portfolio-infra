@@ -197,7 +197,7 @@ Each figure links to its full-size file. Below 680 px an SVG figure keeps a 900 
 inside its frame instead of shrinking, so its text stays near 10 px; the page itself never
 scrolls sideways. The graph data comes from the project's own diagram source (ClearSky:
 `docs/architecture.drawio` in its repo), never redrawn from memory. A repo with no diagram
-source (containers) is drawn from its Terraform and workflow files instead.
+source (containers, Cloud Detective) is drawn from its Terraform, workflows and code instead.
 
 **Certification lockup** — issuer badge artwork, credential name and direct verification
 link. Badge canvases are normalized to one size so different vendor artwork does not disrupt
