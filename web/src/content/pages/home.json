@@ -6,8 +6,8 @@
   },
   "discover": {
     "blog": {
-      "title": "Notes from the work",
-      "description": "Decisions and maintenance from this portfolio."
+      "title": "Blog",
+      "description": "Whatever I am building, fixing or thinking about."
     },
     "homelab": {
       "title": "Homelab",

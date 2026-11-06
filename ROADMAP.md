@@ -268,10 +268,11 @@ Exit criteria:
 
 **Class:** Standard. "Phase C" in the 2026-11-05 redesign system; author approved the mockup.
 
-Scope: hero name at `--t-72`, one role-led sentence, three actions (projects, resume, email);
-compact project rows with one sentence each; "More from the work" rows without category labels;
-footer loses the role column. Copy changes in `home.json`: role casing, a shorter introduction
-and a plainer Homelab line. No infrastructure.
+Scope: a static CSS fallback for the ocean background when WebGL is unavailable; glass active
+state in the nav and phone menu; hero name at `--t-72`, one role-led sentence, three actions (projects, resume, email);
+compact project rows with one sentence each; "More" rows without category labels;
+footer loses the role column. Copy changes: role casing, a shorter introduction, a plainer
+Homelab line, and the blog presented as a blog ("Blog", not "Notes from the work"). No infrastructure.
 
 Exit criteria:
 - [x] Browser gate passes on all 14 pages; on a 375 px phone the name, sentence and all three actions fit the first screen.

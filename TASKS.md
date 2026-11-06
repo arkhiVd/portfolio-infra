@@ -7,7 +7,14 @@ Branch `feat/simple-home`. Standard: Home template, row component, footer, CSS a
 - [x] Hero: name at `--t-72` (36 px on a 375 px phone, one line), "Cloud engineer." plus one
       sentence, then View projects, Download resume (outline) and email me. Full-width pills on phones.
 - [x] Selected work: compact rows show the short name and the summary's first sentence.
-- [x] "Discover" becomes "More from the work"; the `writing`/`reference` labels are gone.
+- [x] "Discover" becomes "More"; the `writing`/`reference` labels are gone.
+- [x] Ocean background: static CSS fallback of the shader's lights. The in-app browser has no
+      WebGL, so the shader never started and the page was flat black; the same happens wherever
+      WebGL is off. The shader still paints over the fallback where it runs.
+- [x] Active nav item and phone menu use glass (white 8%, inset edge) instead of the blue fill.
+      The sheet is 97% opaque so text never bleeds through where blur does not render.
+- [x] Blog is presented as a blog: Home row and blog page heading "Blog", lede "Whatever I am
+      building, fixing or thinking about."; feed and meta description "Writing by Aravindakrishnan V."
 - [x] Footer: the "Cloud · DevOps · Infrastructure" column is removed on every page.
 - [x] Copy (`home.json`, for author review): role "Cloud engineer"; introduction "I build and
       operate cloud infrastructure on AWS with Terraform, containers and CI/CD."; Homelab line

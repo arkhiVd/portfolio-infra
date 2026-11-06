@@ -48,7 +48,7 @@ re-verified with a checker before the freeze.
 | `--text` | `#EDEDF0` | headings, body | **17.4:1** on ink |
 | `--muted` | `#9B9BA3` | secondary copy, labels | **7.4:1** on ink · 6.8:1 on surface |
 | `--accent` | `#4FC1D4` | links, active nav, metric emphasis, focus ring | **9.6:1** on ink |
-| `--accent-dim` | `rgba(79,193,212,.14)` | chip fills, selection, active nav item | — |
+| `--accent-dim` | `rgba(79,193,212,.14)` | chip fills, selection | — |
 | `--surface-2` | `#151A22` | hover and pressed rows | structure; muted **6.3:1** on it |
 | `--hairline-strong` | `rgba(255,255,255,.16)` | edges of controls (menu toggle, sheet) | — |
 | `--accent-strong` | `#7FD6E4` | accent on hover | **12.3:1** on ink |
@@ -84,6 +84,10 @@ Rules that make it safe to ship:
 
 Reference implementation: `web/src/components/Ocean.astro`, derived from the approved export.
 
+Fallback: `.ocean` also carries a static CSS picture of the shader's two lights (cyan top-left,
+blue top-right, fading to `--ink`). The WebGL canvas paints over it opaque. Without WebGL or
+JavaScript the canvas stays transparent and visitors see the still glow, never flat black.
+
 ## Type
 
 - **Instrument Sans** — headings, body, UI. **JetBrains Mono** — labels, metrics, paths,
@@ -110,7 +114,7 @@ Reference implementation: `web/src/components/Ocean.astro`, derived from the app
 - Radii: `8px` (chips, small controls), `12px` (cards, panels), `999px` (pills, nav).
 - Cards: `--surface` + 1 px `--hairline`. Elevation is a hairline and a background shift,
   not a drop shadow.
-- Glass, reserved for the nav pill and the phone menu toggle only: `backdrop-filter: blur(22px) saturate(150%)`,
+- Glass, reserved for the nav pill, its active item, the phone menu toggle and sheet: `backdrop-filter: blur(22px) saturate(150%)`,
   `background: rgba(255,255,255,.045)`, 1 px hairline, inset top highlight
   `rgba(255,255,255,.09)`.
 - No gradients on text. No additional background animation beyond the approved ocean layer.
@@ -143,9 +147,11 @@ Reference implementation: `web/src/components/Ocean.astro`, derived from the app
 
 **Nav** — a shell in normal flow (not sticky) with a compact monochrome cloud mark at left;
 availability and the primary links sit right, with the links inside one contained glass pill and
-the current page filled with `--accent-dim`. The same cloud mark is the browser favicon. Visitor
+the current page lifted with a frosted glass highlight (white at 8% with an inset top edge), not a
+colour fill. The same cloud mark is the browser favicon. Visitor
 count belongs in the footer. Below 680 px the bar stays one row: mark, availability and a `menu`
-toggle built on `<details>`, which opens a sheet of 48 px links without JavaScript. Escape does not
+toggle built on `<details>`, which opens a glass sheet of 48 px links without JavaScript. The
+sheet is 97% opaque, so it stays readable where `backdrop-filter` does not render. Escape does not
 close it, because native `<details>` has no such behaviour and no script is added for it.
 
 **Hero** — Home's first screen is for a recruiter and stays simple. The person's full name is
@@ -163,7 +169,7 @@ redesign system.
 compact: the name before " — " and the summary's first sentence, then the arrow. No highlighted
 metric or marketing tagline. The whole row links to its case study. GitHub is a secondary action
 within that detail page; only projects explicitly exempted from case studies may remain unlinked
-or link directly. Home's "More from the work" rows (blog, Homelab, How I work) use the same
+or link directly. Home's "More" rows (Blog, Homelab, How I work) use the same
 shape: title, one line, arrow.
 
 **Case-study section** — fixed order: Problem · Architecture · Decisions and tradeoffs ·
