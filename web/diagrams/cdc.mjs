@@ -14,7 +14,7 @@ const LB = (col[2] + col[3]) / 2; // the log lane
 
 // [x, y, icon, title, detail]
 const spec = {
-  dev: [col[0], row[1], "client", "Developer laptop", "Arch Linux"],
+  dev: [col[0], row[1], "client", "Developer laptop"],
   rds: [col[1], row[1], "rds", "Amazon RDS", ["PostgreSQL 18 · db.t4g.micro", "wal_level=logical, public"]],
   connect: [col[2], row[1], "msk-connect", "Amazon MSK Connect", ["Debezium 2.7.4", "1 MCU · 1 worker"]],
   msk: [col[3], row[1], "msk", "Amazon MSK", ["2 × kafka.t3.small", "PLAINTEXT :9092", "topic rds.public.users"]],
