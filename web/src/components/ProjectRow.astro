@@ -6,15 +6,18 @@ interface Props { project: Project; compact?: boolean; }
 const { project, compact = false } = Astro.props;
 const href = project.caseStudy ? url(project.caseStudy) : project.repo;
 const Tag = href ? "a" : "article";
+// Home's compact row: the name before " — " and the summary's first sentence.
+const name = compact ? project.name.split(" — ")[0] : project.name;
+const summary = compact ? project.summary.split(/(?<=\.)\s+/)[0] : project.summary;
 ---
 
 <Tag class:list={["project-row", { compact }]} href={href} {...(href && !project.caseStudy ? { rel: "noopener" } : {})}>
   <div class="project-row-main">
     <div class="project-row-title">
-      <h2>{project.name}</h2>
+      <h2>{name}</h2>
       {!compact && <span class="label">{project.status}</span>}
     </div>
-    {!compact && <p>{project.summary}</p>}
+    <p>{summary}</p>
     {!compact && <span class="project-stack">{project.stack.join(" · ")}</span>}
   </div>
   {href && <span class="project-arrow" aria-hidden="true">→</span>}

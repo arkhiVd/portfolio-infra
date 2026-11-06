@@ -262,7 +262,20 @@ No Home content or layout change (Phase 18), no infrastructure.
 Exit criteria:
 - [x] Browser gate: 0 axe violations, no overflow 320 to 2560 px, no-JS, keyboard and links pass on all 14 pages.
 - [x] No standalone link under 44 px on any page at 375 px except the Homelab Atlas rail (Phase F).
-- [ ] Fresh-context review; CI; merge; live check of the phone menu.
+- [x] Fresh-context review; CI; merge; live check of the phone menu.
+
+## Phase 18: simple, recruiter-first Home
+
+**Class:** Standard. "Phase C" in the 2026-11-05 redesign system; author approved the mockup.
+
+Scope: hero name at `--t-72`, one role-led sentence, three actions (projects, resume, email);
+compact project rows with one sentence each; "More from the work" rows without category labels;
+footer loses the role column. Copy changes in `home.json`: role casing, a shorter introduction
+and a plainer Homelab line. No infrastructure.
+
+Exit criteria:
+- [x] Browser gate passes on all 14 pages; on a 375 px phone the name, sentence and all three actions fit the first screen.
+- [ ] Fresh-context review; CI; merge; live check at 375 and 1280 px.
 
 ## Delegation budget
 

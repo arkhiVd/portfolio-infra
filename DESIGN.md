@@ -148,18 +148,23 @@ count belongs in the footer. Below 680 px the bar stays one row: mark, availabil
 toggle built on `<details>`, which opens a sheet of 48 px links without JavaScript. Escape does not
 close it, because native `<details>` has no such behaviour and no script is added for it.
 
-**Hero** — the person's full name is the primary heading, followed by a quiet mono role,
-one evidence-led paragraph, then two actions: a solid pill (`View projects`)
-and a quiet mono link (`download resume →`). Contact remains in About and the footer.
-Nothing else. Badge/chip rows were tried and cut: they read as generic template furniture,
-and the facts they carried (cost, certifications, keyless CI) belong in About and the case
-studies, where they can be argued instead of asserted.
+**Hero** — Home's first screen is for a recruiter and stays simple. The person's full name is
+the primary heading at `--t-72` (scaling down to fit one line on a 375 px phone), followed by
+one sentence that starts with the role in `--text` ("Cloud engineer.") and continues in
+`--muted`. Then three actions in the order a recruiter uses them: a solid pill
+(`View projects`), an outline pill (`Download resume`) and a quiet mono `email me →`. Below
+680 px the two pills go full width at 48 px. Nothing else: no stats, counters, cards or panels.
+Proof lives one click away, in the case studies. The open space beside the hero on desktop is
+deliberate; the ocean light fills it. Approved by the author on 2026-11-05 after a mockup in the
+redesign system.
 
 **Project row** — the full Projects index uses project name (21 px), concise outcome
 (`--muted`), stack line (mono, 13 px), status and arrow. Home's Selected work variant is
-intentionally compact: name and arrow only. No highlighted metric or marketing tagline.
-The whole row links to its case study. GitHub is a secondary action within that detail page;
-only projects explicitly exempted from case studies may remain unlinked or link directly.
+compact: the name before " — " and the summary's first sentence, then the arrow. No highlighted
+metric or marketing tagline. The whole row links to its case study. GitHub is a secondary action
+within that detail page; only projects explicitly exempted from case studies may remain unlinked
+or link directly. Home's "More from the work" rows (blog, Homelab, How I work) use the same
+shape: title, one line, arrow.
 
 **Case-study section** — fixed order: Problem · Architecture · Decisions and tradeoffs ·
 What broke and how it was fixed · Numbers. Each section led by a mono label at 13 px.
@@ -173,8 +178,9 @@ link. Badge canvases are normalized to one size so different vendor artwork does
 the grid.
 
 **Footer** — one restrained bordered surface panel with small mail, GitHub and LinkedIn
-icons, followed by copyright and visitor count. No implementation tagline and no repeated
-contact paragraph. The panel may echo the glass composition but does not add another
+icons, followed by copyright and visitor count. No implementation tagline, no role restatement
+(the "Cloud · DevOps · Infrastructure" column was removed in Phase 18) and no repeated contact
+paragraph. The panel may echo the glass composition but does not add another
 backdrop-filter layer.
 
 **Visitor counter** — mono readout in the footer. Shows `····` until resolved, and keeps
@@ -184,9 +190,9 @@ showing `····` if the API fails. **Never renders a fabricated number.**
 
 - The fold answers, in order: what he does → how to act on it → the work. No slogans above
   the fold, and no personality claims about 3am or boredom.
-- The hero heading is the person's name, followed by the role. The introductory sentence
-  names the discipline, not a vendor: "I build and operate cloud infrastructure."
-  Vendors, services and versions belong in the supporting copy and case studies.
+- The hero heading is the person's name, followed by one sentence that opens with the role.
+  It names the discipline first ("I build and operate cloud infrastructure"), then the platform
+  and tools in the same sentence. Certifications live on About and in the resume, not the hero.
 - **Cost language:** never publish "₹0", "zero cost", or "free" — it invites an argument
   about what is really free and reads as a gimmick. Say **"minimal running cost"**, or
   describe the engineering: no NAT gateway, no idle compute, torn down when not in use.
