@@ -11,11 +11,13 @@ Branch `feat/case-study-template`. Standard: layout, renderer helpers, CSS and t
       is "numbers", "scope", "pipeline" or "delivery" depending on the project).
 - [x] Previous and next case study at the bottom, in project order.
 - [x] The browser gate also captures `projects/clearsky` at 1280 and 375 px.
+- [x] Fresh-context review: approve. Fixed both nits: duplicate or empty section anchors now fail
+      the build, and the strip reads only the first metrics list and decodes entities (new test).
 
 Local evidence, 2026-11-06:
 
 ```text
-astro check: 0 errors, 0 warnings; node:test: 14 passed, 0 failed
+astro check: 0 errors, 0 warnings; node:test: 15 passed, 0 failed
 browser gate, 14 pages: axe 0 violations; overflow none at 320/375/768/1280/2560;
   no-JS, keyboard focus, local links and same-page anchors PASS
 terraform plan: 1 add, 14 change, 1 destroy, 0 replace (hashed CSS swap; pages for CSS reference)

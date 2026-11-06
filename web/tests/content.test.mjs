@@ -15,7 +15,7 @@ import {
   referenceSchema,
   validateProjectSet,
 } from "../src/lib/content-schema.ts";
-import { renderCaseStudyBody } from "../src/lib/case-study.ts";
+import { caseStudyMetrics, renderCaseStudyBody } from "../src/lib/case-study.ts";
 
 const root = process.cwd();
 const blog = join(root, "src/content/blog");
@@ -272,4 +272,17 @@ test("published output excludes drafts, future posts and their assets", (t) => {
     assert.doesNotMatch(page, /rel="canonical" href="[^"]*\.html"/, `${file} has a .html canonical`);
   }
   assert.ok(feed.includes("Cache &amp; XML"));
+});
+
+test("case-study anchors are unique and the numbers strip reads one list as text", () => {
+  const section = (label) => `<section class="block wrap"><p class="label">${label}</p><h2>${label}</h2></section>`;
+  const required = ["problem", "architecture", "decisions and tradeoffs", "what broke"].map(section).join("");
+  const project = { slug: "test", image: null, imageAlt: "", additionalFigures: [] };
+  const rendered = renderCaseStudyBody(required + section("numbers"), project);
+  assert.match(rendered, /id="decisions-and-tradeoffs"/);
+  assert.match(rendered, /id="numbers"/);
+  assert.throws(() => renderCaseStudyBody(required + section("problem"), project), /unique anchors/);
+  assert.throws(() => renderCaseStudyBody(required + section("!!!"), project), /unique anchors/);
+  const body = '<ul class="metrics"><li><b>1 &amp; 2</b><span>A <code>x</code> &lt;y&gt;</span></li></ul><ul class="metrics"><li><b>9</b><span>second list</span></li></ul>';
+  assert.deepEqual(caseStudyMetrics(body), [{ value: "1 & 2", label: "A x <y>" }]);
 });
