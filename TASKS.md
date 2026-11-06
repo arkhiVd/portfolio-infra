@@ -6,7 +6,7 @@ Branch `feat/diagram-containers`. Standard: two generators, 3 icons, two SVGs, c
 
 - [x] `web/diagrams/containers-architecture.mjs` from `iac/vpc.tf`, `ecs.tf`, `main.tf`: AWS Cloud >
       Region ap-south-1 > VPC 10.0.0.0/16 > public subnets (1a, 1b) > ECS cluster. Users, internet
-      gateway, internet-facing ALB on HTTP :80, one Fargate task (Flask on :8080, 256 CPU / 512 MiB,
+      gateway, internet-facing ALB on HTTP :80, one Fargate task (Flask on :8080, 0.25 vCPU / 512 MiB,
       public IP); CloudWatch Logs `/ecs/demo-app`, ECR `demo-assignment-repo` and the task execution
       role in the region.
 - [x] `web/diagrams/containers-cicd.mjs` from `deploy.yml`: a manual `workflow_dispatch` run of
@@ -16,6 +16,12 @@ Branch `feat/diagram-containers`. Standard: two generators, 3 icons, two SVGs, c
 - [x] Case-study text corrected where the code contradicts it: the tasks are in public subnets with
       public IPs (locked to the ALB's security group), not private subnets; the run is manual, not
       push-triggered; ECR tags are `MUTABLE`, so SHA tags are traceable, not immutable.
+- [x] Fresh-context review: no factual errors in the diagrams. Fixed four layout defects (pipeline
+      lines through the AWS Cloud and Region labels, badges on the VPC and GitHub borders) and
+      tightened wording: one task, not tasks (`desired_count = 1`); 0.25 vCPU; the execution role
+      is what ECS uses, and the app has no task role; destroy removes the Terraform stack, not the
+      state bucket or the OIDC role; the apply doesn't wait for a healthy task, so the heading is
+      now "From a manual run to a new task revision".
 - [x] 3 more icons (Fargate, internet gateway, generic application for jobs), unmodified.
 - [x] Both PNGs (940 KB and 676 KB) removed; drift test covers all five diagrams.
 

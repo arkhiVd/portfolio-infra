@@ -14,7 +14,7 @@ const spec = {
   users: [col[0], row[1], "users", "Users", "browser"],
   igw: [col[1], row[1], "internet-gateway", "Internet gateway"],
   alb: [col[2], row[1], "alb", "Elastic Load Balancing", ["Application Load Balancer", "internet-facing · HTTP :80"]],
-  task: [col[3], row[1], "fargate", "AWS Fargate", ["ECS service · 1 task", "Flask container :8080", "256 CPU · 512 MiB · public IP"]],
+  task: [col[3], row[1], "fargate", "AWS Fargate", ["ECS service · 1 task", "Flask container :8080", "0.25 vCPU · 512 MiB · public IP"]],
   logs: [col[4], row[1], "cloudwatch", "Amazon CloudWatch Logs", "/ecs/demo-app"],
   role: [col[2], row[2], "iam-role", "IAM role", ["ECS task execution role", "AmazonECSTaskExecutionRolePolicy"]],
   ecr: [col[3], row[2], "ecr", "Amazon ECR", ["demo-assignment-repo", "commit-SHA image tags"]],
@@ -35,9 +35,9 @@ step(2, (n.alb.R[0] + lane) / 2, n.alb.y - 18);
 line([n.task.R, n.logs.L]);
 step(3, n.logs.L[0] - 38, n.task.y - 18); // past the VPC edge
 line([n.ecr.T, n.task.B]);
-step(4, n.ecr.x + 22, (n.ecr.T[1] + n.task.B[1]) / 2);
+step(4, n.ecr.x + 22, n.ecr.T[1] - 19); // under the VPC edge
 line([n.role.R, [lane, n.role.y], [lane, n.task.y + 18], [n.task.L[0], n.task.y + 18]], true);
-step(5, lane - 22, (n.task.y + n.role.y) / 2 + 40);
+step(5, lane - 22, n.role.y - 40); // under the VPC edge
 
 const legend = [
   "Users reach the internet-facing Application Load Balancer over HTTP on port 80.",
@@ -46,8 +46,11 @@ const legend = [
   "Fargate pulls the commit-SHA-tagged image from ECR.",
   "The task execution role lets ECS pull that image and write the logs.",
 ];
-const dashedKey = "Dashed line: the IAM role the tasks run with.";
-const notes = ["The tasks run in the two public subnets with public IPs and no NAT gateway; security groups keep them reachable only from the ALB."];
+const dashedKey = "Dashed line: the execution role ECS uses for the task; the app itself has no IAM role.";
+const notes = [
+  "The service places its one task in one of two public subnets, with a public IP and no NAT gateway.",
+  "Security groups keep it reachable only from the ALB.",
+];
 
 const cloud = { x: 180, y: 20, r: 1100, b: row[2] + 120 };
 const region = { x: 200, y: 60, r: 1080, b: cloud.b - 16 };

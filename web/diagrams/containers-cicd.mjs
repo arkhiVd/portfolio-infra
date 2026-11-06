@@ -30,7 +30,7 @@ const step = (num, x, y) => steps.push({ n: num, x, y });
 
 // 1 · a manual run; the jobs run in order (needs).
 line([n.dev.R, n.build.L]);
-step(1, (n.dev.R[0] + n.build.L[0]) / 2, n.dev.y - 18);
+step(1, n.dev.R[0] + 36, n.dev.y - 18); // left of the GitHub box
 line([n.build.R, n.plan.L]);
 step(4, (n.build.R[0] + n.plan.L[0]) / 2, n.build.y - 18);
 line([n.plan.R, n.apply.L]);
@@ -60,12 +60,12 @@ const legend = [
 const dashedKey = "Dashed lines: each job assuming the OIDC role.";
 const notes = [
   "Plan and apply keep Terraform state in an S3 backend.",
-  "A separate destroy workflow removes everything after a typed confirmation.",
+  "A separate destroy workflow removes the Terraform-managed stack after a typed confirmation.",
 ];
 
 const github = { x: 200, y: 40, r: 900, b: row[1] + 130 };
-const cloud = { x: 200, y: row[1] + 170, r: 900, b: yPull + 40 };
-const region = { x: 218, y: cloud.y + 40, r: 882, b: cloud.b - 16 };
+const cloud = { x: 40, y: row[1] + 170, r: 900, b: yPull + 40 };
+const region = { x: 58, y: cloud.y + 40, r: 882, b: cloud.b - 16 };
 const width = 920;
 const legendTop = cloud.b + 44;
 const height = legendTop + (legend.length + 1 + notes.length) * 32 + 20;

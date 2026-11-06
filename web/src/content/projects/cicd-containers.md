@@ -24,9 +24,9 @@ lede: A manually triggered deploy pipeline for a Dockerized Python application o
   </section>
   <section class="block wrap">
   <p class="label">architecture</p>
-  <h2>Public load balancer, locked-down tasks</h2>
+  <h2>Public load balancer, locked-down task</h2>
     <figure class="arch" data-project-figure="0">
-<figcaption>The internet-facing Application Load Balancer is the only way in. It forwards requests to Flask containers running as ECS Fargate tasks in two public subnets. The tasks have public IPs, but their security group accepts port 8080 only from the load balancer's group. CloudWatch Logs receives the container logs.</figcaption></figure>
+<figcaption>The internet-facing Application Load Balancer is the only way in. It forwards requests to a Flask container running as one ECS Fargate task, placed in one of two public subnets. The task has a public IP, but its security group accepts port 8080 only from the load balancer's group. CloudWatch Logs receives the container logs.</figcaption></figure>
     <p>Security-group ingress ties the ECS service directly to the load balancer security group instead of allowing a broad network range. Terraform defines the VPC, subnets, ECR repository, load balancer, ECS cluster, task definition and service.</p>
     <figure class="arch" data-project-figure="1">
 <figcaption>A manually started GitHub Actions run assumes an AWS role with OIDC, builds an image tagged with the commit SHA, pushes it to ECR and passes that image URL into Terraform.</figcaption></figure>
@@ -38,7 +38,7 @@ lede: A manually triggered deploy pipeline for a Dockerized Python application o
       <div class="row"><dt>OIDC instead of repository access keys</dt><dd>GitHub receives temporary AWS credentials for each run. IAM trust configuration is more involved, but there is no long-lived secret to rotate or leak.</dd></div>
       <div class="row"><dt>Commit SHA image tags</dt><dd>Each task definition points to a traceable build rather than an ambiguous <code>latest</code> tag. The ECR repository still allows tags to be overwritten, so the SHA is a convention, not an enforced guarantee.</dd></div>
       <div class="row"><dt>Fargate instead of managed EC2 hosts</dt><dd>The deployment avoids patching container hosts. Per-task pricing can cost more than well-utilized EC2 capacity.</dd></div>
-      <div class="row"><dt>Terraform receives the image URL</dt><dd>Application versions and infrastructure changes share one plan, while the infrastructure remains independent of a hardcoded build.</dd></div>
+      <div class="row"><dt>Terraform receives the image URL</dt><dd>Application versions and infrastructure changes go through the same Terraform run, while the infrastructure remains independent of a hardcoded build.</dd></div>
     </dl>
   </section>
   <section class="block wrap">
@@ -48,6 +48,6 @@ lede: A manually triggered deploy pipeline for a Dockerized Python application o
   </section>
   <section class="block wrap">
   <p class="label">pipeline</p>
-  <h2>From a manual run to a healthy task</h2>
+  <h2>From a manual run to a new task revision</h2>
     <ul class="metrics"><li><b>1</b><span>reachable entry point</span></li><li><b>0</b><span>stored AWS access keys</span></li><li><b>3</b><span>pipeline stages: build, plan, apply</span></li><li><b>SHA</b><span>identifies every deployed image</span></li></ul>
   </section>
