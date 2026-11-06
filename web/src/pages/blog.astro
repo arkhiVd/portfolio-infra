@@ -6,11 +6,11 @@ import { site, url } from "../lib/site";
 const posts = await getPublishedBlogPosts();
 ---
 
-<Base title={`Blog — ${site.name}`} description="Notes on operating cloud infrastructure." current="blog">
+<Base title={`Blog — ${site.name}`} description="Writing by Aravindakrishnan V." current="blog">
   <section class="blog-index wrap">
     <p class="label">blog</p>
-    <h1>Notes from the work</h1>
-    <p class="lede">Dated notes on decisions and the maintenance that follows.</p>
+    <h1>Blog</h1>
+    <p class="lede">Whatever I am building, fixing or thinking about.</p>
     <p><a class="label" href={url("/feed.xml")}>RSS feed</a></p>
     <div class="project-list" aria-label="Blog posts">
       {posts.map((post) => (

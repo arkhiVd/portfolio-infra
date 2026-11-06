@@ -1,17 +1,17 @@
 {
   "id": "home",
   "hero": {
-    "role": "Cloud Engineer",
-    "introduction": "I build and operate cloud infrastructure across AWS, Linux, networking, Terraform, containers and CI/CD. AWS Solutions Architect – Associate and CCNA certified."
+    "role": "Cloud engineer",
+    "introduction": "I build and operate cloud infrastructure on AWS with Terraform, containers and CI/CD."
   },
   "discover": {
     "blog": {
-      "title": "Notes from the work",
-      "description": "Decisions and maintenance from this portfolio."
+      "title": "Blog",
+      "description": "Whatever I am building, fixing or thinking about."
     },
     "homelab": {
       "title": "Homelab",
-      "description": "A bounded view of private systems and file paths."
+      "description": "Diagrams of the self-hosted systems I run at home."
     },
     "workflow": {
       "title": "How I work",

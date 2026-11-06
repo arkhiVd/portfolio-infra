@@ -1,6 +1,48 @@
 # Portfolio tasks
 
-## Current phase: 17, design tokens, phone nav and tap targets
+## Current phase: 18, simple recruiter-first Home
+
+Branch `feat/simple-home`. Standard: Home template, row component, footer, CSS and `home.json` copy.
+
+- [x] Hero: name at `--t-72` (36 px on a 375 px phone, one line), "Cloud engineer." plus one
+      sentence, then View projects, Download resume (outline) and email me. Full-width pills on phones.
+- [x] Selected work: compact rows show the short name and the summary's first sentence.
+- [x] "Discover" becomes "More"; the `writing`/`reference` labels are gone.
+- [x] Ocean background: static CSS fallback of the shader's lights. The in-app browser has no
+      WebGL, so the shader never started and the page was flat black; the same happens wherever
+      WebGL is off. The shader still paints over the fallback where it runs.
+- [x] Active nav item and phone menu use glass (white 8%, inset edge) instead of the blue fill.
+      The sheet is 97% opaque so text never bleeds through where blur does not render.
+- [x] Blog is presented as a blog: Home row and blog page heading "Blog", lede "Whatever I am
+      building, fixing or thinking about."; feed and meta description "Writing by Aravindakrishnan V."
+- [x] Footer: the "Cloud · DevOps · Infrastructure" column is removed on every page.
+- [x] Copy (`home.json`, for author review): role "Cloud engineer"; introduction "I build and
+      operate cloud infrastructure on AWS with Terraform, containers and CI/CD."; Homelab line
+      "Diagrams of the self-hosted systems I run at home." Certifications move off the hero.
+- [x] Fresh-context review: approve. Fixed its one finding: a CMS role ending in punctuation no
+      longer renders a double period. Accepted: rows fall back to the full name or summary if
+      the CMS uses another separator.
+- [x] Fresh-context review of round 2: approve. Fixed the stale `--accent` "active nav" line in
+      DESIGN.md. Kept the 8% active highlight the author approved; the reviewer called it
+      distinguishable but faint.
+- [ ] Live check after apply.
+
+Local evidence, 2026-11-06:
+
+```text
+git diff --check: exit 0; astro check: 0 errors; node:test: 14 passed, 0 failed
+browser gate (playwright 1.63.0, axe-core 4.13.0, chromium), 14 pages:
+  axe 0 violations; overflow none at 320/375/768/1280/2560; no-JS, keyboard, links PASS
+375 px Home: h1 one line at 165-202 px; View projects 327x49, Download resume 327x48,
+  email me 81x44; last action ends at 498 px of 812
+terraform plan: 1 add, 15 change, 1 destroy, 0 replace (hashed CSS swap; every page for the footer
+  and nav; feed.xml for the new description)
+```
+
+## Previous phase: 17, design tokens, phone nav and tap targets
+
+Merged as PR #54 and applied 2026-11-06: 2 add, 14 change, 2 destroy; post-apply plan empty. Live
+at 375 px the menu opens above the page and no standalone link is under 44 px.
 
 Branch `feat/design-tokens-nav`. Standard: CSS, nav markup and the local browser gate.
 
