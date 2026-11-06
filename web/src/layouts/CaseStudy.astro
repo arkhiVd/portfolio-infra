@@ -1,6 +1,9 @@
 ---
+import { getEntry } from "astro:content";
 import Base from "../layouts/Base.astro";
-import type { Project } from "../lib/projects";
+import { caseStudyMetrics, caseStudySections } from "../lib/case-study";
+import { getProjects, type Project } from "../lib/projects";
+import { url } from "../lib/site";
 
 /**
  * Case-study shell. Section order is fixed by DESIGN.md:
@@ -14,6 +17,16 @@ interface Props {
   lede: string;
 }
 const { project, kicker, lede } = Astro.props;
+
+// The numbers and section labels come from the same validated Markdown body the page renders.
+const source = (await getEntry("project", project.slug))?.body ?? "";
+const metrics = caseStudyMetrics(source).slice(0, 4);
+const sections = caseStudySections(source);
+const studies = (await getProjects()).filter((entry) => entry.caseStudy);
+const index = studies.findIndex((entry) => entry.slug === project.slug);
+const previous = index > 0 ? studies[index - 1] : undefined;
+const next = index >= 0 && index < studies.length - 1 ? studies[index + 1] : undefined;
+const shortName = (entry: Project) => entry.name.split(" — ")[0];
 ---
 
 <Base title={`${project.name} — case study`} description={lede} current="projects">
@@ -35,7 +48,44 @@ const { project, kicker, lede } = Astro.props;
         </div>
       )
     }
+    {
+      metrics.length > 0 && (
+        <ul class="glance" aria-label="Key numbers">
+          {metrics.map((metric) => (
+            <li>
+              <b>{metric.value}</b>
+              <span>{metric.label}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
   </section>
 
-  <slot />
+  <div class="study-body wrap">
+    <div class="study-main"><slot /></div>
+    <nav class="study-contents" aria-label="On this page">
+      <span class="label">on this page</span>
+      {sections.map((section) => <a href={`#${section.id}`}>{section.label}</a>)}
+    </nav>
+  </div>
+
+  {
+    (previous || next) && (
+      <nav class="study-pager wrap" aria-label="More case studies">
+        {previous ? (
+          <a class="study-pager-prev" href={url(previous.caseStudy!)}>
+            <span class="label">← previous</span>
+            <span>{shortName(previous)}</span>
+          </a>
+        ) : <span />}
+        {next && (
+          <a class="study-pager-next" href={url(next.caseStudy!)}>
+            <span class="label">next →</span>
+            <span>{shortName(next)}</span>
+          </a>
+        )}
+      </nav>
+    )
+  }
 </Base>

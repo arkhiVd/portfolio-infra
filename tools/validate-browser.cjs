@@ -39,7 +39,7 @@ const server = http.createServer((req, res) => {
 });
 const files = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry =>
   entry.isDirectory() ? files(path.join(dir, entry.name)) : [path.join(dir, entry.name)]);
-const captures = new Set(['/index.html', '/blog.html', '/blog/two-cdn-cache-trap.html', '/homelab.html', '/how-i-work.html']);
+const captures = new Set(['/index.html', '/blog.html', '/blog/two-cdn-cache-trap.html', '/homelab.html', '/how-i-work.html', '/projects/clearsky.html']);
 
 (async () => {
   await new Promise((resolve, reject) => { server.once('error', reject); server.listen(8766, '127.0.0.1', resolve); });

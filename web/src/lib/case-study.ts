@@ -28,6 +28,30 @@ const allowedChildren: Record<string, Set<string>> = {
   code: new Set(),
 };
 
+/** Anchor id for a section label: "decisions and tradeoffs" becomes "decisions-and-tradeoffs". */
+export const sectionId = (label: string) =>
+  label.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+
+const entities: Record<string, string> = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", "#39": "'" };
+// Plain text for an Astro expression, which escapes it again: drop tags, decode the basic entities.
+const stripTags = (value: string) =>
+  value
+    .replace(/<[^>]+>/g, "")
+    .replace(/&(amp|lt|gt|quot|apos|#39);/g, (_match, name: string) => entities[name])
+    .replace(/\s+/g, " ")
+    .trim();
+
+/** The section labels of a case-study body, in order, for the contents rail. */
+export const caseStudySections = (body: string) =>
+  [...body.matchAll(/<p class="label">([^<]+)<\/p>/g)].map((match) => ({ id: sectionId(match[1]), label: match[1] }));
+
+/** The figures in the body's first metrics list, as plain text, for the strip under the lede. */
+export const caseStudyMetrics = (body: string) =>
+  [...(body.match(/<ul class="metrics">([\s\S]*?)<\/ul>/)?.[1] ?? "").matchAll(/<li><b>([\s\S]*?)<\/b><span>([\s\S]*?)<\/span><\/li>/g)].map((match) => ({
+    value: stripTags(match[1]),
+    label: stripTags(match[2]),
+  }));
+
 const escapeAttribute = (value: string) =>
   value.replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;");
 
@@ -79,6 +103,10 @@ export const renderCaseStudyBody = (body: string, project: Project) => {
   if (labels.length !== sectionChildren.length || requiredLabels.some((label, index) => labels[index] !== label)) {
     throw new Error(`Case-study sections are invalid for ${project.slug}`);
   }
+  const ids = labels.map(sectionId);
+  if (ids.some((id) => !id) || new Set(ids).size !== ids.length) {
+    throw new Error(`Case-study section labels must give unique anchors in ${project.slug}`);
+  }
   const figures = project.image
     ? [{ image: project.image, imageAlt: project.imageAlt }, ...project.additionalFigures]
     : project.additionalFigures;
@@ -87,7 +115,10 @@ export const renderCaseStudyBody = (body: string, project: Project) => {
     throw new Error(`Case-study figure markers are invalid for ${project.slug}`);
   }
 
-  return body.replace(
+  let section = 0;
+  return body.replace(/<section class="block wrap">/g, () =>
+    `<section class="block wrap" id="${sectionId(labels[section++])}">`,
+  ).replace(
     /<figure class="arch" data-project-figure="(\d+)">([\s\S]*?)<\/figure>/g,
     (_match, indexText, caption) => {
       const index = Number(indexText);
