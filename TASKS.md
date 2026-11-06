@@ -32,7 +32,8 @@ browser gate (playwright 1.63.0, axe-core 4.13.0, chromium), 14 pages:
   axe 0 violations; overflow none at 320/375/768/1280/2560; no-JS, keyboard, links PASS
 375 px Home: h1 one line at 165-202 px; View projects 327x49, Download resume 327x48,
   email me 81x44; last action ends at 498 px of 812
-terraform plan: 1 add, 14 change, 1 destroy, 0 replace (hashed CSS swap; every page has the new footer)
+terraform plan: 1 add, 15 change, 1 destroy, 0 replace (hashed CSS swap; every page for the footer
+  and nav; feed.xml for the new description)
 ```
 
 ## Previous phase: 17, design tokens, phone nav and tap targets
