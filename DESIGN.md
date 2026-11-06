@@ -48,7 +48,16 @@ re-verified with a checker before the freeze.
 | `--text` | `#EDEDF0` | headings, body | **17.4:1** on ink |
 | `--muted` | `#9B9BA3` | secondary copy, labels | **7.4:1** on ink · 6.8:1 on surface |
 | `--accent` | `#4FC1D4` | links, active nav, metric emphasis, focus ring | **9.6:1** on ink |
-| `--accent-dim` | `rgba(79,193,212,.14)` | chip fills, selection | — |
+| `--accent-dim` | `rgba(79,193,212,.14)` | chip fills, selection, active nav item | — |
+| `--surface-2` | `#151A22` | hover and pressed rows | structure; muted **6.3:1** on it |
+| `--hairline-strong` | `rgba(255,255,255,.16)` | edges of controls (menu toggle, sheet) | — |
+| `--accent-strong` | `#7FD6E4` | accent on hover | **12.3:1** on ink |
+| `--live` | `#5CCF8F` | live status, availability dot | **10.5:1** on ink; always beside a word |
+| `--progress` | `#E5B567` | in-progress status | **10.8:1** on ink; always beside a word |
+
+Added 2026-11-05 (Phase 17) from the approved redesign system. `--live` and `--progress` share a
+lightness, so the label and dot shape carry the meaning, never hue alone. Secondary text uses
+`--muted`; hand-picked greys darker than it failed axe on How I work and were replaced.
 
 Rules: no pure black, no pure white. Never state information with colour alone — pair with
 a label, an icon, or weight. Body text is never `--muted` at sizes below 15 px.
@@ -79,7 +88,8 @@ Reference implementation: `web/src/components/Ocean.astro`, derived from the app
 
 - **Instrument Sans** — headings, body, UI. **JetBrains Mono** — labels, metrics, paths,
   commands only. Both self-hosted woff2, SIL OFL 1.1, `font-display: swap`, preloaded.
-- Scale (px): `13 15 17 21 27 34 44 56`. Nothing between steps; nothing above 56.
+- Scale (px): `13 15 17 21 27 34 44 56`, plus `72` (`--t-72`) for one page hero per page.
+  Nothing between steps; nothing above 72.
 - Weights: 400 body, 500 headings and emphasis. No 600+, no italics.
 - Line height: 1.65 body · 1.35 sub-heads · 1.08 display.
 - Letter spacing: `-0.02em` at 34+, `-0.015em` at 21–27, `0` body, `+0.02em` mono labels.
@@ -100,7 +110,7 @@ Reference implementation: `web/src/components/Ocean.astro`, derived from the app
 - Radii: `8px` (chips, small controls), `12px` (cards, panels), `999px` (pills, nav).
 - Cards: `--surface` + 1 px `--hairline`. Elevation is a hairline and a background shift,
   not a drop shadow.
-- Glass, reserved for the sticky nav only: `backdrop-filter: blur(22px) saturate(150%)`,
+- Glass, reserved for the nav pill and the phone menu toggle only: `backdrop-filter: blur(22px) saturate(150%)`,
   `background: rgba(255,255,255,.045)`, 1 px hairline, inset top highlight
   `rgba(255,255,255,.09)`.
 - No gradients on text. No additional background animation beyond the approved ocean layer.
@@ -123,17 +133,20 @@ Reference implementation: `web/src/components/Ocean.astro`, derived from the app
 - `:focus-visible` → 2 px `--accent` outline, 2 px offset, on **every** interactive
   element. Never `outline: none` without a replacement.
 - Skip link as the first focusable element, visible on focus.
-- Hit targets ≥44×44 px on touch.
+- Hit targets ≥44×44 px on touch (`--hit`): every standalone link, button and the menu toggle.
+  Links inline in body text are exempt.
 - One `<h1>` per page; heading levels never skip. Every image has meaningful `alt`, or
   `alt=""` when decorative. Diagrams get a real caption, not just alt text.
 - Icons that carry meaning need an accessible name; decorative SVG gets `aria-hidden="true"`.
 
 ## Components
 
-**Nav** — sticky shell with a compact monochrome cloud mark at left; availability and
-`home / projects / about` sit right, with the links inside one contained glass pill. The same
-cloud mark is the browser favicon. Visitor count belongs in the footer. Below 680 px the mark
-stacks above a pill that retains all primary links.
+**Nav** — a shell in normal flow (not sticky) with a compact monochrome cloud mark at left;
+availability and the primary links sit right, with the links inside one contained glass pill and
+the current page filled with `--accent-dim`. The same cloud mark is the browser favicon. Visitor
+count belongs in the footer. Below 680 px the bar stays one row: mark, availability and a `menu`
+toggle built on `<details>`, which opens a sheet of 48 px links without JavaScript. Escape does not
+close it, because native `<details>` has no such behaviour and no script is added for it.
 
 **Hero** — the person's full name is the primary heading, followed by a quiet mono role,
 one evidence-led paragraph, then two actions: a solid pill (`View projects`)

@@ -12,8 +12,8 @@ BROWSER_TOOLS="$BROWSER_TOOLS" CHROME_PATH=/usr/bin/chromium \
   node tools/validate-browser.cjs
 ```
 
-The test starts a loopback-only static server, injects a local visitor API stub and never
-calls production. It checks all non-redirect pages for local links, same-page anchors,
+The test starts a loopback-only static server that resolves paths through `edge/clean-urls.js`,
+as CloudFront does, injects a local visitor API stub and never calls production. It checks all non-redirect pages for local links, same-page anchors,
 broken images, third-party requests, JavaScript errors, no-JS content, keyboard focus,
 axe violations and horizontal overflow. It writes screenshots and a JSON summary under
 `docs/evidence/`.
