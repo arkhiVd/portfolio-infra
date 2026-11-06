@@ -15,7 +15,7 @@ const hasHomelab = references.some((entry) => entry.id === "homelab");
 <Base title={`${site.name} — ${site.role}`} current="home">
   <section class="hero wrap">
     <h1>{site.name}</h1>
-    <p class="hero-lead"><strong>{home.hero.role}.</strong> {home.hero.introduction}</p>
+    <p class="hero-lead"><strong>{home.hero.role.replace(/[.!?]+$/, "")}.</strong> {home.hero.introduction}</p>
     <div class="cta">
       <a class="btn" href={url("/projects")}>View projects</a>
       <a class="btn-outline" href={url(site.resume)}>Download resume</a>

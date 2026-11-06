@@ -12,7 +12,10 @@ Branch `feat/simple-home`. Standard: Home template, row component, footer, CSS a
 - [x] Copy (`home.json`, for author review): role "Cloud engineer"; introduction "I build and
       operate cloud infrastructure on AWS with Terraform, containers and CI/CD."; Homelab line
       "Diagrams of the self-hosted systems I run at home." Certifications move off the hero.
-- [ ] Fresh-context review; live check after apply.
+- [x] Fresh-context review: approve. Fixed its one finding: a CMS role ending in punctuation no
+      longer renders a double period. Accepted: rows fall back to the full name or summary if
+      the CMS uses another separator.
+- [ ] Live check after apply.
 
 Local evidence, 2026-11-06:
 
