@@ -276,7 +276,19 @@ Homelab line, and the blog presented as a blog ("Blog", not "Notes from the work
 
 Exit criteria:
 - [x] Browser gate passes on all 14 pages; on a 375 px phone the name, sentence and all three actions fit the first screen.
-- [ ] Fresh-context review; CI; merge; live check at 375 and 1280 px.
+- [x] Fresh-context review; CI; merge; live check at 375 and 1280 px.
+
+## Phase 19: case-study template
+
+**Class:** Standard. "Phase D" in the 2026-11-05 redesign system.
+
+Scope: numbers strip under the lede, read from the body's metrics list; section anchors; a
+sticky contents rail at ≥1200 px; previous/next links; the browser gate captures one case study.
+No content or diagram changes (diagrams are the next phase).
+
+Exit criteria:
+- [x] Browser gate passes on all 14 pages, including every `#section` anchor.
+- [ ] Fresh-context review; CI; merge; live check.
 
 ## Delegation budget
 

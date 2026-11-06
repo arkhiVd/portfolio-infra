@@ -534,6 +534,82 @@ figure.arch figcaption {
 }
 .metrics span { color: var(--muted); font-size: 15px; }
 
+/* Key numbers under a case-study lede: plain figures between hairlines, no tiles. */
+.glance {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0;
+  margin: 32px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+}
+.glance li { padding: 18px 20px 18px 0; }
+.glance li + li { padding-left: 20px; border-left: 1px solid var(--hairline); }
+.glance b {
+  display: block;
+  font: 500 27px/1.15 var(--mono);
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.glance span { display: block; margin-top: 6px; color: var(--muted); font-size: 15px; line-height: 1.45; }
+@media (max-width: 680px) {
+  .glance { grid-template-columns: 1fr 1fr; }
+  .glance li,
+  .glance li + li { padding: 16px 12px 16px 0; border-left: 0; }
+  .glance li:nth-child(even) { padding-left: 12px; border-left: 1px solid var(--hairline); }
+  .glance li:nth-child(n + 3) { border-top: 1px solid var(--hairline); }
+}
+
+/* Case-study body with a contents rail on wide screens. */
+.study-main > .block.wrap { max-width: none; margin: 0; padding-inline: 0; }
+.study-contents { display: none; }
+@media (min-width: 1200px) {
+  .study-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 200px;
+    gap: 48px;
+    align-items: start;
+  }
+  .study-contents {
+    position: sticky;
+    top: 24px;
+    display: grid;
+    padding-top: 32px;
+  }
+  .study-contents .label { margin-bottom: 4px; }
+  .study-contents a {
+    display: flex;
+    align-items: center;
+    min-height: var(--hit);
+    color: var(--muted);
+    font: 400 13px/1.3 var(--mono);
+    letter-spacing: 0.02em;
+  }
+  .study-contents a:hover { color: var(--text); }
+}
+
+/* Previous and next case study. */
+.study-pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--hairline);
+}
+.study-pager a {
+  display: grid;
+  gap: 4px;
+  min-height: var(--hit);
+  padding: 12px 0;
+  color: var(--text);
+  font-size: 17px;
+}
+.study-pager a:hover { color: var(--accent-strong); }
+.study-pager-next { text-align: right; justify-items: end; }
+
 /* ---------- blog ---------- */
 
 .blog-index { padding-block: 48px; }

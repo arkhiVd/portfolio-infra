@@ -176,6 +176,12 @@ shape: title, one line, arrow.
 What broke and how it was fixed · Numbers. Each section led by a mono label at 13 px.
 "What broke" is mandatory; a case study without a failure is a brochure.
 
+Since Phase 19, up to four of the case study's own numbers sit under the lede as plain mono
+figures between hairlines (no tiles, no accent): a reviewer sees the scale before reading. They
+are read from the same validated metrics list as the final section, so they cannot disagree.
+At ≥1200 px a sticky "on this page" rail lists the sections, using each body's own labels.
+Every case study ends with previous and next links in project order.
+
 **Figure** — diagrams full-width inside the content column, 12 px radius, hairline border,
 mono caption below in `--muted`. Must stay legible at 375 px — re-export rather than shrink.
 

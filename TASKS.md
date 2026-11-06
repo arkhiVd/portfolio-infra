@@ -1,6 +1,29 @@
 # Portfolio tasks
 
-## Current phase: 18, simple recruiter-first Home
+## Current phase: 19, case-study template
+
+Branch `feat/case-study-template`. Standard: layout, renderer helpers, CSS and the gate's capture list.
+
+- [x] Numbers strip: up to four figures under the lede from the body's own `<ul class="metrics">`,
+      so the strip and the final section cannot disagree. 2 by 2 on phones.
+- [x] Section anchors: the renderer adds `id`s from each section label (`#what-broke`).
+- [x] Contents rail at ≥1200 px, sticky at 24 px, using each page's own labels (the fifth section
+      is "numbers", "scope", "pipeline" or "delivery" depending on the project).
+- [x] Previous and next case study at the bottom, in project order.
+- [x] The browser gate also captures `projects/clearsky` at 1280 and 375 px.
+
+Local evidence, 2026-11-06:
+
+```text
+astro check: 0 errors, 0 warnings; node:test: 14 passed, 0 failed
+browser gate, 14 pages: axe 0 violations; overflow none at 320/375/768/1280/2560;
+  no-JS, keyboard focus, local links and same-page anchors PASS
+terraform plan: 1 add, 14 change, 1 destroy, 0 replace (hashed CSS swap; pages for CSS reference)
+```
+
+## Previous phase: 18, simple recruiter-first Home
+
+Merged as PR #55 and applied 2026-11-06: 1 add, 15 change, 1 destroy; post-apply plan empty.
 
 Branch `feat/simple-home`. Standard: Home template, row component, footer, CSS and `home.json` copy.
 
@@ -25,7 +48,7 @@ Branch `feat/simple-home`. Standard: Home template, row component, footer, CSS a
 - [x] Fresh-context review of round 2: approve. Fixed the stale `--accent` "active nav" line in
       DESIGN.md. Kept the 8% active highlight the author approved; the reviewer called it
       distinguishable but faint.
-- [ ] Live check after apply.
+- [x] Live check after apply.
 
 Local evidence, 2026-11-06:
 
