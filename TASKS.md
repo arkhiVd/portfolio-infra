@@ -1,6 +1,28 @@
 # Portfolio tasks
 
-## Current phase: 22, CDC diagram
+## Current phase: 23, containers diagrams
+
+Branch `feat/diagram-containers`. Standard: two generators, 3 icons, two SVGs, case-study text.
+
+- [x] `web/diagrams/containers-architecture.mjs` from `iac/vpc.tf`, `ecs.tf`, `main.tf`: AWS Cloud >
+      Region ap-south-1 > VPC 10.0.0.0/16 > public subnets (1a, 1b) > ECS cluster. Users, internet
+      gateway, internet-facing ALB on HTTP :80, one Fargate task (Flask on :8080, 256 CPU / 512 MiB,
+      public IP); CloudWatch Logs `/ecs/demo-app`, ECR `demo-assignment-repo` and the task execution
+      role in the region.
+- [x] `web/diagrams/containers-cicd.mjs` from `deploy.yml`: a manual `workflow_dispatch` run of
+      build and push, Terraform plan and Terraform apply (`production` environment), each assuming
+      `GitHubActions_ECS_Role` through OIDC; image tagged with the commit SHA; S3 state backend and
+      the separate destroy workflow as notes. No account ID shown.
+- [x] Case-study text corrected where the code contradicts it: the tasks are in public subnets with
+      public IPs (locked to the ALB's security group), not private subnets; the run is manual, not
+      push-triggered; ECR tags are `MUTABLE`, so SHA tags are traceable, not immutable.
+- [x] 3 more icons (Fargate, internet gateway, generic application for jobs), unmodified.
+- [x] Both PNGs (940 KB and 676 KB) removed; drift test covers all five diagrams.
+
+## Previous phase: 22, CDC diagram
+
+Merged as PR #59, with a follow-up PR #60 removing the laptop's operating system; both applied
+2026-11-06 with an empty post-apply plan.
 
 Branch `feat/diagram-cdc`. Standard: one generator, 4 icons, one SVG, case-study metadata.
 
