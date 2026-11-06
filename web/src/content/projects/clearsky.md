@@ -3,8 +3,8 @@ name: ClearSky — AWS posture and cost platform
 status: completed
 summary: Scans multiple AWS accounts for security, cost and inventory findings. Deterministic detectors create the findings; a read-only AI investigator explains them without changing resources.
 stack: [Lambda, DynamoDB, Cognito, CloudFront, Terraform]
-image: /assets/img/clearsky-architecture.png
-imageAlt: "ClearSky architecture: CloudFront and Cognito in front of Lambda function URLs, DynamoDB, EventBridge and cross-account IAM roles"
+image: /assets/img/clearsky-architecture.svg
+imageAlt: "ClearSky architecture: CloudFront serves the dashboard from S3 and sends /api to a Lambda API that verifies Cognito sign-in. A daily schedule runs the scanner, which assumes a read-only role in member accounts, stores findings in DynamoDB and emails a digest. GitHub Actions deploys through OIDC roles."
 repo: https://github.com/arkhiVd/clearsky
 order: 1
 featuredOrder: 1

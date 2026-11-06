@@ -1,6 +1,42 @@
 # Portfolio tasks
 
-## Current phase: 19, case-study template
+## Current phase: 20, dark diagrams (ClearSky first)
+
+Branch `feat/dark-diagrams`. Standard: one generator, one SVG, renderer link, CSS and a test.
+
+- [x] `web/diagrams/clearsky.mjs` draws the ClearSky architecture left to right from
+      `arkhiVd/clearsky` `docs/architecture.drawio`: 19 services, 18 labelled edges, the ClearSky
+      account and the member accounts, with official AWS Architecture Icons (package
+      `Icon-package_07312026`, 17 files copied unmodified, NOTICE included). Output
+      `web/public/assets/img/clearsky-architecture.svg`, 99 KB with icons embedded; the white PNG
+      it replaces was 66 KB and its SSM label was out of date.
+- [x] Author feedback on two drafts: wanted AWS icons, a fitting background, cleaner arrows, and a
+      diagram that looks like an AWS architecture diagram. Redrawn in the AWS reference style:
+      squid-ink canvas, AWS Cloud > account groups, straight or single-bend arrows with junction
+      fan-outs, 8 numbered steps with a legend.
+- [x] Fresh-context review of the AWS-style draft: approve, all 18 edges verified against the
+      draw.io. Fixed: the member-account box no longer sits on the scanner's stem, badge 5 is on its
+      branch, the legend keys dashed lines, and two phrases use the source's wording.
+- [x] Figures link to their full-size file. Below 680 px SVG figures pan at 900 px.
+- [x] Test: the committed SVG equals the generator's output.
+- [x] Measured: desktop 848 px wide, node text 10.6 px, edge labels 9.3 px (the PNG gave about 6 px);
+      phone 900 px inside a 302 px frame, node text 11.3 px, labels 9.8 px; page width 375.
+
+Local evidence, 2026-11-06:
+
+```text
+astro check: 0 errors; node:test: 16 passed, 0 failed
+browser gate, 14 pages: axe 0 violations; overflow none at 320/375/768/1280/2560;
+  no-JS, keyboard focus, links and anchors PASS
+terraform plan: 2 add, 14 change, 2 destroy, 0 replace (hashed CSS swap; PNG replaced by the SVG,
+  content_type image/svg+xml)
+```
+
+Next: appstack, cdc, cicd-containers and cloud-detective diagrams, one PR each, from each repo's source.
+
+## Previous phase: 19, case-study template
+
+Merged as PR #56 and applied 2026-11-06: 1 add, 14 change, 1 destroy; post-apply plan empty.
 
 Branch `feat/case-study-template`. Standard: layout, renderer helpers, CSS and the gate's capture list.
 

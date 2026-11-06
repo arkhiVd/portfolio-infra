@@ -490,6 +490,14 @@ figure.arch img {
   border-radius: 8px;
   background: #08080b;
 }
+figure.arch .arch-open { display: block; cursor: zoom-in; }
+/* Generated SVG diagrams carry their own legend; show them whole instead of capping the height. */
+figure.arch img[src$=".svg"] { max-height: none; }
+/* Phones: a wide diagram keeps a readable size and pans inside its frame; tapping opens it whole. */
+@media (max-width: 680px) {
+  figure.arch .arch-open { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  figure.arch .arch-open img[src$=".svg"] { width: 900px; max-width: none; max-height: none; }
+}
 figure.arch figcaption {
   max-width: 74ch;
   margin-top: 12px;

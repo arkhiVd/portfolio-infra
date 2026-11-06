@@ -288,6 +288,20 @@ No content or diagram changes (diagrams are the next phase).
 
 Exit criteria:
 - [x] Browser gate passes on all 14 pages, including every `#section` anchor.
+- [x] Fresh-context review; CI; merge; live check.
+
+## Phase 20: dark diagrams, starting with ClearSky
+
+**Class:** Standard. "Phase E" in the 2026-11-05 redesign system.
+
+Scope: a grid-layout SVG generator with official AWS icons and the ClearSky diagram from its
+draw.io source (19 services, 18 edges); figures link to their full-size file; phones pan wide SVG figures at a readable size; a
+test that the committed SVG matches its generator. The other four case-study diagrams follow in
+their own PRs, each from that project's own source.
+
+Exit criteria:
+- [x] ClearSky labels render at about 10 px on desktop and phone; page has no horizontal scroll.
+- [x] Browser gate passes on all 14 pages.
 - [ ] Fresh-context review; CI; merge; live check.
 
 ## Delegation budget

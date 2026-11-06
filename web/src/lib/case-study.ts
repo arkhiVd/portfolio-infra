@@ -124,7 +124,9 @@ export const renderCaseStudyBody = (body: string, project: Project) => {
       const index = Number(indexText);
       const figure = figures[index];
       if (!figure) throw new Error(`Unknown figure ${index} in ${project.slug}`);
-      return `<figure class="arch"><img src="${escapeAttribute(figure.image)}" alt="${escapeAttribute(figure.imageAlt)}" loading="lazy" decoding="async">${caption}</figure>`;
+      // The link opens the full-size file: on a phone a wide diagram is panned or zoomed there.
+      const src = escapeAttribute(figure.image);
+      return `<figure class="arch"><a class="arch-open" href="${src}"><img src="${src}" alt="${escapeAttribute(figure.imageAlt)}" loading="lazy" decoding="async"></a>${caption}</figure>`;
     },
   );
 };
