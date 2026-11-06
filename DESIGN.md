@@ -47,7 +47,7 @@ re-verified with a checker before the freeze.
 | `--hairline` | `rgba(255,255,255,.08)` | 1 px separators, card borders | — |
 | `--text` | `#EDEDF0` | headings, body | **17.4:1** on ink |
 | `--muted` | `#9B9BA3` | secondary copy, labels | **7.4:1** on ink · 6.8:1 on surface |
-| `--accent` | `#4FC1D4` | links, active nav, metric emphasis, focus ring | **9.6:1** on ink |
+| `--accent` | `#4FC1D4` | links, metric emphasis, focus ring | **9.6:1** on ink |
 | `--accent-dim` | `rgba(79,193,212,.14)` | chip fills, selection | — |
 | `--surface-2` | `#151A22` | hover and pressed rows | structure; muted **6.3:1** on it |
 | `--hairline-strong` | `rgba(255,255,255,.16)` | edges of controls (menu toggle, sheet) | — |

@@ -22,6 +22,9 @@ Branch `feat/simple-home`. Standard: Home template, row component, footer, CSS a
 - [x] Fresh-context review: approve. Fixed its one finding: a CMS role ending in punctuation no
       longer renders a double period. Accepted: rows fall back to the full name or summary if
       the CMS uses another separator.
+- [x] Fresh-context review of round 2: approve. Fixed the stale `--accent` "active nav" line in
+      DESIGN.md. Kept the 8% active highlight the author approved; the reviewer called it
+      distinguishable but faint.
 - [ ] Live check after apply.
 
 Local evidence, 2026-11-06:
