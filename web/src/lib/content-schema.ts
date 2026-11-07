@@ -90,7 +90,6 @@ export const projectSchema = z.object({
 });
 
 export const caseStudyIds = new Set(["clearsky", "appstack", "cdc", "portfolio", "cicd-containers", "cloud-detective"]);
-const illustratedCaseStudyIds = new Set(["clearsky", "appstack", "cdc", "portfolio", "cicd-containers"]);
 
 export const validateProjectSet = <T extends z.infer<typeof projectSchema> & { slug: string }>(projects: T[]): T[] => {
   const assertSequence = (values: number[], label: string) => {
@@ -108,7 +107,7 @@ export const validateProjectSet = <T extends z.infer<typeof projectSchema> & { s
     if (caseStudyIds.has(project.slug) && (!project.kicker || !project.lede)) {
       throw new Error(`Case study metadata is required for ${project.slug}`);
     }
-    if (illustratedCaseStudyIds.has(project.slug) && (!project.image || !project.imageAlt)) {
+    if (caseStudyIds.has(project.slug) && (!project.image || !project.imageAlt)) {
       throw new Error(`Case study image and alt text are required for ${project.slug}`);
     }
   }

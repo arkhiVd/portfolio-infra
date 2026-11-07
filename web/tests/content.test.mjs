@@ -78,8 +78,8 @@ test("project set validation protects routes and deterministic ordering", () => 
     status: "live",
     summary: "Copy",
     stack: ["Astro"],
-    image: slug === "cloud-detective" || index > 5 ? null : "/assets/test.png",
-    imageAlt: slug === "cloud-detective" || index > 5 ? "" : "Test",
+    image: index > 5 ? null : "/assets/test.png",
+    imageAlt: index > 5 ? "" : "Test",
     repo: null,
     order: index + 1,
     featuredOrder: index < 3 ? index + 1 : undefined,
@@ -92,6 +92,7 @@ test("project set validation protects routes and deterministic ordering", () => 
   assert.throws(() => validateProjectSet(records.map((record) => ({ ...record, featuredOrder: undefined }))));
   assert.throws(() => validateProjectSet(records.map((record) => record.slug === "clearsky" ? { ...record, kicker: undefined } : record)));
   assert.throws(() => validateProjectSet(records.slice(1)));
+  assert.throws(() => validateProjectSet(records.map((record) => record.slug === "cloud-detective" ? { ...record, image: null, imageAlt: "" } : record)));
 });
 
 test("blog schema rejects malformed dates and IDs", () => {
@@ -288,7 +289,7 @@ test("case-study anchors are unique and the numbers strip reads one list as text
 });
 
 test("architecture diagrams are their generators' output, not hand edits", () => {
-  for (const [script, svg] of [["clearsky", "clearsky-architecture"], ["appstack", "appstack-architecture"], ["cdc", "cdc-architecture"], ["containers-architecture", "containers-architecture"], ["containers-cicd", "containers-cicd"]]) {
+  for (const [script, svg] of [["clearsky", "clearsky-architecture"], ["appstack", "appstack-architecture"], ["cdc", "cdc-architecture"], ["containers-architecture", "containers-architecture"], ["containers-cicd", "containers-cicd"], ["cloud-detective-scan", "cloud-detective-scan"], ["cloud-detective-dashboard", "cloud-detective-dashboard"]]) {
     const generated = execFileSync(process.execPath, [`diagrams/${script}.mjs`], { cwd: root }).toString();
     assert.equal(readFileSync(join(root, `public/assets/img/${svg}.svg`), "utf8"), generated, `${svg}.svg drifted`);
   }
